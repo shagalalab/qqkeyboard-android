@@ -1,4 +1,4 @@
-package com.blackcj.customkeyboard;
+package com.shagalalab.qqkeyboard;
 
 import org.junit.Test;
 

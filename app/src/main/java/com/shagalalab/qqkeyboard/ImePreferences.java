@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.blackcj.customkeyboard;
+package com.shagalalab.qqkeyboard;
 
 import android.content.Intent;
 import android.os.Bundle;
