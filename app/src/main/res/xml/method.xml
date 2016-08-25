@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /**
  * Copyright (c) 2008, The Android Open Source Project
  *
@@ -17,21 +16,19 @@
  */
 -->
 
-<!-- The attributes in this XML file provide configuration information -->
-<!-- for the Search Manager. -->
+<!-- The attributes in this XML file provide configuration information --><!-- for the Search Manager. -->
 
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
-        android:settingsActivity="com.blackcj.customkeyboard.ImePreferences"
-        android:supportsSwitchingToNextInputMethod="true"
->
+    android:settingsActivity="com.blackcj.customkeyboard.ImePreferences"
+    android:supportsSwitchingToNextInputMethod="true">
     <subtype
-        android:label="@string/label_subtype_generic"
         android:icon="@drawable/icon_en_us"
-        android:imeSubtypeLocale="en_US"
-        android:imeSubtypeMode="keyboard" />
+        android:imeSubtypeLocale="kaa"
+        android:imeSubtypeMode="keyboard"
+        android:label="@string/label_subtype_generic" />
     <subtype
-        android:label="@string/label_subtype_en_GB"
         android:icon="@drawable/icon_en_gb"
-        android:imeSubtypeLocale="en_GB"
-        android:imeSubtypeMode="keyboard" />
+        android:imeSubtypeLocale="kaa"
+        android:imeSubtypeMode="keyboard"
+        android:label="@string/label_subtype_en_GB" />
 </input-method>
