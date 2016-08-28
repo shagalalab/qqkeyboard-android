@@ -74,19 +74,20 @@ public class LatinKeyboardView extends KeyboardView {
         List<Key> keys = getKeyboard().getKeys();
         for(Key key: keys) {
             if(key.label != null) {
-                if (key.label.equals("q")) {
-                    canvas.drawText("1", key.x + (key.width - 25), key.y + 40, paint);
-                } else if (key.label.equals("w")) {
-                    canvas.drawText("2", key.x + (key.width - 25), key.y + 40, paint);
-                } else if (key.label.equals("e")) {
-                    canvas.drawText("3", key.x + (key.width - 25), key.y + 40, paint);
-                } else if (key.label.equals("r")) {
-                    canvas.drawText("4", key.x + (key.width - 25), key.y + 40, paint);
-                } else if (key.label.equals("t")) {
-                    canvas.drawText("5", key.x + (key.width - 25), key.y + 40, paint);
+                if (key.label.equals("a")) {
+                    canvas.drawText("á", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("g")) {
+                    canvas.drawText("ǵ", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("i")) {
+                    canvas.drawText("ı", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("n")) {
+                    canvas.drawText("ń", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("o")) {
+                    canvas.drawText("ó", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("u")) {
+                    canvas.drawText("ú", key.x + (key.width - 25), key.y + 40, paint);
                 }
             }
-
         }
     }
 }

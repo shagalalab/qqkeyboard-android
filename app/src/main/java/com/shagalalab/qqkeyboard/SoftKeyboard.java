@@ -37,7 +37,6 @@ import android.view.inputmethod.InputMethodSubtype;
 import android.view.textservice.SentenceSuggestionsInfo;
 import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
-import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
 
 import java.util.ArrayList;
@@ -576,17 +575,17 @@ public class SoftKeyboard extends InputMethodService
      * candidates.
      */
     private void updateCandidates() {
-        if (!mCompletionOn) {
-            if (mComposing.length() > 0) {
-                ArrayList<String> list = new ArrayList<String>();
-                //list.add(mComposing.toString());
-                Log.d("SoftKeyboard", "REQUESTING: " + mComposing.toString());
-                mScs.getSentenceSuggestions(new TextInfo[] {new TextInfo(mComposing.toString())}, 5);
-                setSuggestions(list, true, true);
-            } else {
-                setSuggestions(null, false, false);
-            }
-        }
+//        if (!mCompletionOn) {
+//            if (mComposing.length() > 0) {
+//                ArrayList<String> list = new ArrayList<String>();
+//                //list.add(mComposing.toString());
+//                Log.d("SoftKeyboard", "REQUESTING: " + mComposing.toString());
+//                mScs.getSentenceSuggestions(new TextInfo[] {new TextInfo(mComposing.toString())}, 5);
+//                setSuggestions(list, true, true);
+//            } else {
+//                setSuggestions(null, false, false);
+//            }
+//        }
     }
     
     public void setSuggestions(List<String> suggestions, boolean completions,

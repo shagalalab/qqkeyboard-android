@@ -22,12 +22,10 @@
     android:settingsActivity="com.blackcj.customkeyboard.ImePreferences"
     android:supportsSwitchingToNextInputMethod="true">
     <subtype
-        android:icon="@drawable/icon_en_us"
         android:imeSubtypeLocale="kaa"
         android:imeSubtypeMode="keyboard"
         android:label="@string/label_subtype_generic" />
     <subtype
-        android:icon="@drawable/icon_en_gb"
         android:imeSubtypeLocale="kaa"
         android:imeSubtypeMode="keyboard"
         android:label="@string/label_subtype_en_GB" />
