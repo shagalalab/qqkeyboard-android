@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <!-- Title for Latin keyboard  -->
     <string name="ime_name">QqKeyboard</string>
 
@@ -26,16 +26,19 @@
     
     <!-- Labels on soft keys -->
     <string name="label_go_key">Go</string>
-    <string name="label_next_key">Next</string>
-    <string name="label_send_key">Send</string>
+    <string name="label_next_key">Keyingi</string>
+    <string name="label_send_key">Jiberiw</string>
 
     <!-- Labels for subtype -->
     <string name="label_subtype_generic">%s</string>
     <string name="label_subtype_en_GB">English (GB)</string>
 
     <!-- Titles for ImePreference -->
-    <string name="settings_name">QqKeyboard Settings</string>
+    <string name="settings_name">QqKeyboard sazlawları</string>
     <string name="language_selection_title">Input languages</string>
-    <string name="select_language">Select input languages</string>
-    <string name="general_category">General</string>
+    <string name="select_language">Klaviatura tilin saylań</string>
+    <string name="sound_on_keypress">Klavisha basılǵanda dawıs shıǵarıw</string>
+    <string name="vibrate_on_keypress">Klavisha basılǵanda vibratsiya qılıw</string>
+    <string name="pref_keypress_sound_key">pref_keypress_sound_key</string>
+    <string name="pref_keypress_vibration_key">pref_keypress_vibration_key</string>
 </resources>

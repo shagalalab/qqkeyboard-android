@@ -16,4 +16,12 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         android:title="@string/settings_name">
+    <SwitchPreference
+        android:key="@string/pref_keypress_sound_key"
+        android:title="@string/sound_on_keypress"
+        android:defaultValue="true" />
+    <SwitchPreference
+        android:key="@string/pref_keypress_vibration_key"
+        android:title="@string/vibrate_on_keypress"
+        android:defaultValue="true" />
 </PreferenceScreen>

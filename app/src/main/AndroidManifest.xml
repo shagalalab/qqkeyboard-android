@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shagalalab.qqkeyboard">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.shagalalab.qqkeyboard">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:label="@string/ime_name">
-        <activity android:name=".ImePreferences" android:label="@string/settings_name">
+        <activity android:name=".ImePreferences"
+            android:label="@string/settings_name"
+            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>

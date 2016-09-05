@@ -16,9 +16,11 @@
 
 package com.shagalalab.qqkeyboard;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
 import com.android.inputmethodcommon.InputMethodSettingsFragment;
 
@@ -26,6 +28,7 @@ import com.android.inputmethodcommon.InputMethodSettingsFragment;
  * Displays the IME preferences inside the input method setting.
  */
 public class ImePreferences extends PreferenceActivity {
+
     @Override
     public Intent getIntent() {
         final Intent modIntent = new Intent(super.getIntent());
@@ -40,6 +43,20 @@ public class ImePreferences extends PreferenceActivity {
 
         // We overwrite the title of the activity, as the default one is "Voice Search".
         setTitle(R.string.settings_name);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
