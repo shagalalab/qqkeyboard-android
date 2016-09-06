@@ -74,6 +74,7 @@ public class LatinKeyboardView extends KeyboardView {
         List<Key> keys = getKeyboard().getKeys();
         for(Key key: keys) {
             if(key.label != null) {
+                // latin keyboard
                 if (key.label.equals("a")) {
                     canvas.drawText("á", key.x + (key.width - 25), key.y + 40, paint);
                 } else if (key.label.equals("g")) {
@@ -86,6 +87,26 @@ public class LatinKeyboardView extends KeyboardView {
                     canvas.drawText("ó", key.x + (key.width - 25), key.y + 40, paint);
                 } else if (key.label.equals("u")) {
                     canvas.drawText("ú", key.x + (key.width - 25), key.y + 40, paint);
+
+                    // cyrillic keyboard
+                } else if (key.label.equals("у")) {
+                    canvas.drawText("ўү", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("к")) {
+                    canvas.drawText("қ", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("е")) {
+                    canvas.drawText("ё", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("н")) {
+                    canvas.drawText("ң", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("г")) {
+                    canvas.drawText("ғ", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("х")) {
+                    canvas.drawText("ҳ", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("а")) {
+                    canvas.drawText("ә", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("о")) {
+                    canvas.drawText("ө", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("ь")) {
+                    canvas.drawText("ъ", key.x + (key.width - 25), key.y + 40, paint);
                 }
             }
         }

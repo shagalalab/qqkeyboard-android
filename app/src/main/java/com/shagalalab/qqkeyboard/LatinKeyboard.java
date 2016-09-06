@@ -144,10 +144,10 @@ public class LatinKeyboard extends Keyboard {
         }
     }
 
-    static class LatinKey extends Keyboard.Key {
+    private static class LatinKey extends Keyboard.Key {
         
-        public LatinKey(Resources res, Keyboard.Row parent, int x, int y,
-                XmlResourceParser parser) {
+        LatinKey(Resources res, Keyboard.Row parent, int x, int y,
+                 XmlResourceParser parser) {
             super(res, parent, x, y, parser);
         }
         
