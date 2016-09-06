@@ -87,8 +87,7 @@
             android:codes: -101 is not a framework-defined key code but a key code that is
             privately defined in com.shagalalab.qqkeyboard.LatinKeyboardView.
         -->
-        <Key android:codes="-101" android:keyIcon="@drawable/ic_language_white_24dp"
-                android:keyWidth="10%p" />
+        <Key android:codes="-101" android:keyLabel="ҚҚ" android:keyWidth="10%p" />
         <Key android:codes="32" android:keyIcon="@drawable/ic_space_bar_white_24dp"
                 android:keyWidth="40%p" android:isRepeatable="true" />
         <Key android:codes="46" android:keyLabel="."
