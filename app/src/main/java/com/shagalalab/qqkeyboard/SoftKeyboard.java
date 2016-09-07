@@ -84,6 +84,7 @@ public class SoftKeyboard extends InputMethodService
     private LatinKeyboard qwertyKeyboard;
     private LatinKeyboard cyrillicKeyboard;
     private LatinKeyboard currentKeyboard;
+    private LatinKeyboard prevKeyboard;
     private String mWordSeparators;
     private List<String> mSuggestions;
     private boolean isSoundEnabled = true;
@@ -556,8 +557,9 @@ public class SoftKeyboard extends InputMethodService
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard || current == symbolsShiftedKeyboard) {
-                setLatinKeyboard(qwertyKeyboard);
+                setLatinKeyboard(prevKeyboard == null ? qwertyKeyboard : prevKeyboard);
             } else {
+                prevKeyboard = (LatinKeyboard) current;
                 setLatinKeyboard(symbolsKeyboard);
                 symbolsKeyboard.setShifted(false);
             }
@@ -824,6 +826,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     private void tryPlayKeyDown() {
+        //TODO: different sounds for keys
         AudioManager audioManager = getAudioManager();
         if (audioManager != null) {
             audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, 0.5f);
