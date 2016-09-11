@@ -19,14 +19,10 @@
 <!-- The attributes in this XML file provide configuration information --><!-- for the Search Manager. -->
 
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
-    android:settingsActivity="com.shagalalab.qqkeyboard.ImePreferences"
+    android:settingsActivity="com.shagalalab.qqkeyboard.settings.ImePreferences"
     android:supportsSwitchingToNextInputMethod="true">
     <subtype
         android:imeSubtypeLocale="kaa"
         android:imeSubtypeMode="keyboard"
         android:label="@string/label_subtype_generic" />
-    <subtype
-        android:imeSubtypeLocale="kaa"
-        android:imeSubtypeMode="keyboard"
-        android:label="@string/label_subtype_en_GB" />
 </input-method>

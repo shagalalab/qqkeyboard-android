@@ -11,6 +11,8 @@ import com.shagalalab.qqkeyboard.R;
  */
 
 public class SettingsUtil {
+
+
     private static SharedPreferences getPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
@@ -24,4 +26,30 @@ public class SettingsUtil {
         SharedPreferences sharedPref = getPreferences(context);
         return sharedPref.getBoolean(context.getString(R.string.pref_keypress_vibration_key), true);
     }
+
+    public static void setSoundLevel(Context context, int level) {
+        SharedPreferences sharedPref = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(context.getString(R.string.pref_keypress_sound_volume_level), level);
+        editor.apply();
+    }
+
+    public static int getSoundLevel(Context context) {
+        SharedPreferences sharedPref = getPreferences(context);
+        return sharedPref.getInt(context.getString(R.string.pref_keypress_sound_volume_level), 50);
+    }
+
+    public static void setVibrationLevel(Context context, int level) {
+        SharedPreferences sharedPref = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(context.getString(R.string.pref_keypress_vibration_strength_level), level);
+        editor.apply();
+    }
+
+    public static int getVibrationLevel(Context context) {
+        SharedPreferences sharedPref = getPreferences(context);
+        return sharedPref.getInt(context.getString(R.string.pref_keypress_vibration_strength_level), 50);
+    }
+
+
 }

@@ -5,7 +5,7 @@
 
     <application
         android:label="@string/ime_name">
-        <activity android:name=".ImePreferences"
+        <activity android:name=".settings.ImePreferences"
             android:label="@string/settings_name"
             android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
             <intent-filter>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.shagalalab.qqkeyboard;
+    package com.shagalalab.qqkeyboard.settings;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
 import com.android.inputmethodcommon.InputMethodSettingsFragment;
+import com.shagalalab.qqkeyboard.R;
 
 /**
  * Displays the IME preferences inside the input method setting.

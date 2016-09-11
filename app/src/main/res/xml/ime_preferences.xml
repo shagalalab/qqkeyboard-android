@@ -20,8 +20,18 @@
         android:key="@string/pref_keypress_sound_key"
         android:title="@string/sound_on_keypress"
         android:defaultValue="true" />
+    <com.shagalalab.qqkeyboard.settings.SoundVolumePreference
+        android:key="@string/pref_keypress_sound_volume_key"
+        android:title="@string/volume_on_keypress"
+        android:dependency="@string/pref_keypress_sound_key"
+        android:summary="%s"/>
     <SwitchPreference
         android:key="@string/pref_keypress_vibration_key"
         android:title="@string/vibrate_on_keypress"
         android:defaultValue="true" />
+    <com.shagalalab.qqkeyboard.settings.VibrationLevelPreference
+        android:key="@string/pref_keypress_vibration_strength_key"
+        android:title="@string/vibration_strenth_on_keypress"
+        android:dependency="@string/pref_keypress_vibration_key"
+        android:summary="%s"/>
 </PreferenceScreen>

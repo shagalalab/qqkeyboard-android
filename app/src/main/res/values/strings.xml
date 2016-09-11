@@ -39,6 +39,18 @@
     <string name="select_language">Klaviatura tilin saylań</string>
     <string name="sound_on_keypress">Klavisha basılǵanda dawıs shıǵarıw</string>
     <string name="vibrate_on_keypress">Klavisha basılǵanda vibratsiya qılıw</string>
+    <string name="volume_on_keypress">Klavisha dawıs dárejesi</string>
+    <string name="vibration_strenth_on_keypress">Klavisha vibratsiya kúshi</string>
     <string name="pref_keypress_sound_key">pref_keypress_sound_key</string>
     <string name="pref_keypress_vibration_key">pref_keypress_vibration_key</string>
+    <string name="pref_keypress_sound_volume_key">pref_keypress_sound_volume_key</string>
+    <string name="pref_keypress_sound_volume_level">pref_keypress_sound_volume_seekbar</string>
+    <string name="pref_keypress_vibration_strength_key">pref_keypress_vibration_strength_key</string>
+    <string name="pref_keypress_vibration_strength_level">pref_keypress_vibration_strength_level</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Biykar et</string>
+    <string name="text_with_percent">%d%%</string>
+    <string name="text_with_ms">%d ms</string>
+    <string name="vibration_level_default">50 ms</string>
+    <string name="sound_volume_default">50%</string>
 </resources>
