@@ -32,7 +32,7 @@ public class SoundVolumePreference extends DialogPreference implements SeekBar.O
 
     @Override
     protected View onCreateView(ViewGroup parent) {
-        setSummary(String.format(getContext().getString(R.string.text_with_percent), SettingsUtil.getSoundLevel(getContext())));
+        setSummary(String.format(getContext().getString(R.string.text_with_percent), SettingsUtil.getSoundVolume(getContext())));
         return super.onCreateView(parent);
     }
 
@@ -60,7 +60,7 @@ public class SoundVolumePreference extends DialogPreference implements SeekBar.O
         caption = (TextView) view.findViewById(R.id.sound_volume_preference_caption);
         seekBar = (SeekBar) view.findViewById(R.id.sound_volume_preference_seekbar);
         seekBar.setOnSeekBarChangeListener(this);
-        seekBar.setProgress(SettingsUtil.getSoundLevel(getContext()));
+        seekBar.setProgress(SettingsUtil.getSoundVolume(getContext()));
 
         return view;
     }
@@ -70,7 +70,7 @@ public class SoundVolumePreference extends DialogPreference implements SeekBar.O
         super.onClick(dialog, which);
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
-                SettingsUtil.setSoundLevel(getContext(), seekBar.getProgress());
+                SettingsUtil.setSoundVolume(getContext(), seekBar.getProgress());
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 break;

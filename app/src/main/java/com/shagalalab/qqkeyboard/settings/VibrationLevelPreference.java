@@ -3,6 +3,7 @@ package com.shagalalab.qqkeyboard.settings;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Vibrator;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.shagalalab.qqkeyboard.util.SettingsUtil;
 public class VibrationLevelPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
     private TextView caption;
     private SeekBar seekBar;
+    private Vibrator vibrator;
 
     public VibrationLevelPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -91,6 +93,14 @@ public class VibrationLevelPreference extends DialogPreference implements SeekBa
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        getVibrator().vibrate(seekBar.getProgress());
+    }
 
+    private Vibrator getVibrator() {
+        if (vibrator == null) {
+            vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        }
+
+        return vibrator;
     }
 }

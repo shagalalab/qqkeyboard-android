@@ -91,6 +91,8 @@ public class SoftKeyboard extends InputMethodService
     private boolean isVibrationEnabled = true;
     private AudioManager am;
     private Vibrator vb;
+    private int soundVolume;
+    private int vibrationLevel;
 
     /**
      * Main initialization of the input method component.  Be sure to call
@@ -247,7 +249,9 @@ public class SoftKeyboard extends InputMethodService
         currentKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 
         isSoundEnabled = SettingsUtil.isKeySoundEnabled(getBaseContext());
+        soundVolume = SettingsUtil.getSoundVolume(getBaseContext());
         isVibrationEnabled = SettingsUtil.isKeyVibrationEnabled(getBaseContext());
+        vibrationLevel = SettingsUtil.getVibrationLevel(getBaseContext());
         Log.d(TAG, "onStartInput: isSoundEnabled: " + isSoundEnabled);
         Log.d(TAG, "onStartInput: isVibrationEnabled: " + isVibrationEnabled);
     }
@@ -829,14 +833,14 @@ public class SoftKeyboard extends InputMethodService
         //TODO: different sounds for keys
         AudioManager audioManager = getAudioManager();
         if (audioManager != null) {
-            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, 0.5f);
+            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, soundVolume / 100);
         }
     }
 
     private void tryVibrate() {
         Vibrator vibrator = getVibrator();
         if (vibrator != null) {
-            vibrator.vibrate(30);
+            vibrator.vibrate(vibrationLevel);
         }
     }
 }

@@ -27,14 +27,14 @@ public class SettingsUtil {
         return sharedPref.getBoolean(context.getString(R.string.pref_keypress_vibration_key), true);
     }
 
-    public static void setSoundLevel(Context context, int level) {
+    public static void setSoundVolume(Context context, int level) {
         SharedPreferences sharedPref = getPreferences(context);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(context.getString(R.string.pref_keypress_sound_volume_level), level);
         editor.apply();
     }
 
-    public static int getSoundLevel(Context context) {
+    public static int getSoundVolume(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
         return sharedPref.getInt(context.getString(R.string.pref_keypress_sound_volume_level), 50);
     }
