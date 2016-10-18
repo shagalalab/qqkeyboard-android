@@ -296,27 +296,6 @@ public class SoftKeyboard extends InputMethodService
     }
 
     /**
-     * Deal with the editor reporting movement of its cursor.
-     */
-    @Override
-    public void onUpdateSelection(int oldSelStart, int oldSelEnd,
-                                  int newSelStart, int newSelEnd,
-                                  int candidatesStart, int candidatesEnd) {
-        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-
-        // If the current selection in the text view changes, we should
-        // clear whatever candidate text we have.
-        if (mComposing.length() > 0 && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd)) {
-            mComposing.setLength(0);
-            updateCandidates();
-            InputConnection ic = getCurrentInputConnection();
-            if (ic != null) {
-                ic.finishComposingText();
-            }
-        }
-    }
-
-    /**
      * This tells us about completions that the editor has determined based
      * on the current text in it.  We want to use this in fullscreen mode
      * to show the completions ourself, since the editor can not be seen
@@ -527,10 +506,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     // Implementation of KeyboardViewListener
-
     public void onKey(int primaryCode, int[] keyCodes) {
-        Log.d(TAG, "KEYCODE: " + primaryCode);
-
         if (isSoundEnabled) {
             tryPlayKeyDown();
         }
@@ -539,14 +515,7 @@ public class SoftKeyboard extends InputMethodService
             tryVibrate();
         }
 
-        if (isWordSeparator(primaryCode)) {
-            // Handle separator
-            if (mComposing.length() > 0) {
-                commitTyped(getCurrentInputConnection());
-            }
-            sendKey(primaryCode);
-            updateShiftKeyState(getCurrentInputEditorInfo());
-        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+        if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleBackspace();
         } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
             handleShift();
@@ -659,13 +628,10 @@ public class SoftKeyboard extends InputMethodService
                 primaryCode = Character.toUpperCase(primaryCode);
             }
         }
-        if (mPredictionOn) {
-            mComposing.append((char) primaryCode);
-            getCurrentInputConnection().setComposingText(mComposing, 1);
+
+        getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
+        if (isWordSeparator(primaryCode)) {
             updateShiftKeyState(getCurrentInputEditorInfo());
-            updateCandidates();
-        } else {
-            getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
         }
     }
 
