@@ -630,9 +630,7 @@ public class SoftKeyboard extends InputMethodService
         }
 
         getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
-        if (isWordSeparator(primaryCode)) {
-            updateShiftKeyState(getCurrentInputEditorInfo());
-        }
+        updateShiftKeyState(getCurrentInputEditorInfo());
     }
 
     private void handleClose() {
