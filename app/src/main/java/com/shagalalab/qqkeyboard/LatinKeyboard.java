@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
+import android.support.v4.content.ContextCompat;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
@@ -51,14 +52,18 @@ public class LatinKeyboard extends Keyboard {
      * {@link #mLanguageSwitchKey} is changed.
      */
     private Key mSavedLanguageSwitchKey;
+
+    private Context context;
     
     public LatinKeyboard(Context context, int xmlLayoutResId) {
         super(context, xmlLayoutResId);
+        this.context = context;
     }
 
     public LatinKeyboard(Context context, int layoutTemplateResId, 
             CharSequence characters, int columns, int horizontalPadding) {
         super(context, layoutTemplateResId, characters, columns, horizontalPadding);
+        this.context = context;
     }
 
     @Override
@@ -77,29 +82,6 @@ public class LatinKeyboard extends Keyboard {
             mSavedLanguageSwitchKey = new LatinKey(res, parent, x, y, parser);
         }
         return key;
-    }
-
-    /**
-     * Dynamically change the visibility of the language switch key (a.k.a. globe key).
-     * @param visible True if the language switch key should be visible.
-     */
-    void setLanguageSwitchKeyVisibility(boolean visible) {
-        if (visible) {
-            // The language switch key should be visible. Restore the size of the mode change key
-            // and language switch key using the saved layout.
-            mModeChangeKey.width = mSavedModeChangeKey.width;
-            mModeChangeKey.x = mSavedModeChangeKey.x;
-            mLanguageSwitchKey.width = mSavedLanguageSwitchKey.width;
-            mLanguageSwitchKey.icon = mSavedLanguageSwitchKey.icon;
-            mLanguageSwitchKey.iconPreview = mSavedLanguageSwitchKey.iconPreview;
-        } else {
-            // The language switch key should be hidden. Change the width of the mode change key
-            // to fill the space of the language key so that the user will not see any strange gap.
-            mModeChangeKey.width = mSavedModeChangeKey.width + mSavedLanguageSwitchKey.width;
-            mLanguageSwitchKey.width = 0;
-            mLanguageSwitchKey.icon = null;
-            mLanguageSwitchKey.iconPreview = null;
-        }
     }
 
     /**
@@ -123,7 +105,7 @@ public class LatinKeyboard extends Keyboard {
                 mEnterKey.label = res.getText(R.string.label_next_key);
                 break;
             case EditorInfo.IME_ACTION_SEARCH:
-                mEnterKey.icon = res.getDrawable(R.drawable.ic_search_white_24dp);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_search_white_24dp);
                 mEnterKey.label = null;
                 break;
             case EditorInfo.IME_ACTION_SEND:
@@ -132,7 +114,7 @@ public class LatinKeyboard extends Keyboard {
                 mEnterKey.label = res.getText(R.string.label_send_key);
                 break;
             default:
-                mEnterKey.icon = res.getDrawable(R.drawable.ic_keyboard_return_white_24dp);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_keyboard_return_white_24dp);
                 mEnterKey.label = null;
                 break;
         }

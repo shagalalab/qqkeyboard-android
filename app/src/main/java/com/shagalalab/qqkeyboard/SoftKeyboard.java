@@ -16,33 +16,22 @@
 
 package com.shagalalab.qqkeyboard;
 
-import android.app.Dialog;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
-import android.os.IBinder;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
-import android.util.Log;
-import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
-import android.view.textservice.SentenceSuggestionsInfo;
-import android.view.textservice.SpellCheckerSession;
-import android.view.textservice.SuggestionsInfo;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Example of writing an input method for a soft keyboard.  This code is
@@ -51,29 +40,13 @@ import java.util.List;
  * a basic example for how you would get started writing an input method, to
  * be fleshed out as appropriate.
  */
-public class SoftKeyboard extends InputMethodService
-        implements KeyboardView.OnKeyboardActionListener, SpellCheckerSession.SpellCheckerSessionListener {
+public class SoftKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
     private static final String TAG = "SoftKeyboard";
 
-    /**
-     * This boolean indicates the optional example code for performing
-     * processing of hard keys in addition to regular text generation
-     * from on-screen interaction.  It would be used for input methods that
-     * perform language translations (such as converting text entered on
-     * a QWERTY keyboard to Chinese), but may not be used for input methods
-     * that are primarily intended to be used for on-screen text entry.
-     */
-    static final boolean PROCESS_HARD_KEYS = true;
-
     private InputMethodManager mInputMethodManager;
-
     private LatinKeyboardView mInputView;
-    private CandidateView mCandidateView;
-    private CompletionInfo[] mCompletions;
 
     private StringBuilder mComposing = new StringBuilder();
-    private boolean mPredictionOn;
-    private boolean mCompletionOn;
     private int mLastDisplayWidth;
     private boolean mCapsLock;
     private long mLastShiftTime;
@@ -86,7 +59,6 @@ public class SoftKeyboard extends InputMethodService
     private LatinKeyboard currentKeyboard;
     private LatinKeyboard prevKeyboard;
     private String mWordSeparators;
-    private List<String> mSuggestions;
     private boolean isSoundEnabled = true;
     private boolean isVibrationEnabled = true;
     private AudioManager am;
@@ -150,9 +122,7 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public View onCreateCandidatesView() {
-        mCandidateView = new CandidateView(this);
-        mCandidateView.setService(this);
-        return mCandidateView;
+        return super.onCreateCandidatesView();
     }
 
     /**
@@ -168,16 +138,11 @@ public class SoftKeyboard extends InputMethodService
         // Reset our state.  We want to do this even if restarting, because
         // the underlying state of the text editor could have changed in any way.
         mComposing.setLength(0);
-        updateCandidates();
 
         if (!restarting) {
             // Clear shift states.
             mMetaState = 0;
         }
-
-        mPredictionOn = false;
-        mCompletionOn = false;
-        mCompletions = null;
 
         // We are now going to initialize our state based on the type of
         // text being edited.
@@ -201,35 +166,6 @@ public class SoftKeyboard extends InputMethodService
                 // be doing predictive text (showing candidates as the
                 // user types).
                 currentKeyboard = qwertyKeyboard;
-                mPredictionOn = true;
-
-                // We now look for a few special variations of text that will
-                // modify our behavior.
-                int variation = attribute.inputType & InputType.TYPE_MASK_VARIATION;
-                if (variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-                        variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
-                    // Do not display predictions / what the user is typing
-                    // when they are entering a password.
-                    mPredictionOn = false;
-                }
-
-                if (variation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                        || variation == InputType.TYPE_TEXT_VARIATION_URI
-                        || variation == InputType.TYPE_TEXT_VARIATION_FILTER) {
-                    // Our predictions are not useful for e-mail addresses
-                    // or URIs.
-                    mPredictionOn = false;
-                }
-
-                if ((attribute.inputType & InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE) != 0) {
-                    // If this is an auto-complete text view, then our predictions
-                    // will not be shown and instead we will allow the editor
-                    // to supply their own.  We only show the editor's
-                    // candidates when in fullscreen mode, otherwise relying
-                    // own it displaying its own UI.
-                    mPredictionOn = false;
-                    mCompletionOn = isFullscreenMode();
-                }
 
                 // We also want to look at the current state of the editor
                 // to decide whether our alphabetic keyboard should start out
@@ -252,8 +188,6 @@ public class SoftKeyboard extends InputMethodService
         soundVolume = SettingsUtil.getSoundVolume(getBaseContext());
         isVibrationEnabled = SettingsUtil.isKeyVibrationEnabled(getBaseContext());
         vibrationLevel = SettingsUtil.getVibrationLevel(getBaseContext());
-        Log.d(TAG, "onStartInput: isSoundEnabled: " + isSoundEnabled);
-        Log.d(TAG, "onStartInput: isVibrationEnabled: " + isVibrationEnabled);
     }
 
     /**
@@ -266,7 +200,6 @@ public class SoftKeyboard extends InputMethodService
 
         // Clear current composing text and candidates.
         mComposing.setLength(0);
-        updateCandidates();
 
         // We only hide the candidates window when finishing input on
         // a particular editor, to avoid popping the underlying application
@@ -303,56 +236,6 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public void onDisplayCompletions(CompletionInfo[] completions) {
-        if (mCompletionOn) {
-            mCompletions = completions;
-            if (completions == null) {
-                setSuggestions(null, false, false);
-                return;
-            }
-
-            List<String> stringList = new ArrayList<>();
-            for (int i = 0; i < completions.length; i++) {
-                CompletionInfo ci = completions[i];
-                if (ci != null) stringList.add(ci.getText().toString());
-            }
-            setSuggestions(stringList, true, true);
-        }
-    }
-
-    /**
-     * This translates incoming hard key events in to edit operations on an
-     * InputConnection.  It is only needed when using the
-     * PROCESS_HARD_KEYS option.
-     */
-    private boolean translateKeyDown(int keyCode, KeyEvent event) {
-        mMetaState = MetaKeyKeyListener.handleKeyDown(mMetaState, keyCode, event);
-        int c = event.getUnicodeChar(MetaKeyKeyListener.getMetaState(mMetaState));
-        mMetaState = MetaKeyKeyListener.adjustMetaAfterKeypress(mMetaState);
-        InputConnection ic = getCurrentInputConnection();
-        if (c == 0 || ic == null) {
-            return false;
-        }
-
-        boolean dead = false;
-
-        if ((c & KeyCharacterMap.COMBINING_ACCENT) != 0) {
-            dead = true;
-            c = c & KeyCharacterMap.COMBINING_ACCENT_MASK;
-        }
-
-        if (mComposing.length() > 0) {
-            char accent = mComposing.charAt(mComposing.length() - 1);
-            int composed = KeyEvent.getDeadChar(accent, c);
-
-            if (composed != 0) {
-                c = composed;
-                mComposing.setLength(mComposing.length() - 1);
-            }
-        }
-
-        onKey(c, null);
-
-        return true;
     }
 
     /**
@@ -435,13 +318,7 @@ public class SoftKeyboard extends InputMethodService
         // If we want to do transformations on text being entered with a hard
         // keyboard, we need to process the up events to update the meta key
         // state we are tracking.
-        if (PROCESS_HARD_KEYS) {
-            if (mPredictionOn) {
-                mMetaState = MetaKeyKeyListener.handleKeyUp(mMetaState, keyCode, event);
-            }
-        }
-
-
+        mMetaState = MetaKeyKeyListener.handleKeyUp(mMetaState, keyCode, event);
         return super.onKeyUp(keyCode, event);
     }
 
@@ -452,7 +329,6 @@ public class SoftKeyboard extends InputMethodService
         if (mComposing.length() > 0) {
             inputConnection.commitText(mComposing, mComposing.length());
             mComposing.setLength(0);
-            updateCandidates();
         }
     }
 
@@ -473,36 +349,11 @@ public class SoftKeyboard extends InputMethodService
     }
 
     /**
-     * Helper to determine if a given character code is alphabetic.
-     */
-    private boolean isAlphabet(int code) {
-        return Character.isLetter(code);
-    }
-
-    /**
      * Helper to send a key down / key up pair to the current editor.
      */
     private void keyDownUp(int keyEventCode) {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
-    }
-
-    /**
-     * Helper to send a character to the editor as raw key events.
-     */
-    private void sendKey(int keyCode) {
-        switch (keyCode) {
-            case '\n':
-                keyDownUp(KeyEvent.KEYCODE_ENTER);
-                break;
-            default:
-                if (keyCode >= '0' && keyCode <= '9') {
-                    keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
-                } else {
-                    getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
-                }
-                break;
-        }
     }
 
     // Implementation of KeyboardViewListener
@@ -553,48 +404,14 @@ public class SoftKeyboard extends InputMethodService
         updateShiftKeyState(getCurrentInputEditorInfo());
     }
 
-    /**
-     * Update the list of available candidates from the current composing
-     * text.  This will need to be filled in by however you are determining
-     * candidates.
-     */
-    private void updateCandidates() {
-//        if (!mCompletionOn) {
-//            if (mComposing.length() > 0) {
-//                ArrayList<String> list = new ArrayList<String>();
-//                //list.add(mComposing.toString());
-//                Log.d(TAG, "REQUESTING: " + mComposing.toString());
-//                mScs.getSentenceSuggestions(new TextInfo[] {new TextInfo(mComposing.toString())}, 5);
-//                setSuggestions(list, true, true);
-//            } else {
-//                setSuggestions(null, false, false);
-//            }
-//        }
-    }
-
-    public void setSuggestions(List<String> suggestions, boolean completions,
-                               boolean typedWordValid) {
-        if (suggestions != null && suggestions.size() > 0) {
-            setCandidatesViewShown(true);
-        } else if (isExtractViewShown()) {
-            setCandidatesViewShown(true);
-        }
-        mSuggestions = suggestions;
-        if (mCandidateView != null) {
-            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
-        }
-    }
-
     private void handleBackspace() {
         final int length = mComposing.length();
         if (length > 1) {
             mComposing.delete(length - 1, length);
             getCurrentInputConnection().setComposingText(mComposing, 1);
-            updateCandidates();
         } else if (length > 0) {
             mComposing.setLength(0);
             getCurrentInputConnection().commitText("", 0);
-            updateCandidates();
         } else {
             keyDownUp(KeyEvent.KEYCODE_DEL);
         }
@@ -639,20 +456,7 @@ public class SoftKeyboard extends InputMethodService
         mInputView.closing();
     }
 
-    private IBinder getToken() {
-        final Dialog dialog = getWindow();
-        if (dialog == null) {
-            return null;
-        }
-        final Window window = dialog.getWindow();
-        if (window == null) {
-            return null;
-        }
-        return window.getAttributes().token;
-    }
-
     private void handleLanguageSwitch() {
-//        mInputMethodManager.switchToNextInputMethod(getToken(), false /* onlyCurrentIme */);
         boolean shifted = mInputView.isShifted();
 
         if (mInputView.getKeyboard() == qwertyKeyboard) {
@@ -683,42 +487,21 @@ public class SoftKeyboard extends InputMethodService
         return separators.contains(String.valueOf((char) code));
     }
 
-    public void pickDefaultCandidate() {
-        pickSuggestionManually(0);
-    }
-
-    public void pickSuggestionManually(int index) {
-        if (mCompletionOn && mCompletions != null && index >= 0 && index < mCompletions.length) {
-            CompletionInfo ci = mCompletions[index];
-            getCurrentInputConnection().commitCompletion(ci);
-            if (mCandidateView != null) {
-                mCandidateView.clear();
-            }
-            updateShiftKeyState(getCurrentInputEditorInfo());
-        } else if (mComposing.length() > 0) {
-            if (mPredictionOn && mSuggestions != null && index >= 0) {
-                mComposing.replace(0, mComposing.length(), mSuggestions.get(index));
-            }
-            commitTyped(getCurrentInputConnection());
-        }
-    }
-
+    @Override
     public void swipeRight() {
-        Log.d(TAG, "Swipe right");
-        if (mCompletionOn || mPredictionOn) {
-            pickDefaultCandidate();
-        }
     }
 
+    @Override
     public void swipeLeft() {
-        Log.d(TAG, "Swipe left");
         handleBackspace();
     }
 
+    @Override
     public void swipeDown() {
         handleClose();
     }
 
+    @Override
     public void swipeUp() {
     }
 
@@ -728,53 +511,6 @@ public class SoftKeyboard extends InputMethodService
 
     public void onRelease(int primaryCode) {
 
-    }
-
-    /**
-     * http://www.tutorialspoint.com/android/android_spelling_checker.htm
-     *
-     * @param results results
-     */
-    @Override
-    public void onGetSuggestions(SuggestionsInfo[] results) {
-        final StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < results.length; ++i) {
-            // Returned suggestions are contained in SuggestionsInfo
-            final int len = results[i].getSuggestionsCount();
-            sb.append('\n');
-
-            for (int j = 0; j < len; ++j) {
-                sb.append("," + results[i].getSuggestionAt(j));
-            }
-
-            sb.append(" (" + len + ")");
-        }
-        Log.d(TAG, "SUGGESTIONS: " + sb.toString());
-    }
-
-    private void dumpSuggestionsInfoInternal(
-            final List<String> sb, final SuggestionsInfo si, final int length, final int offset) {
-        // Returned suggestions are contained in SuggestionsInfo
-        final int len = si.getSuggestionsCount();
-        for (int j = 0; j < len; ++j) {
-            sb.add(si.getSuggestionAt(j));
-        }
-    }
-
-    @Override
-    public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
-        Log.d(TAG, "onGetSentenceSuggestions");
-        final List<String> sb = new ArrayList<>();
-        for (int i = 0; i < results.length; ++i) {
-            final SentenceSuggestionsInfo ssi = results[i];
-            for (int j = 0; j < ssi.getSuggestionsCount(); ++j) {
-                dumpSuggestionsInfoInternal(
-                        sb, ssi.getSuggestionsInfoAt(j), ssi.getOffsetAt(j), ssi.getLengthAt(j));
-            }
-        }
-        Log.d(TAG, "SUGGESTIONS: " + sb.toString());
-        setSuggestions(sb, true, true);
     }
     
     private AudioManager getAudioManager() {
