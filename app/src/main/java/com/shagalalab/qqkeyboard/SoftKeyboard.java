@@ -24,6 +24,7 @@ import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
@@ -109,6 +110,18 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setPreviewEnabled(false);
         setLatinKeyboard(qwertyKeyboard);
+
+        // Dismiss popup keyboard on touching outside
+        mInputView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    mInputView.closing(); // Close popup keyboard if it's showing
+                }
+                return false;
+            }
+        });
+
         return mInputView;
     }
 
