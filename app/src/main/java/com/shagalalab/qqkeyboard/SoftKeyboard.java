@@ -54,7 +54,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private long mMetaState;
 
     private LatinKeyboard symbolsKeyboard;
-    private LatinKeyboard symbolsShiftedKeyboard;
     private LatinKeyboard qwertyKeyboard;
     private LatinKeyboard cyrillicKeyboard;
     private LatinKeyboard currentKeyboard;
@@ -95,7 +94,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         qwertyKeyboard = new LatinKeyboard(this, R.xml.qwerty);
         cyrillicKeyboard = new LatinKeyboard(this, R.xml.cyrillic);
         symbolsKeyboard = new LatinKeyboard(this, R.xml.symbols);
-        symbolsShiftedKeyboard = new LatinKeyboard(this, R.xml.symbols_shift);
     }
 
     /**
@@ -393,7 +391,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             // Show a menu or somethin'
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
-            if (current == symbolsKeyboard || current == symbolsShiftedKeyboard) {
+            if (current == symbolsKeyboard) {
                 setLatinKeyboard(prevKeyboard == null ? qwertyKeyboard : prevKeyboard);
             } else {
                 prevKeyboard = (LatinKeyboard) current;
@@ -441,14 +439,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             // Alphabet keyboard
             checkToggleCapsLock();
             mInputView.setShifted(mCapsLock || !mInputView.isShifted());
-        } else if (currentKeyboard == symbolsKeyboard) {
-            symbolsKeyboard.setShifted(true);
-            setLatinKeyboard(symbolsShiftedKeyboard);
-            symbolsShiftedKeyboard.setShifted(true);
-        } else if (currentKeyboard == symbolsShiftedKeyboard) {
-            symbolsShiftedKeyboard.setShifted(false);
-            setLatinKeyboard(symbolsKeyboard);
-            symbolsKeyboard.setShifted(false);
         }
     }
 
