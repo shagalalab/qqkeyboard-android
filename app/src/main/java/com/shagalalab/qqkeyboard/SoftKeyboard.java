@@ -334,6 +334,24 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     }
 
     /**
+     * Helper to send a character to the editor as raw key events.
+     */
+    private void sendKey(int keyCode) {
+        switch (keyCode) {
+            case '\n':
+                keyDownUp(KeyEvent.KEYCODE_ENTER);
+                break;
+            default:
+                if (keyCode >= '0' && keyCode <= '9') {
+                    keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
+                } else {
+                    getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
+                }
+                break;
+        }
+    }
+
+    /**
      * Helper function to commit any text being composed in to the editor.
      */
     private void commitTyped(InputConnection inputConnection) {
@@ -377,7 +395,10 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             tryVibrate();
         }
 
-        if (primaryCode == Keyboard.KEYCODE_DELETE) {
+        if (isWordSeparator(primaryCode)) {
+            sendKey(primaryCode);
+            updateShiftKeyState(getCurrentInputEditorInfo());
+        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleBackspace();
         } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
             handleShift();

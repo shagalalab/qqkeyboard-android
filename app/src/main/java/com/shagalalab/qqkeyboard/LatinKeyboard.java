@@ -25,7 +25,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
-public class LatinKeyboard extends Keyboard {
+class LatinKeyboard extends Keyboard {
 
     private Key mEnterKey;
     private Key mSpaceKey;
