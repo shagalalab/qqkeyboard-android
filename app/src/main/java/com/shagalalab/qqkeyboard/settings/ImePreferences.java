@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-    package com.shagalalab.qqkeyboard.settings;
+package com.shagalalab.qqkeyboard.settings;
 
 import android.app.ActionBar;
 import android.content.Intent;
