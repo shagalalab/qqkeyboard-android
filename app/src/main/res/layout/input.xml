@@ -7,7 +7,7 @@
     android:layout_marginTop="20dp"
     android:background="@color/colorPrimaryDark"
     android:keyBackground="@drawable/key_background"
-    android:keyPreviewLayout="@layout/preview"
+    android:keyPreviewLayout="@null"
     android:keyTextColor="#fff"
     android:paddingTop="0dp"
     android:popupLayout="@layout/keyboard_popup_layout">
