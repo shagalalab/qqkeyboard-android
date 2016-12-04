@@ -95,26 +95,27 @@ class LatinKeyboard extends Keyboard {
 
         switch (options&(EditorInfo.IME_MASK_ACTION|EditorInfo.IME_FLAG_NO_ENTER_ACTION)) {
             case EditorInfo.IME_ACTION_GO:
-                mEnterKey.iconPreview = null;
-                mEnterKey.icon = null;
-                mEnterKey.label = res.getText(R.string.label_go_key);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_forward_24dp);
+                mEnterKey.label = null;
                 break;
             case EditorInfo.IME_ACTION_NEXT:
-                mEnterKey.iconPreview = null;
-                mEnterKey.icon = null;
-                mEnterKey.label = res.getText(R.string.label_next_key);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_keyboard_tab_24dp);
+                mEnterKey.label = null;
                 break;
             case EditorInfo.IME_ACTION_SEARCH:
-                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_search_white_24dp);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_search_24dp);
                 mEnterKey.label = null;
                 break;
             case EditorInfo.IME_ACTION_SEND:
-                mEnterKey.iconPreview = null;
-                mEnterKey.icon = null;
-                mEnterKey.label = res.getText(R.string.label_send_key);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_send_24dp);
+                mEnterKey.label = null;
+                break;
+            case EditorInfo.IME_ACTION_DONE:
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_done_24dp);
+                mEnterKey.label = null;
                 break;
             default:
-                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_keyboard_return_white_24dp);
+                mEnterKey.icon = ContextCompat.getDrawable(context, R.drawable.ic_keyboard_return_24dp);
                 mEnterKey.label = null;
                 break;
         }

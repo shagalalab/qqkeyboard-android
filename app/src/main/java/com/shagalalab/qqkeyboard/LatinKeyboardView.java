@@ -18,13 +18,15 @@ package com.shagalalab.qqkeyboard;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.inputmethod.InputMethodSubtype;
+
+import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
 import java.util.List;
 
@@ -47,11 +49,7 @@ public class LatinKeyboardView extends KeyboardView {
         if (key.codes[0] == Keyboard.KEYCODE_CANCEL) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
-        /*} else if (key.codes[0] == 113) {
-
-            return true; */
         } else {
-            //Log.d("LatinKeyboardView", "KEY: " + key.codes[0]);
             return super.onLongPress(key);
         }
     }
@@ -65,15 +63,19 @@ public class LatinKeyboardView extends KeyboardView {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        boolean isLightTheme = SettingsUtil.isLightTheme(getContext());
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(28);
-        paint.setColor(Color.LTGRAY);
+        int keyColor = isLightTheme ?
+            ContextCompat.getColor(getContext(), R.color.material_light_key_secondary_text_color) :
+            ContextCompat.getColor(getContext(), R.color.material_dark_key_secondary_text_color);
+        paint.setColor(keyColor);
 
         List<Key> keys = getKeyboard().getKeys();
-        for(Key key: keys) {
-            if(key.label != null) {
+        for (Key key: keys) {
+            if (key.label != null) {
                 // latin keyboard
                 if (key.label.equals("a")) {
                     canvas.drawText("á", key.x + (key.width - 25), key.y + 40, paint);

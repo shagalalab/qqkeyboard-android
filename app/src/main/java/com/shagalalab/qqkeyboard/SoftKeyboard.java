@@ -23,6 +23,7 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -104,7 +105,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
      */
     @Override
     public View onCreateInputView() {
-        mInputView = (LatinKeyboardView) getLayoutInflater().inflate(R.layout.input, null);
+        boolean isLightTheme = SettingsUtil.isLightTheme(getBaseContext());
+        if (isLightTheme) {
+            mInputView = (LatinKeyboardView) getLayoutInflater().inflate(R.layout.input_light, null);
+        } else {
+            mInputView = (LatinKeyboardView) getLayoutInflater().inflate(R.layout.input_dark, null);
+        }
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setPreviewEnabled(false);
         setLatinKeyboard(qwertyKeyboard);
@@ -227,7 +233,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
-        // Apply the selected keyboard to the input view.
+        // Recreate input view.
+        setInputView(onCreateInputView());
+
         setLatinKeyboard(currentKeyboard);
         mInputView.closing();
         final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();

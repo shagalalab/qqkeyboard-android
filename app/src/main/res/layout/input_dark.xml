@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shagalalab.qqkeyboard.LatinKeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/keyboard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/material_dark_key_background"
+    android:keyBackground="@drawable/key_background_dark"
+    android:keyPreviewLayout="@null"
+    android:keyTextColor="@color/material_dark_key_text_color"
+    android:shadowRadius="0.0"
+    android:popupLayout="@layout/keyboard_popup_layout_dark">
+
+</com.shagalalab.qqkeyboard.LatinKeyboardView>
