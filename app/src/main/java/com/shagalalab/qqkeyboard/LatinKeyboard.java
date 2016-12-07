@@ -54,10 +54,12 @@ class LatinKeyboard extends Keyboard {
     private Key mSavedLanguageSwitchKey;
 
     private Context context;
+    private int xmlLayoutResId;
     
     public LatinKeyboard(Context context, int xmlLayoutResId) {
         super(context, xmlLayoutResId);
         this.context = context;
+        this.xmlLayoutResId = xmlLayoutResId;
     }
 
     public LatinKeyboard(Context context, int layoutTemplateResId, 
@@ -125,6 +127,10 @@ class LatinKeyboard extends Keyboard {
         if (mSpaceKey != null) {
             mSpaceKey.icon = icon;
         }
+    }
+
+    public int getXmlLayoutResId() {
+        return xmlLayoutResId;
     }
 
     private static class LatinKey extends Keyboard.Key {

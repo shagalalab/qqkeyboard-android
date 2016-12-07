@@ -23,7 +23,6 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,6 +54,8 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private long mMetaState;
 
     private LatinKeyboard symbolsKeyboard;
+    private LatinKeyboard numbersKeyboard;
+    private LatinKeyboard numbersExtKeyboard;
     private LatinKeyboard qwertyKeyboard;
     private LatinKeyboard cyrillicKeyboard;
     private LatinKeyboard currentKeyboard;
@@ -92,9 +93,11 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-        qwertyKeyboard = new LatinKeyboard(this, R.xml.qwerty);
-        cyrillicKeyboard = new LatinKeyboard(this, R.xml.cyrillic);
-        symbolsKeyboard = new LatinKeyboard(this, R.xml.symbols);
+        qwertyKeyboard = new LatinKeyboard(this, R.xml.kbd_qwerty);
+        cyrillicKeyboard = new LatinKeyboard(this, R.xml.kbd_cyrillic);
+        symbolsKeyboard = new LatinKeyboard(this, R.xml.kbd_symbols);
+        numbersKeyboard = new LatinKeyboard(this, R.xml.kbd_numbers);
+        numbersExtKeyboard = new LatinKeyboard(this, R.xml.kbd_numbers_ext);
     }
 
     /**
@@ -168,13 +171,13 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             case InputType.TYPE_CLASS_DATETIME:
                 // Numbers and dates default to the symbols keyboard, with
                 // no extra features.
-                currentKeyboard = symbolsKeyboard;
+                currentKeyboard = numbersKeyboard;
                 break;
 
             case InputType.TYPE_CLASS_PHONE:
                 // Phones will also default to the symbols keyboard, though
                 // often you will want to have a dedicated phone keyboard.
-                currentKeyboard = symbolsKeyboard;
+                currentKeyboard = numbersKeyboard;
                 break;
 
             case InputType.TYPE_CLASS_TEXT:
@@ -422,6 +425,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard) {
                 setLatinKeyboard(prevKeyboard == null ? qwertyKeyboard : prevKeyboard);
+            } else if (current == numbersKeyboard) {
+                prevKeyboard = (LatinKeyboard) current;
+                setLatinKeyboard(numbersExtKeyboard);
+            } else if (current == numbersExtKeyboard) {
+                prevKeyboard = (LatinKeyboard) current;
+                setLatinKeyboard(numbersKeyboard);
             } else {
                 prevKeyboard = (LatinKeyboard) current;
                 setLatinKeyboard(symbolsKeyboard);

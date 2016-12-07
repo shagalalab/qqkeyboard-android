@@ -13,7 +13,7 @@
         android:keyBackground="@drawable/key_background_dark"
         android:keyPreviewLayout="@null"
         android:keyTextColor="@color/material_dark_key_text_color"
-        android:keyTextSize="22sp"
+        android:keyTextSize="@dimen/key_size"
         android:shadowRadius="0.0"
         android:popupLayout="@xml/keyboard_popup_template" />
 
