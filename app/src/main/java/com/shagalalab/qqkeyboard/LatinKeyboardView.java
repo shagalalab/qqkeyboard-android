@@ -76,6 +76,7 @@ public class LatinKeyboardView extends KeyboardView {
         Paint paintNumber = new Paint();
         paintNumber.setTextAlign(Paint.Align.CENTER);
         paintNumber.setTextSize(34);
+        paintNumber.setColor(keyColor);
 
         LatinKeyboard keyboard = (LatinKeyboard) getKeyboard();
         boolean isNumberKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_numbers;

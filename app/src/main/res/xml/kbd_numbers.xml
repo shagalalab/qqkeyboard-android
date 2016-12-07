@@ -28,7 +28,7 @@
         <Key android:codes="49" android:keyLabel="1" android:keyEdgeFlags="left" />
         <Key android:codes="50" android:keyLabel="2" />
         <Key android:codes="51" android:keyLabel="3" />
-        <Key android:codes="48" android:keyLabel="-" android:keyEdgeFlags="right" />
+        <Key android:codes="45" android:keyLabel="-" android:keyEdgeFlags="right" />
     </Row>
 
     <Row>
