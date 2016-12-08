@@ -19,6 +19,8 @@ package com.shagalalab.qqkeyboard;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -92,6 +94,19 @@ public class LatinKeyboardView extends KeyboardView {
         keyToChange.label = label;
         keyToChange.codes[0] = code;
         invalidateKey(keyToChangeIndex);
+    }
+
+    public void toggleShiftKey(LatinKeyboard keyboard, boolean isShifted) {
+        int shiftKeyIndex = 29; // hardcoded index for shift key
+        Key key = keyboard.getKeys().get(shiftKeyIndex);
+        Drawable shiftIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_keyboard_capslock_24dp);
+        if (isShifted) {
+            shiftIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+        } else {
+            shiftIcon.setColorFilter(null);
+        }
+        key.icon = shiftIcon;
+        invalidateKey(shiftKeyIndex);
     }
 
     @Override

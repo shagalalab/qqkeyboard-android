@@ -23,6 +23,7 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -396,10 +397,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
                 cyrillicKeyboard == mInputView.getKeyboard())) {
             int caps = 0;
             EditorInfo ei = getCurrentInputEditorInfo();
-            if (ei != null && ei.inputType != InputType.TYPE_NULL) {
+            if (ei != null && ei.inputType != InputType.TYPE_NULL && getCurrentInputConnection() != null) {
                 caps = getCurrentInputConnection().getCursorCapsMode(attr.inputType);
             }
-            mInputView.setShifted(mCapsLock || caps != 0);
+            boolean shiftStatus = mCapsLock || caps != 0;
+            mInputView.setShifted(shiftStatus);
+            mInputView.toggleShiftKey(currentKeyboard, shiftStatus);
         }
     }
 
@@ -491,7 +494,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         if (qwertyKeyboard == currentKeyboard || cyrillicKeyboard == currentKeyboard) {
             // Alphabet keyboard
             checkToggleCapsLock();
-            mInputView.setShifted(mCapsLock || !mInputView.isShifted());
+            boolean shiftStatus = mCapsLock || !mInputView.isShifted();
+            mInputView.setShifted(shiftStatus);
+            mInputView.toggleShiftKey((LatinKeyboard) currentKeyboard, shiftStatus);
         }
     }
 
@@ -526,11 +531,14 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
 
     private void checkToggleCapsLock() {
         long now = System.currentTimeMillis();
-        if (mLastShiftTime + 800 > now) {
+        if (mLastShiftTime + 500 > now) {
             mCapsLock = !mCapsLock;
             mLastShiftTime = 0;
         } else {
             mLastShiftTime = now;
+            if (mCapsLock) {
+                mCapsLock = false;
+            }
         }
     }
 
