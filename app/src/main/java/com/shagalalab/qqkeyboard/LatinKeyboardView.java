@@ -32,6 +32,12 @@ import java.util.List;
 
 public class LatinKeyboardView extends KeyboardView {
 
+    enum Type {
+        NORMAL,
+        EMAIL,
+        WEB
+    }
+
     static final int KEYCODE_OPTIONS = -100;
     // TODO: Move this into android.inputmethodservice.Keyboard
     static final int KEYCODE_LANGUAGE_SWITCH = -101;
@@ -58,6 +64,34 @@ public class LatinKeyboardView extends KeyboardView {
         final LatinKeyboard keyboard = (LatinKeyboard)getKeyboard();
         //keyboard.setSpaceIcon(getResources().getDrawable(subtype.getIconResId()));
         invalidateAllKeys();
+    }
+
+    void setKeyboardType(LatinKeyboard keyboard, Type type) {
+        boolean isLettersKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty || keyboard.getXmlLayoutResId() == R.xml.kbd_cyrillic;
+        if (!isLettersKeyboard) {
+            return;
+        }
+
+        List<Key> keys = keyboard.getKeys();
+        int keyToChangeIndex = 39; // hardcoded index of comma key
+        Key keyToChange = keys.get(keyToChangeIndex);
+        if (keyToChange.label == null) {
+            return;
+        }
+
+        if (type == Type.EMAIL) {
+            changeKey(keyToChange, keyToChangeIndex, "@", 64);
+        } else if (type == Type.WEB) {
+            changeKey(keyToChange, keyToChangeIndex, "/", 47);
+        } else if (type == Type.NORMAL) {
+            changeKey(keyToChange, keyToChangeIndex, ",", 44);
+        }
+    }
+
+    private void changeKey(Key keyToChange, int keyToChangeIndex, String label, int code) {
+        keyToChange.label = label;
+        keyToChange.codes[0] = code;
+        invalidateKey(keyToChangeIndex);
     }
 
     @Override

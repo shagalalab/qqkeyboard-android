@@ -34,6 +34,14 @@ import android.view.inputmethod.InputMethodSubtype;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
+import static android.text.InputType.TYPE_CLASS_DATETIME;
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.text.InputType.TYPE_CLASS_PHONE;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+import static android.text.InputType.TYPE_TEXT_VARIATION_URI;
+import static android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
+
 /**
  * Example of writing an input method for a soft keyboard.  This code is
  * focused on simplicity over completeness, so it should in no way be considered
@@ -167,30 +175,37 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // We are now going to initialize our state based on the type of
         // text being edited.
         switch (attribute.inputType & InputType.TYPE_MASK_CLASS) {
-            case InputType.TYPE_CLASS_NUMBER:
-            case InputType.TYPE_CLASS_DATETIME:
-                // Numbers and dates default to the symbols keyboard, with
-                // no extra features.
+            case TYPE_CLASS_NUMBER:
+            case TYPE_CLASS_DATETIME:
                 currentKeyboard = numbersKeyboard;
                 break;
 
-            case InputType.TYPE_CLASS_PHONE:
-                // Phones will also default to the symbols keyboard, though
-                // often you will want to have a dedicated phone keyboard.
+            case TYPE_CLASS_PHONE:
                 currentKeyboard = numbersKeyboard;
                 break;
 
-            case InputType.TYPE_CLASS_TEXT:
-                // This is general text editing.  We will default to the
-                // normal alphabetic keyboard, and assume that we should
-                // be doing predictive text (showing candidates as the
-                // user types).
+            case TYPE_CLASS_TEXT:
+                int inputType = attribute.inputType & InputType.TYPE_MASK_VARIATION;
+
                 currentKeyboard = qwertyKeyboard;
+                if (mInputView == null) {
+                    break;
+                }
 
-                // We also want to look at the current state of the editor
-                // to decide whether our alphabetic keyboard should start out
-                // shifted.
-                updateShiftKeyState(attribute);
+                if (inputType == TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                        || inputType == TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS) {
+                    mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.EMAIL);
+                    mInputView.setShifted(false);
+                } else if (inputType == TYPE_TEXT_VARIATION_URI) {
+                    mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.WEB);
+                    mInputView.setShifted(false);
+                } else {
+                    // We also want to look at the current state of the editor
+                    // to decide whether our alphabetic keyboard should start out
+                    // shifted.
+                    mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
+                    updateShiftKeyState(attribute);
+                }
                 break;
 
             default:

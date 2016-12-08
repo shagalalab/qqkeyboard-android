@@ -129,7 +129,7 @@ class LatinKeyboard extends Keyboard {
         }
     }
 
-    public int getXmlLayoutResId() {
+    int getXmlLayoutResId() {
         return xmlLayoutResId;
     }
 
