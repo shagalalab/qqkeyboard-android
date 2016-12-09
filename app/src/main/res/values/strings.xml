@@ -29,12 +29,14 @@
     <string name="settings_name">QqKeyboard sazlawları</string>
     <string name="language_selection_title">Input languages</string>
     <string name="select_language">Klaviatura tilin saylań</string>
+    <string name="key_settings">Klavisha sazlawları</string>
     <string name="sound_on_keypress">Klavisha basılǵanda dawıs shıǵarıw</string>
     <string name="vibrate_on_keypress">Klavisha basılǵanda vibratsiya qılıw</string>
     <string name="volume_on_keypress">Klavisha dawıs dárejesi</string>
     <string name="vibration_strenth_on_keypress">Klavisha vibratsiya kúshi</string>
-    <string name="theme_title">Klaviatura kórinisi</string>
-    <string name="theme_dialog_title">Klaviatura kórinisin (reńin) saylań</string>
+    <string name="keyboard_view_settings">Klaviatura sırtqı kórinisi</string>
+    <string name="theme_title">Klaviatura shablonı</string>
+    <string name="theme_dialog_title">Klaviatura shablonın (reńin) saylań</string>
     <string name="pref_keypress_sound_key">pref_keypress_sound_key</string>
     <string name="pref_keypress_vibration_key">pref_keypress_vibration_key</string>
     <string name="pref_keypress_sound_volume_key">pref_keypress_sound_volume_key</string>
