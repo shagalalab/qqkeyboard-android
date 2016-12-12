@@ -211,8 +211,8 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
                     // to decide whether our alphabetic keyboard should start out
                     // shifted.
                     mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
-                    updateShiftKeyState(attribute);
                 }
+                updateShiftKeyState(attribute);
                 break;
 
             default:
