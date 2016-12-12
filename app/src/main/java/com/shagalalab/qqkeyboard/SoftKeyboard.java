@@ -509,7 +509,11 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (isInputViewShown()) {
             if (mInputView.isShifted()) {
-                primaryCode = Character.toUpperCase(primaryCode);
+                if (primaryCode == 305) { // if we have shifted 'ı', its capitalized version should be 'Í'
+                    primaryCode = 205;
+                } else {
+                    primaryCode = Character.toUpperCase(primaryCode);
+                }
             }
         }
 
