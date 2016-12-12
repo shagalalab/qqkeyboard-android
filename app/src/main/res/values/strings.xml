@@ -46,6 +46,9 @@
     <string name="pref_keypress_theme">pref_keypress_theme</string>
     <string name="pref_keypress_theme_light">theme_light</string>
     <string name="pref_keypress_theme_dark">theme_dark</string>
+    <string name="pref_keypress_layout_latin">layout_latin</string>
+    <string name="pref_keypress_layout_cyrillic">layout_cyrillic</string>
+    <string name="pref_keypress_default_layout">pref_keypress_default_layout</string>
     <string name="ok">OK</string>
     <string name="cancel">Biykar et</string>
     <string name="text_with_percent">%d%%</string>
@@ -54,6 +57,9 @@
     <string name="sound_volume_default">50%</string>
     <string name="theme_dark">Material Dark</string>
     <string name="theme_light">Material Light</string>
+    <string name="layout_latin">Latın</string>
+    <string name="layout_cyrillic">Кирилл</string>
+    <string name="default_layout_title">Daslepki saylangan alfavit</string>
 
     <string-array name="theme_entries">
         <item>@string/theme_light</item>
@@ -63,5 +69,15 @@
     <string-array name="theme_values">
         <item>@string/pref_keypress_theme_light</item>
         <item>@string/pref_keypress_theme_dark</item>
+    </string-array>
+
+    <string-array name="default_layout_entries">
+        <item>@string/layout_latin</item>
+        <item>@string/layout_cyrillic</item>
+    </string-array>
+
+    <string-array name="default_layout_values">
+        <item>@string/pref_keypress_layout_latin</item>
+        <item>@string/pref_keypress_layout_cyrillic</item>
     </string-array>
 </resources>

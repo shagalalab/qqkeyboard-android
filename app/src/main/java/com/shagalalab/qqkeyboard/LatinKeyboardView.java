@@ -69,7 +69,7 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     void setKeyboardType(LatinKeyboard keyboard, Type type) {
-        boolean isLettersKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty || keyboard.getXmlLayoutResId() == R.xml.kbd_cyrillic;
+        boolean isLettersKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty;
         if (!isLettersKeyboard) {
             return;
         }

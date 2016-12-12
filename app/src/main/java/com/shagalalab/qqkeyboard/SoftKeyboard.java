@@ -23,7 +23,6 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,6 +75,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private Vibrator vb;
     private int soundVolume;
     private int vibrationLevel;
+    private boolean isDefaultKeyboardLatin = true;
 
     /**
      * Main initialization of the input method component.  Be sure to call
@@ -94,7 +94,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
      */
     @Override
     public void onInitializeInterface() {
-        if (qwertyKeyboard != null) {
+        if (qwertyKeyboard != null || cyrillicKeyboard != null) {
             // Configuration changes can happen after the keyboard gets recreated,
             // so we need to be able to re-build the keyboards if the available
             // space has changed.
@@ -125,7 +125,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         }
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setPreviewEnabled(false);
-        setLatinKeyboard(qwertyKeyboard);
+
+        isDefaultKeyboardLatin = SettingsUtil.getDefaultKeyboard(getBaseContext()).equalsIgnoreCase(getString(R.string.pref_keypress_layout_latin));
+        setLatinKeyboard(getDefaultKeyboard());
 
         // Dismiss popup keyboard on touching outside
         mInputView.setOnTouchListener(new View.OnTouchListener() {
@@ -173,6 +175,8 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             mMetaState = 0;
         }
 
+        isDefaultKeyboardLatin = SettingsUtil.getDefaultKeyboard(getBaseContext()).equalsIgnoreCase(getString(R.string.pref_keypress_layout_latin));
+
         // We are now going to initialize our state based on the type of
         // text being edited.
         switch (attribute.inputType & InputType.TYPE_MASK_CLASS) {
@@ -188,16 +192,18 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             case TYPE_CLASS_TEXT:
                 int inputType = attribute.inputType & InputType.TYPE_MASK_VARIATION;
 
-                currentKeyboard = qwertyKeyboard;
+                currentKeyboard = getDefaultKeyboard();
                 if (mInputView == null) {
                     break;
                 }
 
                 if (inputType == TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                         || inputType == TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS) {
+                    currentKeyboard = qwertyKeyboard;
                     mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.EMAIL);
                     mInputView.setShifted(false);
                 } else if (inputType == TYPE_TEXT_VARIATION_URI) {
+                    currentKeyboard = qwertyKeyboard;
                     mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.WEB);
                     mInputView.setShifted(false);
                 } else {
@@ -212,7 +218,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             default:
                 // For all unknown input types, default to the alphabetic
                 // keyboard with no special features.
-                currentKeyboard = qwertyKeyboard;
+                currentKeyboard = getDefaultKeyboard();
                 updateShiftKeyState(attribute);
         }
 
@@ -243,7 +249,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // its window.
         setCandidatesViewShown(false);
 
-        currentKeyboard = qwertyKeyboard;
+        currentKeyboard = getDefaultKeyboard();
         if (mInputView != null) {
             mInputView.closing();
         }
@@ -442,7 +448,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard) {
-                setLatinKeyboard(prevKeyboard == null ? qwertyKeyboard : prevKeyboard);
+                setLatinKeyboard(prevKeyboard == null ? getDefaultKeyboard() : prevKeyboard);
             } else if (current == numbersKeyboard) {
                 prevKeyboard = (LatinKeyboard) current;
                 setLatinKeyboard(numbersExtKeyboard);
@@ -606,5 +612,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         if (vibrator != null) {
             vibrator.vibrate(vibrationLevel);
         }
+    }
+
+    private LatinKeyboard getDefaultKeyboard() {
+        return isDefaultKeyboardLatin ? qwertyKeyboard : cyrillicKeyboard;
     }
 }

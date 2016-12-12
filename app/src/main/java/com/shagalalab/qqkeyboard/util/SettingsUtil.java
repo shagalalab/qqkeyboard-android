@@ -57,4 +57,9 @@ public class SettingsUtil {
         return savedTheme.equalsIgnoreCase(context.getString(R.string.pref_keypress_theme_light));
     }
 
+    public static String getDefaultKeyboard(Context context) {
+        SharedPreferences sharedPref = getPreferences(context);
+        return sharedPref.getString(context.getString(R.string.pref_keypress_default_layout), context.getString(R.string.pref_keypress_layout_latin));
+    }
+
 }
