@@ -101,7 +101,7 @@ public class LatinKeyboardView extends KeyboardView {
         Key key = keyboard.getKeys().get(shiftKeyIndex);
         Drawable shiftIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_keyboard_capslock_24dp);
         if (isShifted) {
-            shiftIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+            shiftIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.material_shift_key_pressed), PorterDuff.Mode.SRC_IN);
         } else {
             shiftIcon.setColorFilter(null);
         }

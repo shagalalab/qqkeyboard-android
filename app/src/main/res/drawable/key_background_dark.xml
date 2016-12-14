@@ -9,5 +9,5 @@
     <!-- Pressed state -->
     <item
         android:state_pressed="true"
-        android:drawable="@color/colorAccent" />
+        android:drawable="@color/material_dark_key_background_pressed" />
 </selector>
