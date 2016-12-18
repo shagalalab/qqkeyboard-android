@@ -4,7 +4,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:label="@string/ime_name">
+        android:label="@string/ime_name"
+        android:icon="@mipmap/ic_launcher">
         <activity android:name=".settings.ImePreferences"
             android:label="@string/settings_name"
             android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
@@ -12,6 +13,8 @@
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
+        <activity android:name=".settings.AboutActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
         <service android:name=".SoftKeyboard"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>

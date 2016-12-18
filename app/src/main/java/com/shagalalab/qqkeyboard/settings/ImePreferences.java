@@ -19,6 +19,7 @@ package com.shagalalab.qqkeyboard.settings;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
@@ -74,6 +75,16 @@ public class ImePreferences extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.ime_preferences);
+
+            Preference about = findPreference("about");
+            about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), AboutActivity.class);
+                    startActivity(intent);
+                    return false;
+                }
+            });
         }
     }
 }

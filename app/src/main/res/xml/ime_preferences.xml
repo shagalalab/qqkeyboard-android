@@ -58,4 +58,12 @@
             android:summary="%s" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/keyboard_other_settings">
+        <PreferenceScreen
+            android:key="about"
+            android:title="@string/about_keyboard"
+            android:persistent="false" >
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 </PreferenceScreen>
