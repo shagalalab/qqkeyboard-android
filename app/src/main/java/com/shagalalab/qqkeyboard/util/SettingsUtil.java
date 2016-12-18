@@ -53,8 +53,9 @@ public class SettingsUtil {
 
     public static boolean isLightTheme(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
-        String savedTheme = sharedPref.getString(context.getString(R.string.pref_keypress_theme), "");
-        return savedTheme.equalsIgnoreCase(context.getString(R.string.pref_keypress_theme_light));
+        String lightTheme = context.getString(R.string.pref_keypress_theme_light);
+        String savedTheme = sharedPref.getString(context.getString(R.string.pref_keypress_theme), lightTheme);
+        return savedTheme.equalsIgnoreCase(lightTheme);
     }
 
     public static String getDefaultKeyboard(Context context) {
