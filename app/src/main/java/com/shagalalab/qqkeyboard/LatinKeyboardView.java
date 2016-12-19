@@ -26,11 +26,14 @@ import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
 import java.util.List;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class LatinKeyboardView extends KeyboardView {
 
@@ -56,6 +59,10 @@ public class LatinKeyboardView extends KeyboardView {
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == Keyboard.KEYCODE_CANCEL) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
+            return true;
+        } else if (String.valueOf((char) key.codes[0]).equals(" ")) {
+            InputMethodManager imeManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+            imeManager.showInputMethodPicker();
             return true;
         } else {
             return super.onLongPress(key);
