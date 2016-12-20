@@ -102,7 +102,7 @@
         -->
         <Key android:codes="-101" android:keyLabel="QQ" android:keyWidth="10%p" />
         <Key android:codes="32" android:keyIcon="@drawable/ic_space_bar_24dp"
-                android:keyWidth="40%p" android:isRepeatable="true" />
+                android:keyWidth="40%p" />
         <Key android:codes="46" android:keyLabel="."
                 android:keyWidth="10%p" android:popupCharacters=".,?!#@"
             android:popupKeyboard="@xml/keyboard_popup_template" />

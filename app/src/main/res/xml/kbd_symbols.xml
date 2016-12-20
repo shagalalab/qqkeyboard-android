@@ -85,7 +85,7 @@
             privately defined in com.example.android.softkeyboard.LatinKeyboardView.
         -->
         <Key android:codes="32" android:keyIcon="@drawable/ic_space_bar_24dp"
-            android:keyWidth="50%p" android:isRepeatable="true"/>
+            android:keyWidth="50%p" />
         <Key android:codes="46" android:keyLabel="."
             android:keyWidth="10%p" android:popupCharacters=".,?!#@" android:popupKeyboard="@xml/keyboard_popup_template"/>
         <Key android:codes="10" android:keyIcon="@drawable/ic_keyboard_return_24dp"
