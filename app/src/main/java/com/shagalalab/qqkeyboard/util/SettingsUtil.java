@@ -48,7 +48,7 @@ public class SettingsUtil {
 
     public static int getVibrationLevel(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
-        return sharedPref.getInt(context.getString(R.string.pref_keypress_vibration_strength_level), 50);
+        return sharedPref.getInt(context.getString(R.string.pref_keypress_vibration_strength_level), 20);
     }
 
     public static boolean isLightTheme(Context context) {
