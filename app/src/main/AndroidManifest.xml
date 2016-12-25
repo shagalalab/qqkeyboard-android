@@ -2,12 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.shagalalab.qqkeyboard">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:label="@string/ime_name"
         android:icon="@mipmap/ic_launcher"
+        android:name=".QqKeyboardApplication"
         android:allowBackup="true"
         android:fullBackupContent="true">
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="645168c2bc5f858f9c7c043d79712d53d8d249ff" />
 
         <activity android:name=".settings.ImePreferences"
             android:label="@string/settings_name"
