@@ -59,7 +59,7 @@
     <string name="theme_light">Material Light</string>
     <string name="layout_latin">Latın</string>
     <string name="layout_cyrillic">Кирилл</string>
-    <string name="default_layout_title">Negizgi saylanǵan alfavit</string>
+    <string name="default_layout_title">Negizgi saylanǵan álipbe</string>
     <string name="keyboard_other_settings">Basqa sazlawlar</string>
     <string name="about_keyboard">QqKeyboard haqqında</string>
     <string name="version">version %s</string>
