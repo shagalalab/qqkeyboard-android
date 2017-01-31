@@ -63,4 +63,11 @@ public class SettingsUtil {
         return sharedPref.getString(context.getString(R.string.pref_keypress_default_layout), context.getString(R.string.pref_keypress_layout_latin));
     }
 
+    public static boolean isKeyboardWithFirstRowNumbers(Context context) {
+        SharedPreferences sharedPref = getPreferences(context);
+        String keyboardFirstRowNumbers = context.getString(R.string.pref_keypress_row_numbers);
+        String savedKeyboard = sharedPref.getString(context.getString(R.string.pref_keypress_first_row_appearance), keyboardFirstRowNumbers);
+        return savedKeyboard.equalsIgnoreCase(keyboardFirstRowNumbers);
+    }
+
 }

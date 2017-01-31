@@ -77,7 +77,8 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     void setKeyboardType(LatinKeyboard keyboard, Type type) {
-        boolean isLettersKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty;
+        boolean isLettersKeyboard = (keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty_first_row_numbers ||
+            keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty_first_row_letters);
         if (!isLettersKeyboard) {
             return;
         }
@@ -139,41 +140,43 @@ public class LatinKeyboardView extends KeyboardView {
 
         LatinKeyboard keyboard = (LatinKeyboard) getKeyboard();
         boolean isNumberKeyboard = keyboard.getXmlLayoutResId() == R.xml.kbd_numbers;
+        boolean isKeyboardWithNumbers = SettingsUtil.isKeyboardWithFirstRowNumbers(getContext());
+
         List<Key> keys = keyboard.getKeys();
-        for (Key key: keys) {
+        for (Key key : keys) {
             if (key.label != null) {
                 // latin keyboard
-                if (key.label.equals("a")) {
+                if (key.label.equals("a") && isKeyboardWithNumbers) {
                     canvas.drawText("á", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("g")) {
+                } else if (key.label.equals("g") && isKeyboardWithNumbers) {
                     canvas.drawText("ǵ", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("i")) {
+                } else if (key.label.equals("i") && isKeyboardWithNumbers) {
                     canvas.drawText("ı", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("n")) {
+                } else if (key.label.equals("n") && isKeyboardWithNumbers) {
                     canvas.drawText("ń", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("o")) {
+                } else if (key.label.equals("o") && isKeyboardWithNumbers) {
                     canvas.drawText("ó", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("u")) {
+                } else if (key.label.equals("u") && isKeyboardWithNumbers) {
                     canvas.drawText("ú", getKeyX(res, key), getKeyY(res, key), paint);
 
                     // cyrillic keyboard
-                } else if (key.label.equals("у")) {
+                } else if (key.label.equals("у") && isKeyboardWithNumbers) {
                     canvas.drawText("ўү", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("к")) {
+                } else if (key.label.equals("к") && isKeyboardWithNumbers) {
                     canvas.drawText("қ", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("е")) {
+                } else if (key.label.equals("е") && isKeyboardWithNumbers) {
                     canvas.drawText("ё", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("н")) {
+                } else if (key.label.equals("н") && isKeyboardWithNumbers) {
                     canvas.drawText("ң", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("г")) {
+                } else if (key.label.equals("г") && isKeyboardWithNumbers) {
                     canvas.drawText("ғ", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("х")) {
+                } else if (key.label.equals("х") && isKeyboardWithNumbers) {
                     canvas.drawText("ҳ", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("а")) {
+                } else if (key.label.equals("а") && isKeyboardWithNumbers) {
                     canvas.drawText("ә", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("о")) {
+                } else if (key.label.equals("о") && isKeyboardWithNumbers) {
                     canvas.drawText("ө", getKeyX(res, key), getKeyY(res, key), paint);
-                } else if (key.label.equals("ь")) {
+                } else if (key.label.equals("ь") && isKeyboardWithNumbers) {
                     canvas.drawText("ъ", getKeyX(res, key), getKeyY(res, key), paint);
 
                     // numbers keyboard

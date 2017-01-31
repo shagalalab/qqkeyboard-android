@@ -78,6 +78,12 @@
         menen tanısıwdı qáleseńiz tómendegi bannerdi basıwıńızdı sorap qalamız:
 
     </string>
+    <string name="pref_keypress_first_row_appearance">pref_keypress_first_row_appearance</string>
+    <string name="first_row_appearance">Birinshi qatar kórinisi</string>
+    <string name="row_additional_letters">Qosımsha háripler (á, ú, ı, &#8230;)</string>
+    <string name="row_numbers">Sanlar (1, 2, 3, &#8230;)</string>
+    <string name="pref_keypress_row_numbers">row_numbers</string>
+    <string name="pref_keypress_row_additional_letters">row_additional_letters</string>
 
     <string-array name="theme_entries">
         <item>@string/theme_light</item>
@@ -97,5 +103,15 @@
     <string-array name="default_layout_values">
         <item>@string/pref_keypress_layout_latin</item>
         <item>@string/pref_keypress_layout_cyrillic</item>
+    </string-array>
+
+    <string-array name="first_row_entries">
+        <item>@string/row_numbers</item>
+        <item>@string/row_additional_letters</item>
+    </string-array>
+
+    <string-array name="first_row_values">
+        <item>@string/pref_keypress_row_numbers</item>
+        <item>@string/pref_keypress_row_additional_letters</item>
     </string-array>
 </resources>

@@ -68,6 +68,10 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private LatinKeyboard cyrillicKeyboard;
     private LatinKeyboard currentKeyboard;
     private LatinKeyboard prevKeyboard;
+    private LatinKeyboard qwertyKeyboardFirstRowNumbers;
+    private LatinKeyboard qwertyKeyboardFirstRowLetters;
+    private LatinKeyboard cyrillicKeyboardFirstRowNumbers;
+    private LatinKeyboard cyrillicKeyboardFirstRowLetters;
     private String mWordSeparators;
     private boolean isSoundEnabled = true;
     private boolean isVibrationEnabled = true;
@@ -76,6 +80,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private int soundVolume;
     private int vibrationLevel;
     private boolean isDefaultKeyboardLatin = true;
+    private boolean isKeyboardWithFirstRowNumber = true;
 
     /**
      * Main initialization of the input method component.  Be sure to call
@@ -102,11 +107,16 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-        qwertyKeyboard = new LatinKeyboard(this, R.xml.kbd_qwerty);
-        cyrillicKeyboard = new LatinKeyboard(this, R.xml.kbd_cyrillic);
+
+        qwertyKeyboardFirstRowNumbers = new LatinKeyboard(this, R.xml.kbd_qwerty_first_row_numbers);
+        qwertyKeyboardFirstRowLetters = new LatinKeyboard(this, R.xml.kbd_qwerty_first_row_letters);
+        cyrillicKeyboardFirstRowNumbers = new LatinKeyboard(this, R.xml.kbd_cyrillic_first_row_numbers);
+        cyrillicKeyboardFirstRowLetters = new LatinKeyboard(this, R.xml.kbd_cyrillic_first_row_letters);
         symbolsKeyboard = new LatinKeyboard(this, R.xml.kbd_symbols);
         numbersKeyboard = new LatinKeyboard(this, R.xml.kbd_numbers);
         numbersExtKeyboard = new LatinKeyboard(this, R.xml.kbd_numbers_ext);
+
+        setupKeyboards(SettingsUtil.isKeyboardWithFirstRowNumbers(getBaseContext()));
     }
 
     /**
@@ -127,7 +137,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         mInputView.setPreviewEnabled(false);
 
         isDefaultKeyboardLatin = SettingsUtil.getDefaultKeyboard(getBaseContext()).equalsIgnoreCase(getString(R.string.pref_keypress_layout_latin));
-        setLatinKeyboard(getDefaultKeyboard());
+        isKeyboardWithFirstRowNumber = SettingsUtil.isKeyboardWithFirstRowNumbers(getBaseContext());
+        setupKeyboards(isKeyboardWithFirstRowNumber);
+        setKeyboard(getDefaultKeyboard());
 
         // Dismiss popup keyboard on touching outside
         mInputView.setOnTouchListener(new View.OnTouchListener() {
@@ -143,7 +155,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         return mInputView;
     }
 
-    private void setLatinKeyboard(LatinKeyboard nextKeyboard) {
+    private void setKeyboard(LatinKeyboard nextKeyboard) {
         mInputView.setKeyboard(nextKeyboard);
     }
 
@@ -176,6 +188,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         }
 
         isDefaultKeyboardLatin = SettingsUtil.getDefaultKeyboard(getBaseContext()).equalsIgnoreCase(getString(R.string.pref_keypress_layout_latin));
+        isKeyboardWithFirstRowNumber = SettingsUtil.isKeyboardWithFirstRowNumbers(getBaseContext());
 
         // We are now going to initialize our state based on the type of
         // text being edited.
@@ -261,7 +274,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // Recreate input view.
         setInputView(onCreateInputView());
 
-        setLatinKeyboard(currentKeyboard);
+        setKeyboard(getDefaultKeyboard());
         mInputView.closing();
         final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
         mInputView.setSubtypeOnSpaceKey(subtype);
@@ -448,16 +461,16 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard) {
-                setLatinKeyboard(prevKeyboard == null ? getDefaultKeyboard() : prevKeyboard);
+                setKeyboard(prevKeyboard == null ? getDefaultKeyboard() : prevKeyboard);
             } else if (current == numbersKeyboard) {
                 prevKeyboard = (LatinKeyboard) current;
-                setLatinKeyboard(numbersExtKeyboard);
+                setKeyboard(numbersExtKeyboard);
             } else if (current == numbersExtKeyboard) {
                 prevKeyboard = (LatinKeyboard) current;
-                setLatinKeyboard(numbersKeyboard);
+                setKeyboard(numbersKeyboard);
             } else {
                 prevKeyboard = (LatinKeyboard) current;
-                setLatinKeyboard(symbolsKeyboard);
+                setKeyboard(symbolsKeyboard);
                 symbolsKeyboard.setShifted(false);
             }
         } else {
@@ -530,10 +543,11 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private void handleLanguageSwitch() {
         boolean shifted = mInputView.isShifted();
 
-        if (mInputView.getKeyboard() == qwertyKeyboard) {
-            setLatinKeyboard(cyrillicKeyboard);
+        int keyboardResId = ((LatinKeyboard) mInputView.getKeyboard()).getXmlLayoutResId();
+        if (keyboardResId == R.xml.kbd_qwerty_first_row_numbers || keyboardResId == R.xml.kbd_qwerty_first_row_letters) {
+            setKeyboard(cyrillicKeyboard);
         } else {
-            setLatinKeyboard(qwertyKeyboard);
+            setKeyboard(qwertyKeyboard);
         }
 
         mInputView.setShifted(shifted);
@@ -620,5 +634,15 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
 
     private LatinKeyboard getDefaultKeyboard() {
         return isDefaultKeyboardLatin ? qwertyKeyboard : cyrillicKeyboard;
+    }
+
+    private void setupKeyboards(boolean isKeyboardWithFirstRowNumber) {
+        if (isKeyboardWithFirstRowNumber) {
+            qwertyKeyboard = qwertyKeyboardFirstRowNumbers;
+            cyrillicKeyboard = cyrillicKeyboardFirstRowNumbers;
+        } else {
+            qwertyKeyboard = qwertyKeyboardFirstRowLetters;
+            cyrillicKeyboard = cyrillicKeyboardFirstRowLetters;
+        }
     }
 }
