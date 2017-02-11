@@ -84,7 +84,14 @@ public class LatinKeyboardView extends KeyboardView {
         }
 
         List<Key> keys = keyboard.getKeys();
-        int keyToChangeIndex = 39; // hardcoded index of comma key
+        int keyToChangeIndex; // hardcoded index of comma key
+        if (keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty_first_row_numbers) {
+            keyToChangeIndex = 39;
+        } else if (keyboard.getXmlLayoutResId() == R.xml.kbd_qwerty_first_row_letters) {
+            keyToChangeIndex = 35;
+        } else {
+            return;
+        }
         Key keyToChange = keys.get(keyToChangeIndex);
         if (keyToChange.label == null) {
             return;
@@ -106,6 +113,11 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     public void toggleShiftKey(LatinKeyboard keyboard, boolean isShifted) {
+        int keyboardLayoutId = keyboard.getXmlLayoutResId();
+        if (keyboardLayoutId == R.xml.kbd_numbers || keyboardLayoutId == R.xml.kbd_numbers_ext) {
+            return;
+        }
+
         int shiftKeyIndex = 29; // hardcoded index for shift key
         Key key = keyboard.getKeys().get(shiftKeyIndex);
         Drawable shiftIcon = ContextCompat.getDrawable(getContext(), R.drawable.ic_keyboard_capslock_24dp);

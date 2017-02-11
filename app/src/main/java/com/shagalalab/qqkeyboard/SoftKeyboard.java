@@ -256,12 +256,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // Clear current composing text and candidates.
         mComposing.setLength(0);
 
-        // We only hide the candidates window when finishing input on
-        // a particular editor, to avoid popping the underlying application
-        // up and down if the user is entering text into the bottom of
-        // its window.
-        setCandidatesViewShown(false);
-
         currentKeyboard = getDefaultKeyboard();
         if (mInputView != null) {
             mInputView.closing();
@@ -274,7 +268,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // Recreate input view.
         setInputView(onCreateInputView());
 
-        setKeyboard(getDefaultKeyboard());
+//        setKeyboard(currentKeyboard);
         mInputView.closing();
         final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
         mInputView.setSubtypeOnSpaceKey(subtype);
@@ -429,8 +423,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
      * Helper to send a key down / key up pair to the current editor.
      */
     private void keyDownUp(int keyEventCode) {
-        getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
-        getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
+        try {
+            getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
+            getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
+        } catch (Exception e) {
+
+        }
     }
 
     // Implementation of KeyboardViewListener
@@ -452,12 +450,8 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             handleShift();
         } else if (primaryCode == Keyboard.KEYCODE_CANCEL) {
             handleClose();
-            return;
         } else if (primaryCode == LatinKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
             handleLanguageSwitch();
-            return;
-        } else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
-            // Show a menu or somethin'
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard) {
