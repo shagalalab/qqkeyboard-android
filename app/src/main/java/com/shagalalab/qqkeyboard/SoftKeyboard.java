@@ -196,10 +196,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             case TYPE_CLASS_NUMBER:
             case TYPE_CLASS_DATETIME:
                 currentKeyboard = numbersKeyboard;
+                mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
                 break;
 
             case TYPE_CLASS_PHONE:
                 currentKeyboard = numbersKeyboard;
+                mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
                 break;
 
             case TYPE_CLASS_TEXT:
