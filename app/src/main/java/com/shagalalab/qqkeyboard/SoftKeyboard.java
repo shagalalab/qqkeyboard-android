@@ -139,7 +139,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         isDefaultKeyboardLatin = SettingsUtil.getDefaultKeyboard(getBaseContext()).equalsIgnoreCase(getString(R.string.pref_keypress_layout_latin));
         isKeyboardWithFirstRowNumber = SettingsUtil.isKeyboardWithFirstRowNumbers(getBaseContext());
         setupKeyboards(isKeyboardWithFirstRowNumber);
-        setKeyboard(getDefaultKeyboard());
+        setKeyboard(currentKeyboard);
 
         // Dismiss popup keyboard on touching outside
         mInputView.setOnTouchListener(new View.OnTouchListener() {
@@ -196,12 +196,10 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             case TYPE_CLASS_NUMBER:
             case TYPE_CLASS_DATETIME:
                 currentKeyboard = numbersKeyboard;
-                mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
                 break;
 
             case TYPE_CLASS_PHONE:
                 currentKeyboard = numbersKeyboard;
-                mInputView.setKeyboardType(currentKeyboard, LatinKeyboardView.Type.NORMAL);
                 break;
 
             case TYPE_CLASS_TEXT:
