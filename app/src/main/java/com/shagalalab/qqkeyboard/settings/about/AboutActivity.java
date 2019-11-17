@@ -1,11 +1,8 @@
-package com.shagalalab.qqkeyboard.settings;
+package com.shagalalab.qqkeyboard.settings.about;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -13,17 +10,21 @@ import android.widget.TextView;
 import com.shagalalab.qqkeyboard.BuildConfig;
 import com.shagalalab.qqkeyboard.R;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Created by atabek on 14/12/16.
  */
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.about_keyboard);
             actionBar.setDisplayHomeAsUpEnabled(true);

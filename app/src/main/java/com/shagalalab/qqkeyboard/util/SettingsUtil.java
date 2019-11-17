@@ -2,9 +2,10 @@ package com.shagalalab.qqkeyboard.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.shagalalab.qqkeyboard.R;
+
+import androidx.preference.PreferenceManager;
 
 /**
  * Created by atabek on 2/09/2016.
@@ -12,6 +13,8 @@ import com.shagalalab.qqkeyboard.R;
 
 public class SettingsUtil {
 
+    public static final int DEFAULT_SOUND_VOLUME = 50;
+    public static final int DEFAULT_VIBRATION_LEVEL = 20;
 
     private static SharedPreferences getPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
@@ -27,28 +30,14 @@ public class SettingsUtil {
         return sharedPref.getBoolean(context.getString(R.string.pref_keypress_vibration_key), true);
     }
 
-    public static void setSoundVolume(Context context, int level) {
-        SharedPreferences sharedPref = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(context.getString(R.string.pref_keypress_sound_volume_level), level);
-        editor.apply();
-    }
-
     public static int getSoundVolume(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
-        return sharedPref.getInt(context.getString(R.string.pref_keypress_sound_volume_level), 50);
-    }
-
-    public static void setVibrationLevel(Context context, int level) {
-        SharedPreferences sharedPref = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(context.getString(R.string.pref_keypress_vibration_strength_level), level);
-        editor.apply();
+        return sharedPref.getInt(context.getString(R.string.pref_keypress_sound_volume_level), DEFAULT_SOUND_VOLUME);
     }
 
     public static int getVibrationLevel(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
-        return sharedPref.getInt(context.getString(R.string.pref_keypress_vibration_strength_level), 20);
+        return sharedPref.getInt(context.getString(R.string.pref_keypress_vibration_strength_level), DEFAULT_VIBRATION_LEVEL);
     }
 
     public static boolean isLightTheme(Context context) {

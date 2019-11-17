@@ -25,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
@@ -34,8 +33,11 @@ import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+@SuppressWarnings("deprecation")
 public class LatinKeyboardView extends KeyboardView {
 
     enum Type {

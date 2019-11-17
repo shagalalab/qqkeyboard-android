@@ -49,6 +49,7 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
  * a basic example for how you would get started writing an input method, to
  * be fleshed out as appropriate.
  */
+@SuppressWarnings("deprecation")
 public class SoftKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
     private static final String TAG = "SoftKeyboard";
 
@@ -325,35 +326,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
                 // Let the underlying text editor always handle these.
                 return false;
             default:
-                // For all other keys, if we want to do transformations on
-                // text being entered with a hard keyboard, we need to process
-                // it and do the appropriate action.
-                /*
-                if (PROCESS_HARD_KEYS) {
-                    if (keyCode == KeyEvent.KEYCODE_SPACE
-                            && (event.getMetaState()&KeyEvent.META_ALT_ON) != 0) {
-                        // A silly example: in our input method, Alt+Space
-                        // is a shortcut for 'android' in lower case.
-                        InputConnection ic = getCurrentInputConnection();
-                        if (ic != null) {
-                            // First, tell the editor that it is no longer in the
-                            // shift state, since we are consuming this.
-                            ic.clearMetaKeyStates(KeyEvent.META_ALT_ON);
-                            keyDownUp(KeyEvent.KEYCODE_A);
-                            keyDownUp(KeyEvent.KEYCODE_N);
-                            keyDownUp(KeyEvent.KEYCODE_D);
-                            keyDownUp(KeyEvent.KEYCODE_R);
-                            keyDownUp(KeyEvent.KEYCODE_O);
-                            keyDownUp(KeyEvent.KEYCODE_I);
-                            keyDownUp(KeyEvent.KEYCODE_D);
-                            // And we consume this event.
-                            return true;
-                        }
-                    }
-                    if (mPredictionOn && translateKeyDown(keyCode, event)) {
-                        return true;
-                    }
-                }*/
         }
 
         return super.onKeyDown(keyCode, event);
@@ -377,17 +349,14 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
      * Helper to send a character to the editor as raw key events.
      */
     private void sendKey(int keyCode) {
-        switch (keyCode) {
-            case '\n':
-                keyDownUp(KeyEvent.KEYCODE_ENTER);
-                break;
-            default:
-                if (keyCode >= '0' && keyCode <= '9') {
-                    keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
-                } else {
-                    getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
-                }
-                break;
+        if (keyCode == '\n') {
+            keyDownUp(KeyEvent.KEYCODE_ENTER);
+        } else {
+            if (keyCode >= '0' && keyCode <= '9') {
+                keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
+            } else {
+                getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
+            }
         }
     }
 
@@ -468,7 +437,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
                 symbolsKeyboard.setShifted(false);
             }
         } else {
-            handleCharacter(primaryCode, keyCodes);
+            handleCharacter(primaryCode);
         }
     }
 
@@ -513,7 +482,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         }
     }
 
-    private void handleCharacter(int primaryCode, int[] keyCodes) {
+    private void handleCharacter(int primaryCode) {
         if (isInputViewShown()) {
             if (mInputView.isShifted()) {
                 if (primaryCode == 305) { // if we have shifted 'ı', its capitalized version should be 'Í'
@@ -524,7 +493,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             }
         }
 
-        getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
+        getCurrentInputConnection().commitText(String.valueOf(Character.toChars(primaryCode)), 1);
         updateShiftKeyState(getCurrentInputEditorInfo());
     }
 

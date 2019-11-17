@@ -9,16 +9,16 @@
         android:allowBackup="true"
         android:fullBackupContent="true">
 
-        <activity android:name=".settings.ImePreferences"
+        <activity android:name=".settings.ImePreferencesActivity"
             android:label="@string/settings_name"
-            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".settings.AboutActivity"
-            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+        <activity android:name=".settings.about.AboutActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <service android:name=".SoftKeyboard"
             android:permission="android.permission.BIND_INPUT_METHOD">

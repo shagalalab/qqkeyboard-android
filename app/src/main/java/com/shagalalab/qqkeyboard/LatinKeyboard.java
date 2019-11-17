@@ -21,10 +21,12 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
-import android.support.v4.content.ContextCompat;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.core.content.ContextCompat;
+
+@SuppressWarnings("deprecation")
 class LatinKeyboard extends Keyboard {
 
     private Key mEnterKey;
