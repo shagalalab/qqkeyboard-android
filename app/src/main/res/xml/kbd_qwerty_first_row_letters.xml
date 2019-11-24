@@ -27,10 +27,10 @@
     <Row android:keyWidth="16%p">
         <Key android:codes="225" android:keyLabel="á" android:keyEdgeFlags="left" />
         <Key android:codes="501" android:keyLabel="ǵ" />
-        <Key android:codes="305" android:keyLabel="ı" />
+        <Key android:codes="250" android:keyLabel="ú"/>
         <Key android:codes="324" android:keyLabel="ń" />
-        <Key android:codes="243" android:keyLabel="ó" />
-        <Key android:codes="250" android:keyLabel="ú" android:keyEdgeFlags="right" />
+        <Key android:codes="305" android:keyLabel="ı" />
+        <Key android:codes="243" android:keyLabel="ó" android:keyEdgeFlags="right" />
     </Row>
 
     <Row>

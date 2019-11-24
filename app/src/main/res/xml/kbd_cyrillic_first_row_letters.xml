@@ -26,15 +26,15 @@
 
     <Row android:keyWidth="10%p">
         <Key android:codes="1241" android:keyLabel="ә" android:keyEdgeFlags="left" />
-        <Key android:codes="1171" android:keyLabel="ғ" />
-        <Key android:codes="1105" android:keyLabel="ё" />
-        <Key android:codes="1179" android:keyLabel="қ" />
-        <Key android:codes="1187" android:keyLabel="ң" />
-        <Key android:codes="1257" android:keyLabel="ө" />
         <Key android:codes="1118" android:keyLabel="ў" />
         <Key android:codes="1199" android:keyLabel="ү" />
-        <Key android:codes="1203" android:keyLabel="ҳ" />
-        <Key android:codes="1098" android:keyLabel="ъ" android:keyEdgeFlags="right" />
+        <Key android:codes="1179" android:keyLabel="қ" />
+        <Key android:codes="1105" android:keyLabel="ё" />
+        <Key android:codes="1187" android:keyLabel="ң" />
+        <Key android:codes="1171" android:keyLabel="ғ" />
+        <Key android:codes="1257" android:keyLabel="ө" />
+        <Key android:codes="1098" android:keyLabel="ъ" />
+        <Key android:codes="1203" android:keyLabel="ҳ" android:keyEdgeFlags="right" />
     </Row>
 
     <Row>
