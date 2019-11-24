@@ -65,7 +65,9 @@ public class LatinKeyboardView extends KeyboardView {
             return true;
         } else if (String.valueOf((char) key.codes[0]).equals(" ")) {
             InputMethodManager imeManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imeManager.showInputMethodPicker();
+            if (imeManager != null) {
+                imeManager.showInputMethodPicker();
+            }
             return true;
         } else {
             return super.onLongPress(key);

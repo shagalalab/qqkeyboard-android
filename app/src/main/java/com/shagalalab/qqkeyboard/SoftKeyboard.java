@@ -196,9 +196,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         switch (attribute.inputType & InputType.TYPE_MASK_CLASS) {
             case TYPE_CLASS_NUMBER:
             case TYPE_CLASS_DATETIME:
-                currentKeyboard = numbersKeyboard;
-                break;
-
             case TYPE_CLASS_PHONE:
                 currentKeyboard = numbersKeyboard;
                 break;
@@ -269,7 +266,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // Recreate input view.
         setInputView(onCreateInputView());
 
-//        setKeyboard(currentKeyboard);
         mInputView.closing();
         final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
         mInputView.setSubtypeOnSpaceKey(subtype);
@@ -297,7 +293,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 // The InputMethodService already takes care of the back
@@ -312,7 +307,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
                 break;
 
             case KeyEvent.KEYCODE_DEL:
-
                 // Special handling of the delete key: if we currently are
                 // composing text for the user, we want to modify that instead
                 // of let the application to the delete itself.
@@ -355,7 +349,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             if (keyCode >= '0' && keyCode <= '9') {
                 keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
             } else {
-                getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
+                getCurrentInputConnection().commitText(String.valueOf(Character.toChars(keyCode)), 1);
             }
         }
     }
@@ -509,8 +503,10 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         int keyboardResId = ((LatinKeyboard) mInputView.getKeyboard()).getXmlLayoutResId();
         if (keyboardResId == R.xml.kbd_qwerty_first_row_numbers || keyboardResId == R.xml.kbd_qwerty_first_row_letters) {
             setKeyboard(cyrillicKeyboard);
+            SettingsUtil.setDefaultKeyboard(mInputView.getContext(), R.string.pref_keypress_layout_cyrillic);
         } else {
             setKeyboard(qwertyKeyboard);
+            SettingsUtil.setDefaultKeyboard(mInputView.getContext(), R.string.pref_keypress_layout_latin);
         }
 
         mInputView.setShifted(shifted);

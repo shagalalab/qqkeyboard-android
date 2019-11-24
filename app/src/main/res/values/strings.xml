@@ -53,13 +53,10 @@
     <string name="cancel">Biykar et</string>
     <string name="text_with_percent">%d%%</string>
     <string name="text_with_ms">%d ms</string>
-    <string name="vibration_level_default">50 ms</string>
+    <string name="vibration_level_default">20 ms</string>
     <string name="sound_volume_default">50%</string>
     <string name="theme_dark">Material Dark</string>
     <string name="theme_light">Material Light</string>
-    <string name="layout_latin">Latın</string>
-    <string name="layout_cyrillic">Кирилл</string>
-    <string name="default_layout_title">Negizgi saylanǵan álipbe</string>
     <string name="keyboard_other_settings">Basqa sazlawlar</string>
     <string name="about_keyboard">QqKeyboard haqqında</string>
     <string name="version">version %s</string>
@@ -93,16 +90,6 @@
     <string-array name="theme_values">
         <item>@string/pref_keypress_theme_light</item>
         <item>@string/pref_keypress_theme_dark</item>
-    </string-array>
-
-    <string-array name="default_layout_entries">
-        <item>@string/layout_latin</item>
-        <item>@string/layout_cyrillic</item>
-    </string-array>
-
-    <string-array name="default_layout_values">
-        <item>@string/pref_keypress_layout_latin</item>
-        <item>@string/pref_keypress_layout_cyrillic</item>
     </string-array>
 
     <string-array name="first_row_entries">

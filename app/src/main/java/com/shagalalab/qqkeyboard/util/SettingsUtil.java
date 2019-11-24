@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.shagalalab.qqkeyboard.R;
 
+import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
 /**
@@ -50,6 +51,13 @@ public class SettingsUtil {
     public static String getDefaultKeyboard(Context context) {
         SharedPreferences sharedPref = getPreferences(context);
         return sharedPref.getString(context.getString(R.string.pref_keypress_default_layout), context.getString(R.string.pref_keypress_layout_latin));
+    }
+
+    public static void setDefaultKeyboard(Context context, @StringRes int layout) {
+        getPreferences(context)
+            .edit()
+            .putString(context.getString(R.string.pref_keypress_default_layout), context.getString(layout))
+            .apply();
     }
 
     public static boolean isKeyboardWithFirstRowNumbers(Context context) {
