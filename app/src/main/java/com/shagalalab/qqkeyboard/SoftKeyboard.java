@@ -23,9 +23,12 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -33,6 +36,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
+
+import github.ankushsachdeva.emojicon.EmojiconGridView;
+import github.ankushsachdeva.emojicon.EmojiconsPopup;
+import github.ankushsachdeva.emojicon.emoji.Emojicon;
 
 import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_CLASS_NUMBER;
@@ -51,8 +58,6 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
  */
 @SuppressWarnings("deprecation")
 public class SoftKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
-    private static final String TAG = "SoftKeyboard";
-
     private InputMethodManager mInputMethodManager;
     private LatinKeyboardView mInputView;
 
@@ -73,6 +78,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
     private LatinKeyboard qwertyKeyboardFirstRowLetters;
     private LatinKeyboard cyrillicKeyboardFirstRowNumbers;
     private LatinKeyboard cyrillicKeyboardFirstRowLetters;
+    private EmojiconsPopup popupWindow = null;
     private String mWordSeparators;
     private boolean isSoundEnabled = true;
     private boolean isVibrationEnabled = true;
@@ -266,6 +272,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         // Recreate input view.
         setInputView(onCreateInputView());
 
+        // Dismiss the Emoticons before showing the soft keyboard.
+        closeEmoticons();
+
         mInputView.closing();
         final InputMethodSubtype subtype = mInputMethodManager.getCurrentInputMethodSubtype();
         mInputView.setSubtypeOnSpaceKey(subtype);
@@ -415,6 +424,8 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             handleClose();
         } else if (primaryCode == LatinKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
             handleLanguageSwitch();
+        } else if (primaryCode == LatinKeyboardView.KEYCODE_EMOJI_SWITCH) {
+            handleEmoticons();
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
             if (current == symbolsKeyboard) {
@@ -433,6 +444,47 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         } else {
             handleCharacter(primaryCode);
         }
+    }
+
+    public void handleEmoticons() {
+        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        if (layoutInflater != null) {
+            View popupView = new View(getBaseContext());
+            popupWindow = new EmojiconsPopup(popupView, this);
+            popupWindow.setSizeForSoftKeyboard();
+            popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindow.showAtLocation(mInputView.getRootView(), Gravity.BOTTOM, 0, 0);
+            // If the text keyboard closes, also dismiss the emoji popup
+            popupWindow.setOnSoftKeyboardOpenCloseListener(new EmojiconsPopup.OnSoftKeyboardOpenCloseListener() {
+                @Override
+                public void onKeyboardOpen(int keyboardHeight) {
+                }
+
+                @Override
+                public void onKeyboardClose() {
+                    if (popupWindow.isShowing())
+                        popupWindow.dismiss();
+                }
+            });
+            popupWindow.setOnEmojiconClickedListener(new EmojiconGridView.OnEmojiconClickedListener() {
+                @Override
+                public void onEmojiconClicked(Emojicon emojicon) {
+                    mComposing.append(emojicon.getEmoji());
+                    commitTyped(getCurrentInputConnection());
+                }
+            });
+            popupWindow.setOnEmojiconBackspaceClickedListener(new EmojiconsPopup.OnEmojiconBackspaceClickedListener() {
+                @Override
+                public void onEmojiconBackspaceClicked(View v) {
+                    handleBackspace();
+                }
+            });
+        }
+    }
+
+    public void closeEmoticons() {
+        if (popupWindow != null)
+            popupWindow.dismiss();
     }
 
     public void onText(CharSequence text) {

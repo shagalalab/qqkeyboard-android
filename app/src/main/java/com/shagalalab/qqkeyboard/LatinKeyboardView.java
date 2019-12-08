@@ -47,8 +47,8 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     static final int KEYCODE_OPTIONS = -100;
-    // TODO: Move this into android.inputmethodservice.Keyboard
     static final int KEYCODE_LANGUAGE_SWITCH = -101;
+    static final int KEYCODE_EMOJI_SWITCH = -102;
 
     public LatinKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,7 +75,7 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     void setSubtypeOnSpaceKey(final InputMethodSubtype subtype) {
-        final LatinKeyboard keyboard = (LatinKeyboard)getKeyboard();
+        final LatinKeyboard keyboard = (LatinKeyboard) getKeyboard();
         //keyboard.setSpaceIcon(getResources().getDrawable(subtype.getIconResId()));
         invalidateAllKeys();
     }

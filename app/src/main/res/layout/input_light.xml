@@ -9,7 +9,5 @@
     android:keyPreviewLayout="@null"
     android:keyTextColor="@color/material_light_key_text_color"
     android:keyTextSize="@dimen/key_size"
-    android:shadowRadius="0.0"
-    android:popupLayout="@layout/keyboard_popup_layout_light">
-
-</com.shagalalab.qqkeyboard.LatinKeyboardView>
+    android:popupLayout="@layout/keyboard_popup_layout_light"
+    android:shadowRadius="0.0" />
