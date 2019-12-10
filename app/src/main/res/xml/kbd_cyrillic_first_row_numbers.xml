@@ -202,13 +202,13 @@
             android:keyEdgeFlags="left"
             android:keyLabel="\?123" />
         <Key
-            android:codes="-102"
-            android:keyWidth="10%p"
-            android:keyIcon="@drawable/ic_emoji_24dp" />
-        <Key
             android:codes="44"
             android:keyWidth="10%p"
             android:keyLabel="," />
+        <Key
+            android:codes="-102"
+            android:keyWidth="10%p"
+            android:keyIcon="@drawable/ic_emoji_24dp" />
         <!--
             android:codes: -101 is not a framework-defined key code but a key code that is
             privately defined in com.shagalalab.qqkeyboard.LatinKeyboardView.
