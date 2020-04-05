@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theme_entries">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>@string/pref_keypress_theme_light</item>
+        <item>@string/pref_keypress_theme_dark</item>
+    </string-array>
+
+    <string-array name="first_row_entries">
+        <item>@string/row_numbers</item>
+        <item>@string/row_additional_letters</item>
+    </string-array>
+
+    <string-array name="first_row_values">
+        <item>@string/pref_keypress_row_numbers</item>
+        <item>@string/pref_keypress_row_additional_letters</item>
+    </string-array>
+</resources>

@@ -7,18 +7,24 @@
         android:label="@string/ime_name"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="true"
-        android:fullBackupContent="true">
+        android:fullBackupContent="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".settings.ImePreferencesActivity"
-            android:label="@string/settings_name"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+            android:label="@string/settings_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".settings.about.AboutActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity android:name=".settings.about.AboutActivity"/>
+        <activity android:name=".help.HelpActivity" />
 
         <service android:name=".SoftKeyboard"
             android:permission="android.permission.BIND_INPUT_METHOD">

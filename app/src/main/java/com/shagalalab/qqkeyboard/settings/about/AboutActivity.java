@@ -26,7 +26,7 @@ public class AboutActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.about_keyboard);
+            actionBar.setTitle(R.string.about_qqkeyboard);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 

@@ -19,6 +19,9 @@
 -->
 <resources>
 
+    <color name="color_primary">#607d8b</color>
+    <color name="color_primary_dark">#34515e</color>
+    <color name="color_accent">#EF106C</color>
     <color name="material_key_icon_color">#7F8B8F</color>
     <color name="material_light_key_background">#ECEFF1</color>
     <color name="material_light_key_background_pressed">#90A4AE</color>

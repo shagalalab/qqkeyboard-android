@@ -31,9 +31,9 @@
     <string name="select_language">Klaviatura tilin saylań</string>
     <string name="key_settings">Klavisha sazlawları</string>
     <string name="sound_on_keypress">Klavisha dawısı</string>
-    <string name="vibrate_on_keypress">Klavisha vibratsiyası</string>
     <string name="volume_on_keypress">Klavisha dawıs dárejesi</string>
-    <string name="vibration_strenth_on_keypress">Klavisha vibratsiya kúshi</string>
+    <string name="vibrate_on_keypress">Klavisha vibraciyası</string>
+    <string name="vibration_strenth_on_keypress">Klavisha vibraciya kúshi</string>
     <string name="keyboard_view_settings">Klaviatura sırtqı kórinisi</string>
     <string name="theme_title">Klaviatura shablonı</string>
     <string name="theme_dialog_title">Klaviatura shablonın (reńin) saylań</string>
@@ -58,7 +58,7 @@
     <string name="theme_dark">Material Dark</string>
     <string name="theme_light">Material Light</string>
     <string name="keyboard_other_settings">Basqa sazlawlar</string>
-    <string name="about_keyboard">QqKeyboard haqqında</string>
+    <string name="about_qqkeyboard">QqKeyboard haqqında</string>
     <string name="version">version %s</string>
     <string name="about_description">
         QqKeyboard - Android platformasında qaraqalpaq tilinde tekst kiritiw ushın
@@ -75,30 +75,76 @@
         menen tanısıwdı qáleseńiz tómendegi bannerdi basıwıńızdı sorap qalamız:
 
     </string>
-    <string name="pref_keypress_first_row_appearance">pref_keypress_first_row_appearance</string>
     <string name="first_row_appearance">Birinshi qatar kórinisi</string>
     <string name="row_additional_letters">Qosımsha háripler (á, ú, ı, &#8230;)</string>
     <string name="row_numbers">Sanlar (1, 2, 3, &#8230;)</string>
+
+    <string name="pref_keypress_first_row_appearance">pref_keypress_first_row_appearance</string>
     <string name="pref_keypress_row_numbers">row_numbers</string>
     <string name="pref_keypress_row_additional_letters">row_additional_letters</string>
 
-    <string-array name="theme_entries">
-        <item>@string/theme_light</item>
-        <item>@string/theme_dark</item>
-    </string-array>
+    <string name="enable_keyboard">KLAVIATURANÍ QOSÍW</string>
+    <string name="change_default_keyboard">TIYKARǴÍ KLAVIATURANÍ ÓZGERTIW</string>
+    <string name="keyboard_settings">KLAVIATURA SAZLAWLARÍ</string>
+    <string name="about_keyboard">KLAVIATURA HAQQÍNDA</string>
+    <string name="help">JÁRDEM</string>
 
-    <string-array name="theme_values">
-        <item>@string/pref_keypress_theme_light</item>
-        <item>@string/pref_keypress_theme_dark</item>
-    </string-array>
+    <string name="faq_how_to_install_question">QqKeyboard\'tı qalay ornatamız?</string>
+    <string name="faq_how_to_install_answer">
+        QqKeyboard\'tı tabıslı ornatıw eki basqıshtan ibarat.\n\n
+        1) Birinshi náwbette QqKeyboard\'tı qurılmadaǵı klaviaturalar qatarına qosıw kerek. Onıń ushın
+        aldınǵı bettegi KLAVIATURANÍ QOSÍW knopkasın basıń yamasa mına silteme arqalıda ashsańız boladı.
+        Taza ashılǵan bette qurılmadaǵı ornatılǵan barlıq klaviaturalar dizimi beriledi hám ol jerde QqKeyboard
+        mınanday kóriniste boladı:\n
+        [ENABLE_KEYBOARD_OFF]\n
+        Kórip turǵanıńızday, QqKeyboard dizimde bar, biraq óshik halında turıptı. Onı qosıw kerek, hám ol
+        mına kóriniske ózgeredi:\n
+        [ENABLE_KEYBOARD_ON]\n
+        Sonıń menen birinshi basqısh juwmaqlandı.\n\n
+        2) Endigi qádem, QqKeyboard\'tı tiykarǵi klaviatura esabında sistemada járiyalaw. Onıń ushın
+        aldınǵı bettegi TIYKARǴÍ KLAVIATURANÍ ÓZGERTIW knopkasın basıń yamasa mına silteme arqalıda ashsańız boladı.
+        Taza ashılǵan bette qurılmadaǵı barlıq aktiv (qosılǵan) klaviaturalar dizimi beriledi, sol dizimnen bizler
+        QqKeyboard\'tı saylawımız kerek:\n
+        [CHOOSE_KEYBOARD]\n
+        Sonıń menen usı eki basqıshta kórsetilgenindey islegen bolsańız, QqKeyboard tabıslı ornatılıp, paydalanıwǵa
+        tayar boladı. Onı tekseriw ushın qálegen tekst teretugın jerge barıp, klaviaturanı ashıp kóriń.
+    </string>
+    <string name="faq_how_to_open_settings_question">Klaviatura sazlawlar betin qalay ashamız?</string>
+    <string name="faq_how_to_open_settings_answer">Sazlawlar betine ótiw ushın aldınǵı bettegi KLAVIATURA SAZLAWLARÍ
+        knopkasın basıń, yamasa mına siltemeni bassańızda boladı.</string>
+    <string name="faq_how_to_change_first_row_question">Klaviaturanıń birinshi qatar kórinisin qalay ózgertemiz?</string>
+    <string name="faq_how_to_change_first_row_answer">
+        Eger q, ǵ, ó sıyaqlı háriplerdi teriwde klavishanı uzaq waqıt basıp turıw onsha qolay bolmasa,
+        onda klaviaturanıń joqarǵı eń birinshi qatarın sanlardıń ornına qosımsha háriplerdi qoyıwǵa boladı.
+        Onıń ushın sazlawlarǵa ótip, Qosımsha háripler (á, ú, ı, …) variantın saylasańız, birinshi qatarda
+        sanlardıń ornına á, ǵ, ń hám taǵı basqa háripler jaylasadı. Sanlardı birinshi qatarǵa qaytarıw ushın
+        "Sanlar (1, 2, 3, …)" variantın qayta saylaw kerek.
+    </string>
+    <string name="faq_how_to_change_template_question">Klaviaturanıń kórinisin (shablonın) qalay ózgertemiz?</string>
+    <string name="faq_how_to_change_template_answer">
+        Klaviaturanıń eki túrli shablonı (teması) bar: jarıq (Material Light) hám qarańǵı (Material Dark). Bunı ózgertiw ushın sazlawlarǵa ótip,
+        Klaviatura sırtqı kórinisi bóliminde ózińizge unaǵan variantın saylaw múmkinshiligine iyesiz.
+    </string>
+    <string name="faq_how_to_change_sound_question">Klavisha basılǵandaǵı dawısın óshiriwge ya ózgertiwge bolama?</string>
+    <string name="faq_how_to_change_sound_answer">
+        Klaviaturada tekst tergende, hár bir klavisha basılǵanın bildiriwshi dawıs shıǵaradı. Eger sizge bul usıl maqul bolmasa, sazlawlarǵa ótip,
+        Klavisha dawısı degen sazlawdı óshirip qoyıwıńızǵa boladı.\n\nBuǵan qosımsha iretinde, basılǵan klavisha dawısınıń bálentlik dárejesin belgilew
+        imkániyatına hám iyesiz. Onıń ushın Klavisha dawıs dárejesi sazlawında ózińizge qolay bolǵan dárejeni (%) kórsetseńiz boladı. Esletip ótemiz,
+        bul sazlaw tek ǵana Klavisha dawısı sazlawı qosılǵan waqıtta ǵana kúshke iye.
+    </string>
+    <string name="faq_how_to_change_vibration_question">Klavisha vibraciyasın óshiriwge ya ózgertiwge bolama?</string>
+    <string name="faq_how_to_change_vibration_answer">
+        Klaviaturada tekst tergende, hár bir klavisha basılǵanda vibraciya qıladı. Eger sizge bul usıl maqul bolmasa, sazlawlarǵa ótip,
+        Klavisha vibraciyası degen sazlawdı óshirip qoyıwıńızǵa boladı.\n\nBuǵan qosımsha iretinde, basılǵan klavisha vibraciya kúshi dárejesin belgilew
+        imkániyatına hám iyesiz. Onıń ushın Klavisha vibraciya kúshi sazlawında ózińizge qolay bolǵan dárejeni (ms) kórsetseńiz boladı. Esletip ótemiz,
+        bul sazlaw tek ǵana Klavisha vibraciyası sazlawı qosılǵan waqıtta ǵana kúshke iye.
+    </string>
+    <string name="faq_how_to_find_about_app_question">Klaviatura haqqında maǵlıwmatti qay jerden alsaq boladı?</string>
+    <string name="faq_how_to_find_about_app_answer">
+        Baǵdarlama versiyası hám klaviatura haqqında maǵlıwmat alıw ushın aldınǵı bettegi KLAVIATURA HAQQÍNDA
+        knopkasın basıń, yamasa mına siltemeni bassańızda boladı.
+    </string>
+    <string name="enable_keyboard_first">Dáslep <b>KLAVIATURANÍ QOSÍW</b>ıńız kerek.</string>
+    <string name="enable">Qosıw</string>
 
-    <string-array name="first_row_entries">
-        <item>@string/row_numbers</item>
-        <item>@string/row_additional_letters</item>
-    </string-array>
-
-    <string-array name="first_row_values">
-        <item>@string/pref_keypress_row_numbers</item>
-        <item>@string/pref_keypress_row_additional_letters</item>
-    </string-array>
 </resources>

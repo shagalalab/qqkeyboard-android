@@ -23,6 +23,7 @@
     <dimen name="key_symbol_height">58dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="key_size">26sp</dimen>
+    <dimen name="button_height">150dp</dimen>
 
     <integer name="key_additional_size">28</integer>
     <integer name="key_additional_number_size">34</integer>
@@ -30,4 +31,7 @@
     <integer name="key_additional_y_margin">40</integer>
     <integer name="key_additional_number_x_margin">55</integer>
     <integer name="key_additional_number_y_margin">100</integer>
+
+    <dimen name="standard_margin">16dp</dimen>
+    <dimen name="help_text_size">16sp</dimen>
 </resources>

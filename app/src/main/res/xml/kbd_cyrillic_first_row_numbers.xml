@@ -214,13 +214,13 @@
             privately defined in com.shagalalab.qqkeyboard.LatinKeyboardView.
         -->
         <Key
-            android:codes="-101"
-            android:keyWidth="10%p"
-            android:keyLabel="QQ" />
-        <Key
             android:codes="32"
             android:keyWidth="30%p"
             android:keyIcon="@drawable/ic_space_bar_24dp" />
+        <Key
+            android:codes="-101"
+            android:keyWidth="10%p"
+            android:keyLabel="QQ" />
         <Key
             android:codes="46"
             android:keyWidth="10%p"

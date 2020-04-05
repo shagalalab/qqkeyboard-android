@@ -81,7 +81,7 @@
 
         <PreferenceScreen
             android:key="about"
-            android:title="@string/about_keyboard"
+            android:title="@string/about_qqkeyboard"
             android:persistent="false"
             app:iconSpaceReserved="false" />
 
