@@ -180,38 +180,34 @@
     <Row android:rowEdgeFlags="bottom">
         <Key
             android:codes="-2"
-            android:keyWidth="15%p"
+            android:keyWidth="12%p"
             android:keyEdgeFlags="left"
             android:keyLabel="\?123" />
         <Key
             android:codes="44"
-            android:keyWidth="10%p"
+            android:keyWidth="8%p"
             android:keyLabel="," />
         <Key
-            android:codes="-102"
-            android:keyWidth="10%p"
-            android:keyIcon="@drawable/ic_emoji_24dp" />
-        <!--
-            android:codes: -101 is not a framework-defined key code but a key code that is
-            privately defined in com.shagalalab.qqkeyboard.LatinKeyboardView.
-        -->
-        <Key
-            android:codes="32"
-            android:keyWidth="30%p"
-            android:keyIcon="@drawable/ic_space_bar_24dp" />
-        <Key
             android:codes="-101"
-            android:keyWidth="10%p"
+            android:keyWidth="8%p"
             android:keyLabel="QQ" />
         <Key
+            android:codes="32"
+            android:keyWidth="44%p"
+            android:keyIcon="@drawable/ic_space_bar_24dp" />
+        <Key
+            android:codes="-102"
+            android:keyWidth="8%p"
+            android:keyIcon="@drawable/ic_emoji_24dp" />
+        <Key
             android:codes="46"
-            android:keyWidth="10%p"
+            android:keyWidth="8%p"
             android:keyLabel="."
             android:popupCharacters=".,?!#@"
             android:popupKeyboard="@xml/keyboard_popup_template" />
         <Key
             android:codes="10"
-            android:keyWidth="15%p"
+            android:keyWidth="12%p"
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/ic_keyboard_return_24dp" />
     </Row>
