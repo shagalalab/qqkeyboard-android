@@ -8,8 +8,8 @@ android {
         applicationId "com.shagalalab.qqkeyboard"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 11
-        versionName "0.9"
+        versionCode 12
+        versionName "0.10"
     }
     buildTypes {
         release {
