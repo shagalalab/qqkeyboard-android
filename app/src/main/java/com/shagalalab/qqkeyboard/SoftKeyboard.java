@@ -282,7 +282,9 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
 
     @Override
     public void onCurrentInputMethodSubtypeChanged(InputMethodSubtype subtype) {
-        mInputView.setSubtypeOnSpaceKey(subtype);
+        if (mInputView != null) {
+            mInputView.setSubtypeOnSpaceKey(subtype);
+        }
     }
 
     /**
@@ -452,7 +454,12 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             View popupView = new View(getBaseContext());
             popupWindow = new EmojiconsPopup(popupView, this);
             popupWindow.setSizeForSoftKeyboard();
-            popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            int keyboardHeight = mInputView.getHeight();
+            if (keyboardHeight == 0) {
+                // if for any reason, we cannot retrieve the keyboard height, then fallback to WRAP_CONTENT
+                keyboardHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+            }
+            popupWindow.setHeight(keyboardHeight);
             popupWindow.showAtLocation(mInputView.getRootView(), Gravity.BOTTOM, 0, 0);
             // If the text keyboard closes, also dismiss the emoji popup
             popupWindow.setOnSoftKeyboardOpenCloseListener(new EmojiconsPopup.OnSoftKeyboardOpenCloseListener() {
@@ -462,29 +469,23 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
 
                 @Override
                 public void onKeyboardClose() {
-                    if (popupWindow.isShowing())
+                    if (popupWindow.isShowing()) {
                         popupWindow.dismiss();
+                    }
                 }
             });
-            popupWindow.setOnEmojiconClickedListener(new EmojiconGridView.OnEmojiconClickedListener() {
-                @Override
-                public void onEmojiconClicked(Emojicon emojicon) {
-                    mComposing.append(emojicon.getEmoji());
-                    commitTyped(getCurrentInputConnection());
-                }
+            popupWindow.setOnEmojiconClickedListener(emojicon -> {
+                mComposing.append(emojicon.getEmoji());
+                commitTyped(getCurrentInputConnection());
             });
-            popupWindow.setOnEmojiconBackspaceClickedListener(new EmojiconsPopup.OnEmojiconBackspaceClickedListener() {
-                @Override
-                public void onEmojiconBackspaceClicked(View v) {
-                    handleBackspace();
-                }
-            });
+            popupWindow.setOnEmojiconBackspaceClickedListener(v -> handleBackspace());
         }
     }
 
     public void closeEmoticons() {
-        if (popupWindow != null)
+        if (popupWindow != null) {
             popupWindow.dismiss();
+        }
     }
 
     public void onText(CharSequence text) {

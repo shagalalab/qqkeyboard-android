@@ -175,7 +175,7 @@ public class LatinKeyboardView extends KeyboardView {
                 } else if (key.label.equals("u") && isKeyboardWithNumbers) {
                     canvas.drawText("ú", getKeyX(res, key), getKeyY(res, key), paint);
 
-                    // cyrillic keyboard
+                // cyrillic keyboard
                 } else if (key.label.equals("у") && isKeyboardWithNumbers) {
                     canvas.drawText("ўү", getKeyX(res, key), getKeyY(res, key), paint);
                 } else if (key.label.equals("к") && isKeyboardWithNumbers) {
@@ -195,7 +195,7 @@ public class LatinKeyboardView extends KeyboardView {
                 } else if (key.label.equals("ь") && isKeyboardWithNumbers) {
                     canvas.drawText("ъ", getKeyX(res, key), getKeyY(res, key), paint);
 
-                    // numbers keyboard
+                // numbers keyboard
                 } else if (key.label.equals("2") && isNumberKeyboard) {
                     canvas.drawText("ABC", getKeyNumberX(res, key), getKeyNumberY(res, key), paintNumber);
                 } else if (key.label.equals("3") && isNumberKeyboard) {

@@ -154,34 +154,31 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
      * Call this function to resize the emoji popup according to your soft keyboard size
      */
     public void setSizeForSoftKeyboard() {
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            rootView.getWindowVisibleDisplayFrame(r);
 
-                int screenHeight = getUsableScreenHeight();
-                int heightDifference = screenHeight - (r.bottom - r.top);
-                int resourceId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (resourceId > 0) {
-                    heightDifference -= mContext.getResources().getDimensionPixelSize(resourceId);
+            int screenHeight = getUsableScreenHeight();
+            int heightDifference = screenHeight - (r.bottom - r.top);
+            int resourceId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                heightDifference -= mContext.getResources().getDimensionPixelSize(resourceId);
+            }
+            if (heightDifference > 100) {
+                keyboardHeight = heightDifference;
+                setHeight(keyboardHeight);
+                if (!isOpened && onSoftKeyboardOpenCloseListener != null) {
+                    onSoftKeyboardOpenCloseListener.onKeyboardOpen(keyboardHeight);
                 }
-                if (heightDifference > 100) {
-                    keyboardHeight = heightDifference;
-                    setHeight(keyboardHeight);
-                    if (!isOpened && onSoftKeyboardOpenCloseListener != null) {
-                        onSoftKeyboardOpenCloseListener.onKeyboardOpen(keyboardHeight);
-                    }
-                    isOpened = true;
-                    if (pendingOpen) {
-                        showAtBottom();
-                        pendingOpen = false;
-                    }
-                } else {
-                    isOpened = false;
-                    if (onSoftKeyboardOpenCloseListener != null) {
-                        onSoftKeyboardOpenCloseListener.onKeyboardClose();
-                    }
+                isOpened = true;
+                if (pendingOpen) {
+                    showAtBottom();
+                    pendingOpen = false;
+                }
+            } else {
+                isOpened = false;
+                if (onSoftKeyboardOpenCloseListener != null) {
+                    onSoftKeyboardOpenCloseListener.onKeyboardClose();
                 }
             }
         });
