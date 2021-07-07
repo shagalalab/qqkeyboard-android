@@ -5,15 +5,37 @@ android {
 
     defaultConfig {
         applicationId "com.shagalalab.qqkeyboard"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
-        versionCode 13
-        versionName "0.11"
+        versionCode 14
+        versionName "0.12"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    bundle {
+        language {
+            // This property is set to true by default.
+            // You can specify `false` to turn off
+            // generating configuration APKs for language resources.
+            // These resources are instead packaged with each base and
+            // feature APK.
+            // Continue reading below to learn about situations when an app
+            // might change setting to `false`, otherwise consider leaving
+            // the default on for more optimized downloads.
+            enableSplit = false
+        }
+        density {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+        abi {
+            // This property is set to true by default.
+            enableSplit = true
         }
     }
 }

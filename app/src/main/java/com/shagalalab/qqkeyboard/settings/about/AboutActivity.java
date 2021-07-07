@@ -33,13 +33,10 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.about);
 
         ((TextView) findViewById(R.id.version)).setText(String.format(getString(R.string.version), BuildConfig.VERSION_NAME));
-        findViewById(R.id.google_play_banner).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://search?q=pub:Shag'ala Lab"));
-                startActivity(intent);
-            }
+        findViewById(R.id.google_play_banner).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://search?q=pub:Shag'ala Lab"));
+            startActivity(intent);
         });
     }
 

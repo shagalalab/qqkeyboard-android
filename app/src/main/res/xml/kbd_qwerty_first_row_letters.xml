@@ -121,7 +121,7 @@
             android:isSticky="true"
             android:keyWidth="15%p"
             android:keyEdgeFlags="left"
-            android:keyIcon="@drawable/ic_keyboard_capslock_24dp" />
+            android:keyIcon="@drawable/ic_baseline_keyboard_capslock_24" />
         <Key
             android:codes="122"
             android:keyLabel="z" />
@@ -148,7 +148,7 @@
             android:isRepeatable="true"
             android:keyWidth="15%p"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/ic_backspace_24dp" />
+            android:keyIcon="@drawable/ic_baseline_backspace_24" />
     </Row>
 
     <Row android:rowEdgeFlags="bottom">
@@ -168,11 +168,11 @@
         <Key
             android:codes="32"
             android:keyWidth="44%p"
-            android:keyIcon="@drawable/ic_space_bar_24dp" />
+            android:keyIcon="@drawable/ic_baseline_space_bar_24" />
         <Key
             android:codes="-102"
             android:keyWidth="8%p"
-            android:keyIcon="@drawable/ic_emoji_24dp" />
+            android:keyIcon="@drawable/ic_outline_emoji_emotions_24" />
         <Key
             android:codes="46"
             android:keyWidth="8%p"
@@ -183,6 +183,6 @@
             android:codes="10"
             android:keyWidth="12%p"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/ic_keyboard_return_24dp" />
+            android:keyIcon="@drawable/ic_baseline_keyboard_return_24" />
     </Row>
 </Keyboard>

@@ -42,15 +42,15 @@
         <Key android:codes="55" android:keyLabel="7" android:keyEdgeFlags="left" />
         <Key android:codes="56" android:keyLabel="8" />
         <Key android:codes="57" android:keyLabel="9" />
-        <Key android:codes="-5" android:keyIcon="@drawable/ic_backspace_24dp"
+        <Key android:codes="-5" android:keyIcon="@drawable/ic_baseline_backspace_24"
             android:keyEdgeFlags="right" />
     </Row>
     
     <Row android:rowEdgeFlags="bottom">
         <Key android:codes="-2" android:keyLabel="*#" android:keyEdgeFlags="left" />
         <Key android:codes="48" android:keyLabel="0" />
-        <Key android:codes="32" android:keyIcon="@drawable/ic_space_bar_24dp" />
-        <Key android:codes="10" android:keyIcon="@drawable/ic_keyboard_return_24dp"
+        <Key android:codes="32" android:keyIcon="@drawable/ic_baseline_space_bar_24" />
+        <Key android:codes="10" android:keyIcon="@drawable/ic_baseline_keyboard_return_24"
             android:isRepeatable="true" android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

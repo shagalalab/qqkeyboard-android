@@ -12,6 +12,7 @@ import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -33,38 +34,26 @@ import androidx.core.content.ContextCompat;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private View.OnClickListener settingsCallback = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(HelpActivity.this, ImePreferencesActivity.class));;
-        }
+    private final View.OnClickListener settingsCallback = v -> {
+        startActivity(new Intent(HelpActivity.this, ImePreferencesActivity.class));
     };
 
-    private View.OnClickListener aboutCallback = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(HelpActivity.this, AboutActivity.class));;
-        }
+    private final View.OnClickListener aboutCallback = v -> {
+        startActivity(new Intent(HelpActivity.this, AboutActivity.class));
     };
 
-    private View.OnClickListener enableKeyboardCallback = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivityForResult(new Intent(android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS), 0);
-        }
+    private final View.OnClickListener enableKeyboardCallback = v -> {
+        startActivityForResult(new Intent(android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS), 0);
     };
 
-    private View.OnClickListener chooseKeyboardCallback = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null && isInputEnabled()) {
-                imm.showInputMethodPicker();
-            } else {
-                Snackbar.make(findViewById(R.id.help_expandable_list), R.string.enable_keyboard_first, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.enable, enableKeyboardCallback)
-                    .show();
-            }
+    private final View.OnClickListener chooseKeyboardCallback = v -> {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && isInputEnabled()) {
+            imm.showInputMethodPicker();
+        } else {
+            Snackbar.make(findViewById(R.id.help_expandable_list), R.string.enable_keyboard_first, Snackbar.LENGTH_LONG)
+                .setAction(R.string.enable, enableKeyboardCallback)
+                .show();
         }
     };
 
@@ -91,6 +80,15 @@ public class HelpActivity extends AppCompatActivity {
         ExpandableListView expandableListView = findViewById(R.id.help_expandable_list);
         ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(LayoutInflater.from(this), data);
         expandableListView.setAdapter(expandableListViewAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean isInputEnabled() {
@@ -249,7 +247,7 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     private static class ClickableString extends ClickableSpan {
-        private View.OnClickListener listener;
+        private final View.OnClickListener listener;
 
         ClickableString(View.OnClickListener listener) {
             this.listener = listener;

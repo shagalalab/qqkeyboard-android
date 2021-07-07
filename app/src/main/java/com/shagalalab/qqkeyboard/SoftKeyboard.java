@@ -389,7 +389,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             }
             boolean shiftStatus = mCapsLock || caps != 0;
             mInputView.setShifted(shiftStatus);
-            mInputView.toggleShiftKey(currentKeyboard, shiftStatus);
         }
     }
 
@@ -525,7 +524,6 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
             checkToggleCapsLock();
             boolean shiftStatus = mCapsLock || !mInputView.isShifted();
             mInputView.setShifted(shiftStatus);
-            mInputView.toggleShiftKey((LatinKeyboard) currentKeyboard, shiftStatus);
         }
     }
 
