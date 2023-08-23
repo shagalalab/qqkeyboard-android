@@ -17,53 +17,27 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.enable_keyboard).setOnClickListener(this);
-        findViewById(R.id.change_default_keyboard).setOnClickListener(this);
-        findViewById(R.id.keyboard_settings).setOnClickListener(this);
-        findViewById(R.id.about_keyboard).setOnClickListener(this);
-        findViewById(R.id.help).setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.enable_keyboard:
-                openEnableKeyboard();
-                break;
-            case R.id.change_default_keyboard:
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null && isInputEnabled()) {
-                    imm.showInputMethodPicker();
-                } else {
-                    Snackbar.make(findViewById(R.id.enable_keyboard), R.string.enable_keyboard_first, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.enable, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                openEnableKeyboard();
-                            }
-                        })
+        findViewById(R.id.enable_keyboard).setOnClickListener(v -> openEnableKeyboard());
+        findViewById(R.id.change_default_keyboard).setOnClickListener(view -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null && isInputEnabled()) {
+                imm.showInputMethodPicker();
+            } else {
+                Snackbar.make(findViewById(R.id.enable_keyboard), R.string.enable_keyboard_first, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.enable, v1 -> openEnableKeyboard())
                         .show();
-                }
-                break;
-            case R.id.keyboard_settings:
-                startActivity(new Intent(this, ImePreferencesActivity.class));
-                break;
-            case R.id.about_keyboard:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-            case R.id.help:
-                startActivity(new Intent(this, HelpActivity.class));
-                break;
-            default:
-                break;
-        }
+            }
+        });
+        findViewById(R.id.keyboard_settings).setOnClickListener(v -> startActivity(new Intent(this, ImePreferencesActivity.class)));
+        findViewById(R.id.about_keyboard).setOnClickListener(v -> startActivity(new Intent(this, AboutActivity.class)));
+        findViewById(R.id.help).setOnClickListener(v -> startActivity(new Intent(this, HelpActivity.class)));
     }
 
     private void openEnableKeyboard() {

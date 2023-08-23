@@ -23,7 +23,7 @@ public class SoundVolumePreference extends DialogPreference {
     }
 
     public SoundVolumePreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.preferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.preferenceStyle);
     }
 
     public SoundVolumePreference(Context context, AttributeSet attrs, int defStyleAttr) {

@@ -22,7 +22,7 @@ public class VibrationLevelPreference extends DialogPreference {
     }
 
     public VibrationLevelPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.preferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.preferenceStyle);
     }
 
     public VibrationLevelPreference(Context context, AttributeSet attrs, int defStyleAttr) {

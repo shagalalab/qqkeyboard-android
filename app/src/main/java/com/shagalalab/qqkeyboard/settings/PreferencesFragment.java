@@ -22,13 +22,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         Preference about = findPreference("about");
         if (about != null) {
-            about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                    startActivity(intent);
-                    return false;
-                }
+            about.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
+                return false;
             });
         }
     }

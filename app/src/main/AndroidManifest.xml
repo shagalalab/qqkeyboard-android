@@ -9,7 +9,8 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".settings.ImePreferencesActivity"
-            android:label="@string/settings_name">
+            android:label="@string/settings_name"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
@@ -27,7 +29,8 @@
         <activity android:name=".help.HelpActivity" />
 
         <service android:name=".SoftKeyboard"
-            android:permission="android.permission.BIND_INPUT_METHOD">
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
