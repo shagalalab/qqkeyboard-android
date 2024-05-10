@@ -149,14 +149,11 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         setKeyboard(currentKeyboard);
 
         // Dismiss popup keyboard on touching outside
-        mInputView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    mInputView.closing(); // Close popup keyboard if it's showing
-                }
-                return false;
+        mInputView.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                mInputView.closing(); // Close popup keyboard if it's showing
             }
+            return false;
         });
 
         return mInputView;

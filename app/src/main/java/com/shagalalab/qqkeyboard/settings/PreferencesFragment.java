@@ -10,6 +10,7 @@ import com.shagalalab.qqkeyboard.settings.sound.SoundVolumePreferenceDialogFragm
 import com.shagalalab.qqkeyboard.settings.vibration.VibrationLevelPreference;
 import com.shagalalab.qqkeyboard.settings.vibration.VibrationLevelPreferenceDialogFragment;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -31,7 +32,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onDisplayPreferenceDialog(Preference preference) {
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
         DialogFragment dialogFragment;
         if (preference instanceof SoundVolumePreference) {
             dialogFragment = SoundVolumePreferenceDialogFragment.newInstance(preference.getKey());
