@@ -10,13 +10,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.shagalalab.qqkeyboard.help.HelpActivity
 import com.shagalalab.qqkeyboard.settings.ImePreferencesActivity
 import com.shagalalab.qqkeyboard.settings.about.AboutActivity
-import timber.log.Timber
 
 class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Timber.i("onCreate()")
 
         setContentView(R.layout.activity_main)
 
@@ -65,7 +62,6 @@ class MainActivity: AppCompatActivity() {
     }
 
     private fun openEnableKeyboard() {
-
         startActivityForResult(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS), 0)
     }
 

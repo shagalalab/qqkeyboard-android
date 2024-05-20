@@ -3,19 +3,15 @@ package com.shagalalab.qqkeyboard.settings.about
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.shagalalab.qqkeyboard.BuildConfig
 import com.shagalalab.qqkeyboard.R
-import timber.log.Timber
 
 class AboutActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Timber.i("onCreate()")
 
         val actionBar = supportActionBar
         if (actionBar != null) {
