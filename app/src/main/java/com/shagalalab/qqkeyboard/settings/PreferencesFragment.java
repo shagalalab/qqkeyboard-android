@@ -35,7 +35,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onDisplayPreferenceDialog(@NonNull Preference preference) {
         DialogFragment dialogFragment;
         if (preference instanceof SoundVolumePreference) {
-            dialogFragment = SoundVolumePreferenceDialogFragment.newInstance(preference.getKey());
+            dialogFragment = SoundVolumePreferenceDialogFragment.Companion.newInstance(preference.getKey());
             dialogFragment.setTargetFragment(this, 0);
             dialogFragment.show(getFragmentManager(), SoundVolumePreference.class.getName());
         } else if (preference instanceof VibrationLevelPreference) {
