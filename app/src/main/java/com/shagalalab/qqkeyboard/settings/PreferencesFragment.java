@@ -39,7 +39,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             dialogFragment.setTargetFragment(this, 0);
             dialogFragment.show(getFragmentManager(), SoundVolumePreference.class.getName());
         } else if (preference instanceof VibrationLevelPreference) {
-            dialogFragment = VibrationLevelPreferenceDialogFragment.newInstance(preference.getKey());
+            dialogFragment = VibrationLevelPreferenceDialogFragment.Companion.newInstance(preference.getKey());
             dialogFragment.setTargetFragment(this, 0);
             dialogFragment.show(getFragmentManager(), VibrationLevelPreference.class.getName());
         } else {
