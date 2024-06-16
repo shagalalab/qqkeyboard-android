@@ -5,18 +5,38 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.google.android.material.snackbar.Snackbar
 import com.shagalalab.qqkeyboard.help.HelpActivity
 import com.shagalalab.qqkeyboard.settings.ImePreferencesActivity
 import com.shagalalab.qqkeyboard.settings.about.AboutActivity
 
-class MainActivity: AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContent {
+            Row(modifier = Modifier.padding(16.dp)) {
 
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(16.dp),
+                    onClick = { }) {
+                    Text(text = stringResource(id = R.string.enable_keyboard))
+                }
+            }
+        }
 
         findViewById<View>(R.id.enable_keyboard).setOnClickListener { openEnableKeyboard() }
         findViewById<View>(R.id.change_default_keyboard).setOnClickListener {
