@@ -37,9 +37,7 @@ import android.view.inputmethod.InputMethodSubtype;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
-import github.ankushsachdeva.emojicon.EmojiconGridView;
 import github.ankushsachdeva.emojicon.EmojiconsPopup;
-import github.ankushsachdeva.emojicon.emoji.Emojicon;
 
 import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_CLASS_NUMBER;

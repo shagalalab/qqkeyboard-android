@@ -13,8 +13,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginVertical="10dp"
             android:src="@drawable/ic_keyboard" />
 
         <TextView
@@ -26,7 +25,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/version"
+            android:id="@+id/about_textview_version_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
