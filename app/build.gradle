@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace "com.shagalalab.qqkeyboard"
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode 15
         versionName "0.13"
     }
@@ -45,7 +46,7 @@ android {
 
 dependencies {
     implementation project(':emoji')
-    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.appcompat:appcompat:1.7.1"
     implementation "androidx.preference:preference:1.2.1"
     implementation "com.google.android.material:material:1.12.0"
 }
