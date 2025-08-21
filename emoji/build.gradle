@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_21
+    }
 }
 
 dependencies {
