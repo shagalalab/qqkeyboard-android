@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QqKeyboard</string>
+    <string name="enable_keyboard">Klaviaturanı qosıw</string>
+    <string name="change_default_keyboard">Tiykarǵı klaviaturanı ózgertiw</string>
+    <string name="keyboard_settings">Klaviatura sazlamaları</string>
+    <string name="about_keyboard">Klaviatura haqqında</string>
+    <string name="help">Járdem</string>
+    <string name="test_keyboard_here">Bul jerde klaviaturanı sınap kórseńiz boladı</string>
 </resources>
