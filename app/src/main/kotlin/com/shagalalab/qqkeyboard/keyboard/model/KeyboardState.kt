@@ -58,4 +58,12 @@ data class KeyboardState(
             this
         }
     }
+
+    fun enableAutoCapitalization(): KeyboardState {
+        return if (shiftState == ShiftState.OFF) {
+            copy(shiftState = ShiftState.ON)
+        } else {
+            this
+        }
+    }
 }
