@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shagalalab.qqkeyboard.ui.settings.KeyboardSettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,9 +50,19 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    MainScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val (showSettings, setShowSettings) = remember { mutableStateOf(false) }
+
+                    if (showSettings) {
+                        KeyboardSettingsScreen(
+                            onBackClick = { setShowSettings(false) },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    } else {
+                        MainScreen(
+                            onSettingsClick = { setShowSettings(true) },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
@@ -59,7 +70,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    onSettingsClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(modifier
         .padding(16.dp)
         .fillMaxWidth(),
