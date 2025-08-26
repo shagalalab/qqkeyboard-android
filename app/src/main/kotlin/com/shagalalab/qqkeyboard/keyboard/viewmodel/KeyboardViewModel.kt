@@ -44,7 +44,14 @@ class KeyboardViewModel : ViewModel() {
         inputConnection?.let { ic ->
             when (key) {
                 "BACKSPACE" -> {
-                    ic.deleteSurroundingText(1, 0)
+                    val selectedText = ic.getSelectedText(0)
+                    if (selectedText != null && selectedText.isNotEmpty()) {
+                        // Delete selected text by replacing with empty string
+                        ic.commitText("", 1)
+                    } else {
+                        // No selection, delete one character before cursor
+                        ic.deleteSurroundingText(1, 0)
+                    }
                     feedbackManager?.playBackspaceFeedback()
                 }
                 "ENTER" -> {
