@@ -64,8 +64,9 @@ fun QqKeyboard(
             rows = updatedLayout,
             onKeyClick = { key -> viewModel.onKeyPressed(key) },
             onKeyLongPress = { key ->
-                if (key == "SHIFT") {
-                    viewModel.onShiftLongPress()
+                when (key) {
+                    "SHIFT" -> viewModel.onShiftLongPress()
+                    "BACKSPACE" -> viewModel.onBackspaceLongPress()
                 }
             },
             isShiftActive = keyboardState.shouldShowUpperCase,

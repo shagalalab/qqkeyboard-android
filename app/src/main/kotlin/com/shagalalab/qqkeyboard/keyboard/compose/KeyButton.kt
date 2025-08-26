@@ -1,8 +1,9 @@
 package com.shagalalab.qqkeyboard.keyboard.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
@@ -13,8 +14,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import kotlinx.coroutines.delay
 
+private const val INITIAL_DELAY_BEFORE_REPEAT_MS = 500L
+private const val REPEAT_INTERVAL_DELAY_MS = 100L
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KeyButton(
     keyData: KeyData,
@@ -36,6 +45,7 @@ fun KeyButton(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    var isLongPressing by remember { mutableStateOf(false) }
 
     val keyShape = RoundedCornerShape(6.dp)
 
@@ -63,6 +73,24 @@ fun KeyButton(
         )
     }
 
+    // Handle repetitive long press for specific keys
+    LaunchedEffect(isLongPressing) {
+        if (isLongPressing && (keyData.code == "BACKSPACE")) {
+            delay(INITIAL_DELAY_BEFORE_REPEAT_MS) // Initial delay before starting repetition
+            while (isLongPressing) {
+                onKeyClick(keyData.code) // Perform the action
+                delay(REPEAT_INTERVAL_DELAY_MS) // Repeat interval
+            }
+        }
+    }
+
+    // Stop long pressing when the key is released (not pressed anymore)
+    LaunchedEffect(isPressed) {
+        if (!isPressed && isLongPressing) {
+            isLongPressing = false
+        }
+    }
+
     Box(
         modifier = modifier
             .height(48.dp)
@@ -73,12 +101,18 @@ fun KeyButton(
                 color = borderColor,
                 shape = keyShape
             )
-            .clickable(
+            .combinedClickable(
                 interactionSource = interactionSource,
-                indication = null
-            ) {
-                onKeyClick(keyData.code)
-            },
+                indication = null,
+                onClick = { onKeyClick(keyData.code) },
+                onLongClick = {
+                    if (keyData.code == "BACKSPACE") {
+                        isLongPressing = true
+                    } else {
+                        onKeyLongPress?.invoke()
+                    }
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
         when {
@@ -113,6 +147,4 @@ fun KeyButton(
             }
         }
     }
-
-    // Long press handling will be implemented later if needed
 }

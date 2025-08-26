@@ -27,7 +27,7 @@ fun KeyRow(
             KeyButton(
                 keyData = keyData,
                 onKeyClick = onKeyClick,
-                onKeyLongPress = if (onKeyLongPress != null && keyData.code == "SHIFT") {
+                onKeyLongPress = if (onKeyLongPress != null && (keyData.code == "SHIFT" || keyData.code == "BACKSPACE")) {
                     { onKeyLongPress(keyData.code) }
                 } else null,
                 isShiftActive = isShiftActive,

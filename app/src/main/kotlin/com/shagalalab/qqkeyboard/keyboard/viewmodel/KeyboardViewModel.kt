@@ -107,6 +107,12 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.doubleTapShift()
     }
 
+    fun onBackspaceLongPress() {
+        // This method is called by QqKeyboard.kt but the actual repetitive
+        // deletion is handled by KeyButton.kt's LaunchedEffect mechanism
+        // We can use this for any setup if needed in the future
+    }
+
     private fun toggleShift() {
         keyboardState = keyboardState.toggleShift()
     }

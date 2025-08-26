@@ -6,5 +6,5 @@
     <string name="about_keyboard">Klaviatura haqqında</string>
     <string name="help">Járdem</string>
     <string name="test_keyboard_here">Bul jerde klaviaturanı sınap kórseńiz boladı</string>
-    <string name="word_separators" translatable="false">\u0020.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
+    <string name="word_separators" translatable="false">.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
 </resources>
