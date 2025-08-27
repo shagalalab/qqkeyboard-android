@@ -24,6 +24,11 @@ class KeyboardViewModel : ViewModel() {
     private var inputConnection: InputConnection? = null
 
     private var wordSeparators: Set<Char> = setOf()
+    private var lastShiftTapTime: Long = 0L
+    
+    companion object {
+        private const val DOUBLE_TAP_DELAY_MS = 300L
+    }
 
     fun initialize(context: Context) {
         if (preferences == null) {
@@ -68,7 +73,18 @@ class KeyboardViewModel : ViewModel() {
                     }
                 }
                 "SHIFT" -> {
-                    toggleShift()
+                    val currentTime = System.currentTimeMillis()
+                    val timeSinceLast = currentTime - lastShiftTapTime
+                    
+                    if (timeSinceLast <= DOUBLE_TAP_DELAY_MS && lastShiftTapTime != 0L) {
+                        // Double tap detected - activate caps lock
+                        keyboardState = keyboardState.doubleTapShift()
+                        lastShiftTapTime = 0L // Reset to prevent triple-tap issues
+                    } else {
+                        // Single tap - normal toggle
+                        toggleShift()
+                        lastShiftTapTime = currentTime
+                    }
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "LAYOUT_SWITCH" -> {
