@@ -64,13 +64,44 @@ class KeyboardViewModel : ViewModel() {
                     feedbackManager?.playReturnFeedback()
                 }
                 "SPACE" -> {
-                    ic.commitText(" ", 1)
-                    feedbackManager?.playSpacebarFeedback()
-
-                    // Check if we should auto-capitalize after this space
-                    if (shouldAutoCapitalize()) {
-                        keyboardState = keyboardState.enableAutoCapitalization()
+                    // Check for double-space to period conversion
+                    val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
+                    if (textBefore == " ") {
+                        // Previous character is space - check context before the space
+                        val contextBefore = ic.getTextBeforeCursor(3, 0)?.toString() ?: ""
+                        
+                        // Check if there's already sentence-ending punctuation before the space
+                        if (contextBefore.length >= 2) {
+                            val charBeforeSpace = contextBefore[contextBefore.length - 2]
+                            if (charBeforeSpace == '.' || charBeforeSpace == '!' || charBeforeSpace == '?') {
+                                // Already has punctuation, just add another space
+                                ic.commitText(" ", 1)
+                            } else {
+                                // No punctuation, convert "  " to ". "
+                                ic.deleteSurroundingText(1, 0) // Remove the previous space
+                                ic.commitText(". ", 1) // Add period and space
+                                
+                                // Auto-capitalize after period
+                                keyboardState = keyboardState.enableAutoCapitalization()
+                            }
+                        } else {
+                            // Not enough context, assume no punctuation - convert to period
+                            ic.deleteSurroundingText(1, 0) // Remove the previous space
+                            ic.commitText(". ", 1) // Add period and space
+                            
+                            // Auto-capitalize after period
+                            keyboardState = keyboardState.enableAutoCapitalization()
+                        }
+                    } else {
+                        // Normal space insertion
+                        ic.commitText(" ", 1)
+                        
+                        // Check if we should auto-capitalize after this space
+                        if (shouldAutoCapitalize()) {
+                            keyboardState = keyboardState.enableAutoCapitalization()
+                        }
                     }
+                    feedbackManager?.playSpacebarFeedback()
                 }
                 "SHIFT" -> {
                     val currentTime = System.currentTimeMillis()

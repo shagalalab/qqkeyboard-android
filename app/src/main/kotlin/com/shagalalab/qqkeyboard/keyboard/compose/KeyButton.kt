@@ -31,8 +31,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import kotlinx.coroutines.delay
 
-private const val INITIAL_DELAY_BEFORE_REPEAT_MS = 500L
-private const val REPEAT_INTERVAL_DELAY_MS = 60L
+private const val REPEAT_INTERVAL_DELAY_MS = 50L
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -76,7 +75,6 @@ fun KeyButton(
     // Handle repetitive long press for specific keys
     LaunchedEffect(isLongPressing) {
         if (isLongPressing && (keyData.code == "BACKSPACE")) {
-            delay(INITIAL_DELAY_BEFORE_REPEAT_MS) // Initial delay before starting repetition
             while (isLongPressing) {
                 onKeyClick(keyData.code) // Perform the action
                 delay(REPEAT_INTERVAL_DELAY_MS) // Repeat interval
