@@ -25,7 +25,7 @@ class KeyboardViewModel : ViewModel() {
 
     private var wordSeparators: Set<Char> = setOf()
     private var lastShiftTapTime: Long = 0L
-    
+
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
     }
@@ -75,7 +75,7 @@ class KeyboardViewModel : ViewModel() {
                 "SHIFT" -> {
                     val currentTime = System.currentTimeMillis()
                     val timeSinceLast = currentTime - lastShiftTapTime
-                    
+
                     if (timeSinceLast <= DOUBLE_TAP_DELAY_MS && lastShiftTapTime != 0L) {
                         // Double tap detected - activate caps lock
                         keyboardState = keyboardState.doubleTapShift()
@@ -101,6 +101,10 @@ class KeyboardViewModel : ViewModel() {
                 }
                 "EMOJI" -> {
                     switchToEmoji()
+                    feedbackManager?.playKeyPressFeedback()
+                }
+                "€~\\" -> {
+                    switchToSymbolic()
                     feedbackManager?.playKeyPressFeedback()
                 }
                 else -> {
@@ -151,18 +155,14 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.switchMode(KeyboardMode.EMOJI)
     }
 
+    private fun switchToSymbolic() {
+        keyboardState = keyboardState.switchMode(KeyboardMode.SYMBOLIC)
+    }
+
     fun getLayoutSwitchButtonText(): String {
         return when (keyboardState.layoutType) {
             LayoutType.LATIN -> "ҚҚ"
             LayoutType.CYRILLIC -> "QQ"
-        }
-    }
-
-    fun getModeButtonText(): String {
-        return when (keyboardState.keyboardMode) {
-            KeyboardMode.ALPHABETIC -> "123"
-            KeyboardMode.NUMERIC -> "АБВ"
-            KeyboardMode.EMOJI -> "АБВ"
         }
     }
 

@@ -70,8 +70,7 @@ data class KeyData(
 
         fun modeSwitch(displayText: String) = KeyData(
             code = when (displayText) {
-                "123" -> "123"
-                "АБВ" -> "ABC"
+                "123", "ABC", "€~\\" -> displayText
                 else -> "MODE_SWITCH"
             },
             displayText = displayText,

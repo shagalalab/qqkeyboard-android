@@ -57,7 +57,7 @@ object EmojiData {
         // Add control row
         emojiRows.add(
             listOf(
-                KeyData.modeSwitch("АБВ"),
+                KeyData.modeSwitch("ABC"),
                 KeyData.space(),
                 KeyData.backspace(),
                 KeyData.enter()
@@ -91,7 +91,7 @@ object EmojiData {
         // Add control row
         emojiRows.add(
             listOf(
-                KeyData.modeSwitch("АБВ"),
+                KeyData.modeSwitch("ABC"),
                 KeyData.space(),
                 KeyData.backspace(),
                 KeyData.enter()

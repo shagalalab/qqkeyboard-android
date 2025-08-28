@@ -169,24 +169,79 @@ object KeyboardMappings {
                 KeyData.character("]"),
                 KeyData.character("{"),
                 KeyData.character("}"),
-                KeyData.character("\\"),
-                KeyData.character("|")
+                KeyData.character("<"),
+                KeyData.character(">")
             ),
             // Punctuation and special
             listOf(
+                KeyData.modeSwitch("€~\\"),
                 KeyData.character(";"),
                 KeyData.character(":"),
                 KeyData.character("'"),
                 KeyData.character("\""),
-                KeyData.character(","),
-                KeyData.character("."),
                 KeyData.character("?"),
                 KeyData.character("/"),
                 KeyData.backspace()
             ),
             // Control row
             listOf(
-                KeyData.modeSwitch("АБВ"),
+                KeyData.modeSwitch("ABC"),
+                KeyData.character(","),
+                KeyData.space(),
+                KeyData.character("."),
+                KeyData.enter()
+            )
+        )
+    }
+
+    fun getSymbolicLayout(): List<List<KeyData>> {
+        return listOf(
+            listOf(
+                KeyData.character("£"),
+                KeyData.character("¢"),
+                KeyData.character("€"),
+                KeyData.character("¥"),
+                KeyData.character("₽"),
+                KeyData.character("©"),
+                KeyData.character("®"),
+                KeyData.character("™"),
+                KeyData.character("✓"),
+            ),
+            listOf(
+                KeyData.character("`"),
+                KeyData.character("|"),
+                KeyData.character("•"),
+                KeyData.character("√"),
+                KeyData.character("π"),
+                KeyData.character("÷"),
+                KeyData.character("×"),
+                KeyData.character("§"),
+                KeyData.character("∆"),
+            ),
+            listOf(
+                KeyData.character("’"),
+                KeyData.character("°"),
+                KeyData.character("№"),
+                KeyData.character("„"),
+                KeyData.character("“"),
+                KeyData.character("”"),
+                KeyData.character("«"),
+                KeyData.character("»"),
+                KeyData.character("—"),
+            ),
+            listOf(
+                KeyData.modeSwitch("123"),
+                KeyData.character("~"),
+                KeyData.character("\\"),
+                KeyData.character("±"),
+                KeyData.character("¦"),
+                KeyData.character("¡"),
+                KeyData.character("½"),
+                KeyData.backspace()
+            ),
+            // Control row
+            listOf(
+                KeyData.modeSwitch("ABC"),
                 KeyData.space(),
                 KeyData.enter()
             )

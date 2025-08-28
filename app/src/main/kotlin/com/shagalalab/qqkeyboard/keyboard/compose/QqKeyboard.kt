@@ -36,6 +36,9 @@ fun QqKeyboard(
             keyboardState.keyboardMode == KeyboardMode.NUMERIC -> {
                 KeyboardMappings.getNumericLayout()
             }
+            keyboardState.keyboardMode == KeyboardMode.SYMBOLIC -> {
+                KeyboardMappings.getSymbolicLayout()
+            }
             keyboardState.layoutType == LayoutType.LATIN -> {
                 KeyboardMappings.getLatinLayout()
             }
@@ -52,8 +55,8 @@ fun QqKeyboard(
                     "LAYOUT_SWITCH" -> keyData.copy(
                         displayText = viewModel.getLayoutSwitchButtonText()
                     )
-                    "123", "ABC" -> keyData.copy(
-                        displayText = viewModel.getModeButtonText()
+                    "123", "ABC", "€~\\" -> keyData.copy(
+                        displayText = keyData.code
                     )
                     else -> keyData
                 }

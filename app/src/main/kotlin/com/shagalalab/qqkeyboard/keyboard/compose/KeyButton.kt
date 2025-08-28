@@ -32,7 +32,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import kotlinx.coroutines.delay
 
 private const val INITIAL_DELAY_BEFORE_REPEAT_MS = 500L
-private const val REPEAT_INTERVAL_DELAY_MS = 100L
+private const val REPEAT_INTERVAL_DELAY_MS = 60L
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
