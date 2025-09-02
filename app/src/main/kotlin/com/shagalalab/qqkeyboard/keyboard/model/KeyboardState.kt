@@ -15,14 +15,14 @@ enum class KeyboardMode {
     ALPHABETIC,
     NUMERIC,
     SYMBOLIC,
-    EMOJI
 }
 
 data class KeyboardState(
     val layoutType: LayoutType = LayoutType.LATIN,
     val shiftState: ShiftState = ShiftState.OFF,
     val keyboardMode: KeyboardMode = KeyboardMode.ALPHABETIC,
-    val isShiftLocked: Boolean = false
+    val isEmojiShown: Boolean = false,
+    val isShiftLocked: Boolean = false,
 ) {
     val shouldShowUpperCase: Boolean
         get() = shiftState == ShiftState.ON || shiftState == ShiftState.CAPS_LOCK
@@ -66,5 +66,9 @@ data class KeyboardState(
         } else {
             this
         }
+    }
+
+    fun toggleEmojiPopup(): KeyboardState {
+        return copy(isEmojiShown = !isEmojiShown)
     }
 }

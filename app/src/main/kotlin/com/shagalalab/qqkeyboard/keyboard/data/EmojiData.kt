@@ -1,107 +1,482 @@
 package com.shagalalab.qqkeyboard.keyboard.data
 
-import com.shagalalab.qqkeyboard.keyboard.model.KeyData
+import com.shagalalab.qqkeyboard.R
 
 object EmojiData {
 
-    // Basic emoji categories
-    val smileysAndPeople = listOf(
-        "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
-        "🙂", "🙃", "😉", "😌", "😍", "😘", "😗", "😙", "😚", "😋",
-        "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "😏",
-        "😒", "😞", "😔", "😟", "😕", "🙁", "😣", "😖", "😫", "😩",
-        "🤯", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵",
-        "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫"
+    val emojiCategoryActivity = listOf(
+        "🎉", "🎊", "🎈", "🎂", "🎀", "🎁", "🎇", "🎆", "🧨", "🧧",
+        "🪔", "🪅", "🪩", "🎐", "🎏", "🎎", "🎑", "🎍", "🎋", "🎄",
+        "🎃", "🎗️", "🥇", "🥈", "🥉", "🏅", "🎖️", "🏆", "📢", "⚽",
+        "⚾", "🥎", "🏀", "🏐", "🏈", "🏉", "🥅", "🎾", "🏸", "🥍",
+        "🏏", "🏑", "🏒", "🥌", "🛷", "🎿", "⛸️", "🛼", "🩰", "🛹",
+        "⛳", "🎯", "🏹", "🥏", "🪃", "🪁", "🎣", "🤿", "🩱", "🎽",
+        "🥋", "🥊", "🎱", "🏓", "🎳", "♟️", "🪀", "🧩", "🎮", "🕹️",
+        "👾", "🔫", "🎲", "🎰", "🎴", "🀄", "🃏", "🪄", "🎩", "📷",
+        "📸", "🖼️", "🎨", "🖌️", "🖍️", "🪡", "🧵", "🧶", "🎹", "🎷",
+        "🎺", "🎸", "🪕", "🎻", "🪘", "🥁", "🪇", "🪈", "🪗", "🎤",
+        "🎧", "🎚️", "🎛️", "🎙️", "📻", "📺", "📼", "📹", "📽️", "🎥",
+        "🎞️", "🎬", "🎭", "🎫", "🎟️"
     )
 
-    val animalsAndNature = listOf(
-        "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯",
-        "🦁", "🐮", "🐷", "🐸", "🐵", "🙈", "🙉", "🙊", "🐒", "🐔",
-        "🐧", "🐦", "🐤", "🐣", "🐥", "🦆", "🦅", "🦉", "🦇", "🐺",
-        "🐗", "🐴", "🦄", "🐝", "🐛", "🦋", "🐌", "🐞", "🐜", "🦟"
+    val emojiCategoryAnimalsNature = listOf(
+        "💐", "🌹", "🥀", "🌺", "🌷", "🪷", "🌸", "💮", "🏵️", "🪻",
+        "🌻", "🌼", "🍂", "🍁", "🍄", "🌾", "🌱", "🌿", "🍃", "☘️",
+        "🍀", "🪴", "🌵", "🌴", "🌳", "🌲", "🪵", "🪹", "🪺", "🪨",
+        "⛰️", "🏔️", "❄️", "☃️", "⛄", "🌫️", "🌡️", "🔥", "🌋", "🏜️",
+        "🏞️", "🏝️", "🏖️", "🌅", "🌄", "🌈", "🫧", "🌊", "🌬️", "🌀",
+        "🌪️", "⚡", "☔", "💧", "☁️", "🌨️", "🌧️", "🌩️", "⛈️", "🌦️",
+        "🌥️", "⛅", "🌤️", "☀️", "🌞", "🌝", "🌚", "🌜", "🌛", "⭐",
+        "🌟", "✨", "💫", "🌙", "☄️", "🕳️", "🌠", "🌌", "🌍", "🌎",
+        "🌏", "🪐", "🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘",
+        "🙈", "🙉", "🙊", "🐵", "🦁", "🐯", "🐱", "🐶", "🐺", "🐻",
+        "🐻‍❄️", "🐨", "🐼", "🐹", "🐭", "🐰", "🦊", "🦝", "🐮", "🐷",
+        "🐽", "🐗", "🦓", "🦄", "🐴", "🫎", "🐲", "🦎", "🐉", "🦖",
+        "🦕", "🐢", "🐊", "🐍", "🐸", "🐇", "🐁", "🐀", "🐈", "🐈‍⬛",
+        "🐩", "🐕", "🦮", "🐕‍🦺", "🐖", "🐎", "🫏", "🐄", "🐂", "🐃",
+        "🦬", "🐏", "🐑", "🐐", "🦌", "🦙", "🦥", "🦘", "🐘", "🦣",
+        "🦏", "🦛", "🦒", "🐆", "🐅", "🐒", "🦍", "🦧", "🐪", "🐫",
+        "🐿️", "🦫", "🦨", "🦡", "🦔", "🦦", "🦇", "🪽", "🪶", "🐦",
+        "🐦‍⬛", "🐓", "🐔", "🐣", "🐤", "🐥", "🦅", "🦉", "🦜", "🕊️",
+        "🦤", "🦢", "🦆", "🪿", "🦩", "🦚", "🐦‍🔥", "🦃", "🐧", "🦭",
+        "🦈", "🐬", "🐋", "🐳", "🐟", "🐠", "🐡", "🦐", "🦞", "🦀",
+        "🦑", "🐙", "🪼", "🦪", "🪸", "🦂", "🕷️", "🕸️", "🐚", "🐌",
+        "🐜", "🦗", "🪲", "🦟", "🪳", "🪰", "🐝", "🐞", "🦋", "🐛",
+        "🪱", "🦠", "🐾"
     )
 
-    val foodAndDrink = listOf(
-        "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈",
-        "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦",
-        "🥒", "🥬", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🥔"
+    val emojiCategoryEmotions = listOf(
+        "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😭", "😉",
+        "😗", "😙", "😚", "😘", "🥰", "😍", "🤩", "🥳", "🫠", "🙃",
+        "🙂", "🥲", "🥹", "😊", "☺️", "😌", "😏", "🤤", "😋", "😛",
+        "😝", "😜", "🤪", "🥴", "😔", "🥺", "😬", "😑", "😐", "😶",
+        "😶‍🌫️", "🫥", "🤐", "🫡", "🤔", "🤫", "🫢", "🤭", "🥱", "🤗",
+        "🫣", "😱", "🤨", "🧐", "😒", "🙄", "😮‍💨", "😤", "😠", "😡",
+        "🤬", "😞", "😓", "😟", "😥", "😢", "☹️", "🙁", "🫤", "😕",
+        "😰", "😨", "😧", "😦", "😮", "😯", "😲", "😳", "🤯", "😖",
+        "😣", "😩", "😫", "😵", "😵‍💫", "🫨", "🥶", "🥵", "🤢", "🤮",
+        "😴", "😪", "🤧", "🤒", "🤕", "😷", "🤥", "😇", "🤠", "🤑",
+        "🤓", "😎", "🥸", "🤡", "😈", "👿", "👻", "💀", "☠️", "👹",
+        "👺", "🎃", "💩", "🤖", "👽", "👾", "🌚", "🌝", "🌞", "🌛",
+        "🌜", "🙈", "🙉", "🙊", "😺", "😸", "😹", "😻", "😼", "😽",
+        "🙀", "😿", "😾", "💫", "⭐", "🌟", "✨", "💥", "💨", "💦",
+        "💤", "🕳️", "🔥", "💯", "🎉", "❤️", "🧡", "💛", "💚", "🩵",
+        "💙", "💜", "🤎", "🖤", "🩶", "🤍", "🩷", "💘", "💝", "💖",
+        "💗", "💓", "💞", "💕", "💌", "💟", "♥️", "❣️", "❤️‍🩹", "💔",
+        "❤️‍🔥", "💋", "🫂", "👥", "👤", "🗣️", "👣", "🧠", "🫀", "🫁",
+        "🩸", "🦠", "🦷", "🦴", "👀", "👁️", "👄", "🫦", "👅", "👃",
+        "👂", "🦻", "🦶", "🦵", "🦿", "🦾", "💪", "👏", "👍", "👎",
+        "🫶", "🙌", "👐", "🤲", "🤜", "🤛", "✊", "👊", "🫳", "🫴",
+        "🫱", "🫲", "🫸", "🫷", "👋", "🤚", "🖐️", "✋", "🖖", "🤟",
+        "🤘", "✌️", "🤞", "🫰", "🤙", "🤌", "🤏", "👌", "🫵", "👉",
+        "👈", "☝️", "👆", "👇", "🖕", "✍️", "🤳", "🙏", "💅", "🤝"
     )
 
-    val activities = listOf(
-        "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱",
-        "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅", "⛳"
+    val emojiCategoryFlags = listOf(
+        "🏁", // chequered flag
+        "🚩", // triangular flag
+        "🎌", // crossed flags
+        "🏴", // black flag
+        "🏳️", // white flag
+        "🏳️‍🌈", // rainbow flag
+        "🏳️‍⚧️", // transgender flag
+        "🏴‍☠️", // pirate flag
+        "🇦🇨", // flag: Ascension Island
+        "🇦🇩", // flag: Andorra
+        "🇦🇪", // flag: United Arab Emirates
+        "🇦🇫", // flag: Afghanistan
+        "🇦🇬", // flag: Antigua & Barbuda
+        "🇦🇮", // flag: Anguilla
+        "🇦🇱", // flag: Albania
+        "🇦🇲", // flag: Armenia
+        "🇦🇴", // flag: Angola
+        "🇦🇶", // flag: Antarctica
+        "🇦🇷", // flag: Argentina
+        "🇦🇸", // flag: American Samoa
+        "🇦🇹", // flag: Austria
+        "🇦🇺", // flag: Australia
+        "🇦🇼", // flag: Aruba
+        "🇦🇽", // flag: Åland Islands
+        "🇦🇿", // flag: Azerbaijan
+        "🇧🇦", // flag: Bosnia & Herzegovina
+        "🇧🇧", // flag: Barbados
+        "🇧🇩", // flag: Bangladesh
+        "🇧🇪", // flag: Belgium
+        "🇧🇫", // flag: Burkina Faso
+        "🇧🇬", // flag: Bulgaria
+        "🇧🇭", // flag: Bahrain
+        "🇧🇮", // flag: Burundi
+        "🇧🇯", // flag: Benin
+        "🇧🇱", // flag: St. Barthélemy
+        "🇧🇲", // flag: Bermuda
+        "🇧🇳", // flag: Brunei
+        "🇧🇴", // flag: Bolivia
+        "🇧🇶", // flag: Caribbean Netherlands
+        "🇧🇷", // flag: Brazil
+        "🇧🇸", // flag: Bahamas
+        "🇧🇹", // flag: Bhutan
+        "🇧🇻", // flag: Bouvet Island
+        "🇧🇼", // flag: Botswana
+        "🇧🇾", // flag: Belarus
+        "🇧🇿", // flag: Belize
+        "🇨🇦", // flag: Canada
+        "🇨🇨", // flag: Cocos (Keeling) Islands
+        "🇨🇩", // flag: Congo - Kinshasa
+        "🇨🇫", // flag: Central African Republic
+        "🇨🇬", // flag: Congo - Brazzaville
+        "🇨🇭", // flag: Switzerland
+        "🇨🇮", // flag: Côte d'Ivoire
+        "🇨🇰", // flag: Cook Islands
+        "🇨🇱", // flag: Chile
+        "🇨🇲", // flag: Cameroon
+        "🇨🇳", // flag: China
+        "🇨🇴", // flag: Colombia
+        "🇨🇵", // flag: Clipperton Island
+        "🇨🇷", // flag: Costa Rica
+        "🇨🇺", // flag: Cuba
+        "🇨🇻", // flag: Cape Verde
+        "🇨🇼", // flag: Curaçao
+        "🇨🇽", // flag: Christmas Island
+        "🇨🇾", // flag: Cyprus
+        "🇨🇿", // flag: Czechia
+        "🇩🇪", // flag: Germany
+        "🇩🇬", // flag: Diego Garcia
+        "🇩🇯", // flag: Djibouti
+        "🇩🇰", // flag: Denmark
+        "🇩🇲", // flag: Dominica
+        "🇩🇴", // flag: Dominican Republic
+        "🇩🇿", // flag: Algeria
+        "🇪🇦", // flag: Ceuta & Melilla
+        "🇪🇨", // flag: Ecuador
+        "🇪🇪", // flag: Estonia
+        "🇪🇬", // flag: Egypt
+        "🇪🇭", // flag: Western Sahara
+        "🇪🇷", // flag: Eritrea
+        "🇪🇸", // flag: Spain
+        "🇪🇹", // flag: Ethiopia
+        "🇪🇺", // flag: European Union
+        "🇫🇮", // flag: Finland
+        "🇫🇯", // flag: Fiji
+        "🇫🇰", // flag: Falkland Islands
+        "🇫🇲", // flag: Micronesia
+        "🇫🇴", // flag: Faroe Islands
+        "🇫🇷", // flag: France
+        "🇬🇦", // flag: Gabon
+        "🇬🇧", // flag: United Kingdom
+        "🇬🇩", // flag: Grenada
+        "🇬🇪", // flag: Georgia
+        "🇬🇫", // flag: French Guiana
+        "🇬🇬", // flag: Guernsey
+        "🇬🇭", // flag: Ghana
+        "🇬🇮", // flag: Gibraltar
+        "🇬🇱", // flag: Greenland
+        "🇬🇲", // flag: Gambia
+        "🇬🇳", // flag: Guinea
+        "🇬🇵", // flag: Guadeloupe
+        "🇬🇶", // flag: Equatorial Guinea
+        "🇬🇷", // flag: Greece
+        "🇬🇸", // flag: South Georgia & South Sandwich Islands
+        "🇬🇹", // flag: Guatemala
+        "🇬🇺", // flag: Guam
+        "🇬🇼", // flag: Guinea-Bissau
+        "🇬🇾", // flag: Guyana
+        "🇭🇰", // flag: Hong Kong SAR China
+        "🇭🇲", // flag: Heard & McDonald Islands
+        "🇭🇳", // flag: Honduras
+        "🇭🇷", // flag: Croatia
+        "🇭🇹", // flag: Haiti
+        "🇭🇺", // flag: Hungary
+        "🇮🇨", // flag: Canary Islands
+        "🇮🇩", // flag: Indonesia
+        "🇮🇪", // flag: Ireland
+        "🇮🇱", // flag: Israel
+        "🇮🇲", // flag: Isle of Man
+        "🇮🇳", // flag: India
+        "🇮🇴", // flag: British Indian Ocean Territory
+        "🇮🇶", // flag: Iraq
+        "🇮🇷", // flag: Iran
+        "🇮🇸", // flag: Iceland
+        "🇮🇹", // flag: Italy
+        "🇯🇪", // flag: Jersey
+        "🇯🇲", // flag: Jamaica
+        "🇯🇴", // flag: Jordan
+        "🇯🇵", // flag: Japan
+        "🇰🇪", // flag: Kenya
+        "🇰🇬", // flag: Kyrgyzstan
+        "🇰🇭", // flag: Cambodia
+        "🇰🇮", // flag: Kiribati
+        "🇰🇲", // flag: Comoros
+        "🇰🇳", // flag: St. Kitts & Nevis
+        "🇰🇵", // flag: North Korea
+        "🇰🇷", // flag: South Korea
+        "🇰🇼", // flag: Kuwait
+        "🇰🇾", // flag: Cayman Islands
+        "🇰🇿", // flag: Kazakhstan
+        "🇱🇦", // flag: Laos
+        "🇱🇧", // flag: Lebanon
+        "🇱🇨", // flag: St. Lucia
+        "🇱🇮", // flag: Liechtenstein
+        "🇱🇰", // flag: Sri Lanka
+        "🇱🇷", // flag: Liberia
+        "🇱🇸", // flag: Lesotho
+        "🇱🇹", // flag: Lithuania
+        "🇱🇺", // flag: Luxembourg
+        "🇱🇻", // flag: Latvia
+        "🇱🇾", // flag: Libya
+        "🇲🇦", // flag: Morocco
+        "🇲🇨", // flag: Monaco
+        "🇲🇩", // flag: Moldova
+        "🇲🇪", // flag: Montenegro
+        "🇲🇫", // flag: St. Martin
+        "🇲🇬", // flag: Madagascar
+        "🇲🇭", // flag: Marshall Islands
+        "🇲🇰", // flag: North Macedonia
+        "🇲🇱", // flag: Mali
+        "🇲🇲", // flag: Myanmar (Burma)
+        "🇲🇳", // flag: Mongolia
+        "🇲🇴", // flag: Macao SAR China
+        "🇲🇵", // flag: Northern Mariana Islands
+        "🇲🇶", // flag: Martinique
+        "🇲🇷", // flag: Mauritania
+        "🇲🇸", // flag: Montserrat
+        "🇲🇹", // flag: Malta
+        "🇲🇺", // flag: Mauritius
+        "🇲🇻", // flag: Maldives
+        "🇲🇼", // flag: Malawi
+        "🇲🇽", // flag: Mexico
+        "🇲🇾", // flag: Malaysia
+        "🇲🇿", // flag: Mozambique
+        "🇳🇦", // flag: Namibia
+        "🇳🇨", // flag: New Caledonia
+        "🇳🇪", // flag: Niger
+        "🇳🇫", // flag: Norfolk Island
+        "🇳🇬", // flag: Nigeria
+        "🇳🇮", // flag: Nicaragua
+        "🇳🇱", // flag: Netherlands
+        "🇳🇴", // flag: Norway
+        "🇳🇵", // flag: Nepal
+        "🇳🇷", // flag: Nauru
+        "🇳🇺", // flag: Niue
+        "🇳🇿", // flag: New Zealand
+        "🇴🇲", // flag: Oman
+        "🇵🇦", // flag: Panama
+        "🇵🇪", // flag: Peru
+        "🇵🇫", // flag: French Polynesia
+        "🇵🇬", // flag: Papua New Guinea
+        "🇵🇭", // flag: Philippines
+        "🇵🇰", // flag: Pakistan
+        "🇵🇱", // flag: Poland
+        "🇵🇲", // flag: St. Pierre & Miquelon
+        "🇵🇳", // flag: Pitcairn Islands
+        "🇵🇷", // flag: Puerto Rico
+        "🇵🇸", // flag: Palestinian Territories
+        "🇵🇹", // flag: Portugal
+        "🇵🇼", // flag: Palau
+        "🇵🇾", // flag: Paraguay
+        "🇶🇦", // flag: Qatar
+        "🇷🇪", // flag: Réunion
+        "🇷🇴", // flag: Romania
+        "🇷🇸", // flag: Serbia
+        "🇷🇺", // flag: Russia
+        "🇷🇼", // flag: Rwanda
+        "🇸🇦", // flag: Saudi Arabia
+        "🇸🇧", // flag: Solomon Islands
+        "🇸🇨", // flag: Seychelles
+        "🇸🇩", // flag: Sudan
+        "🇸🇪", // flag: Sweden
+        "🇸🇬", // flag: Singapore
+        "🇸🇭", // flag: St. Helena
+        "🇸🇮", // flag: Slovenia
+        "🇸🇯", // flag: Svalbard & Jan Mayen
+        "🇸🇰", // flag: Slovakia
+        "🇸🇱", // flag: Sierra Leone
+        "🇸🇲", // flag: San Marino
+        "🇸🇳", // flag: Senegal
+        "🇸🇴", // flag: Somalia
+        "🇸🇷", // flag: Suriname
+        "🇸🇸", // flag: South Sudan
+        "🇸🇹", // flag: São Tomé & Príncipe
+        "🇸🇻", // flag: El Salvador
+        "🇸🇽", // flag: Sint Maarten
+        "🇸🇾", // flag: Syria
+        "🇸🇿", // flag: Eswatini
+        "🇹🇦", // flag: Tristan da Cunha
+        "🇹🇨", // flag: Turks & Caicos Islands
+        "🇹🇩", // flag: Chad
+        "🇹🇫", // flag: French Southern Territories
+        "🇹🇬", // flag: Togo
+        "🇹🇭", // flag: Thailand
+        "🇹🇯", // flag: Tajikistan
+        "🇹🇰", // flag: Tokelau
+        "🇹🇱", // flag: Timor-Leste
+        "🇹🇲", // flag: Turkmenistan
+        "🇹🇳", // flag: Tunisia
+        "🇹🇴", // flag: Tonga
+        "🇹🇷", // flag: Turkey
+        "🇹🇹", // flag: Trinidad & Tobago
+        "🇹🇻", // flag: Tuvalu
+        "🇹🇼", // flag: Taiwan
+        "🇹🇿", // flag: Tanzania
+        "🇺🇦", // flag: Ukraine
+        "🇺🇬", // flag: Uganda
+        "🇺🇲", // flag: U.S. Outlying Islands
+        "🇺🇳", // flag: United Nations
+        "🇺🇸", // flag: United States
+        "🇺🇾", // flag: Uruguay
+        "🇺🇿", // flag: Uzbekistan
+        "🇻🇦", // flag: Vatican City
+        "🇻🇨", // flag: St. Vincent & Grenadines
+        "🇻🇪", // flag: Venezuela
+        "🇻🇬", // flag: British Virgin Islands
+        "🇻🇮", // flag: U.S. Virgin Islands
+        "🇻🇳", // flag: Vietnam
+        "🇻🇺", // flag: Vanuatu
+        "🇼🇫", // flag: Wallis & Futuna
+        "🇼🇸", // flag: Samoa
+        "🇽🇰", // flag: Kosovo
+        "🇾🇪", // flag: Yemen
+        "🇾🇹", // flag: Mayotte
+        "🇿🇦", // flag: South Africa
+        "🇿🇲", // flag: Zambia
+        "🇿🇼", // flag: Zimbabwe
+        "🏴󠁧󠁢󠁥󠁮󠁧󠁿", // flag: England
+        "🏴󠁧󠁢󠁳󠁣󠁴󠁿", // flag: Scotland
+        "🏴󠁧󠁢󠁷󠁬󠁳󠁿" // flag: Wales
     )
 
-    val symbols = listOf(
-        "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔",
-        "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "☮️",
-        "✝️", "☪️", "🕉️", "☸️", "✡️", "🔯", "🕎", "☯️", "☦️", "🛐"
+    val emojiCategoryFoodDrink = listOf(
+        "🍓", "🍒", "🍎", "🍉", "🍑", "🍊", "🥭", "🍍", "🍌", "🍋",
+        "🍈", "🍏", "🍐", "🥝", "🫒", "🫐", "🍇", "🥥", "🍅", "🌶️",
+        "🫚", "🥕", "🧅", "🌽", "🥦", "🥒", "🥬", "🫛", "🫑", "🥑",
+        "🍠", "🍆", "🧄", "🥔", "🍄‍", "🫘", "🌰", "🥜", "🍞", "🫓",
+        "🥐", "🥖", "🥯", "🧇", "🥞", "🍳", "🥚", "🧀", "🥓", "🥩",
+        "🍗", "🍖", "🍔", "🌭", "🥪", "🥨", "🍟", "🍕", "🫔", "🌮",
+        "🌯", "🥙", "🧆", "🥘", "🍝", "🥫", "🫕", "🥣", "🥗", "🍲",
+        "🍛", "🍜", "🦪", "🦞", "🍣", "🍤", "🥡", "🍚", "🍱", "🥟",
+        "🍢", "🍙", "🍘", "🍥", "🍡", "🥠", "🥮", "🍧", "🍨", "🍦",
+        "🥧", "🍰", "🍮", "🎂", "🧁", "🍭", "🍬", "🍫", "🍩", "🍪",
+        "🍯", "🧂", "🧈", "🍿", "🧊", "🫙", "🥤", "🧋", "🧃", "🥛",
+        "🍼", "🍵",  "☕", "🫖", "🧉", "🍺", "🍻", "🥂", "🍾", "🍷",
+        "🥃", "🫗", "🍸", "🍹", "🍶", "🥢", "🍴", "🥄", "🔪", "🍽️"
     )
 
-    fun getEmojiLayout(): List<List<KeyData>> {
-        // Create a grid layout with emojis
-        val emojiRows = mutableListOf<List<KeyData>>()
+    val emojiCategoryObjects = listOf(
+        "📱", "☎️", "📞", "📟", "📠", "🔌", "🔋", "🪫", "🖲️", "💽",
+        "💾", "💿", "📀", "🖥️", "💻", "⌨️", "🖨️", "🖱️", "🪙", "💸",
+        "💵", "💴", "💶", "💷", "💳", "💰", "🧾", "🧮", "⚖️", "🛒",
+        "🛍️", "🕯️", "💡", "🔦", "🏮", "🧱", "🪟", "🪞", "🚪", "🪑",
+        "🛏️", "🛋️", "🚿", "🛁", "🚽", "🧻", "🪠", "🧸", "🪆", "🧷",
+        "🪢", "🧹", "🧴", "🧽", "🧼", "🪥", "🪒", "🪮", "🧺", "🧦",
+        "🧤", "🧣", "👖", "👕", "🎽", "👚", "👔", "👗", "👘", "🥻",
+        "🩱", "👙", "🩳", "🩲", "🧥", "🥼", "🦺", "⛑️", "🪖", "🎓",
+        "🎩", "👒", "🧢", "👑", "🪭", "🎒", "👝", "👛", "👜", "💼",
+        "🧳", "☂️", "🌂", "💍", "💎", "💄", "👠", "👟", "👞", "🥿",
+        "🩴", "👡", "👢", "🥾", "🦯", "🕶️", "👓", "🥽", "⚗️", "🧫",
+        "🧪", "🌡️", "💉", "💊", "🩹", "🩺", "🩻", "🧬", "🔭", "🔬",
+        "📡", "🛰️", "🧯", "🪓", "🪜", "🪣", "🪝", "🧲", "🧰", "🗜️",
+        "🔩", "🪛", "🪚", "🔧", "🔨", "⚒️", "🛠️", "⛏️", "⚙️", "⛓️‍💥",
+        "🔗", "⛓️", "📎", "🖇️", "📏", "📐", "🖌️", "🖍️", "🖊️", "🖋️",
+        "✒️", "✏️", "📝", "📖", "📚", "📒", "📔", "📕", "📓", "📗",
+        "📘", "📙", "🔖", "🗒️", "📄", "📃", "📋", "📑", "📂", "📁",
+        "🗂️", "🗃️", "🗄️", "📊", "📈", "📉", "📇", "🪪", "📌", "📍",
+        "✂️", "🗑️", "📰", "🗞️", "🏷️", "📦", "📫", "📪", "📬", "📭",
+        "📮", "✉️", "📧", "📩", "📨", "💌", "📤", "📥", "🗳️", "🕛",
+        "🕧", "🕐", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", "🕟", "🕔",
+        "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "🕙",
+        "🕥", "🕚", "🕦", "⏱️", "⌚", "🕰️", "⌛", "⏳", "⏲️", "⏰",
+        "📅", "📆", "🗓️", "🪧", "🛎️", "🔔", "📯", "📢", "📣", "🔈",
+        "🔉", "🔊", "🔍", "🔎", "🔮", "🧿", "🪬", "📿", "🏺", "⚱️",
+        "⚰️", "🪦", "🚬", "💣", "🪤", "📜", "⚔️", "🗡️", "🛡️", "🗝️",
+        "🔑", "🔐", "🔏", "🔒", "🔓"
+    )
 
-        // Split emojis into rows of 8
-        val allEmojis = smileysAndPeople.take(32) // Show first 32 emojis for now
-        val emojiChunks = allEmojis.chunked(8)
+    val emojiCategorySymbols = listOf(
+        "🔴", "🟠", "🟡", "🟢", "🔵", "🟣", "🟤", "⚫", "⚪", "🟥",
+        "🟧", "🟨", "🟩", "🟦", "🟪", "🟫", "⬛", "⬜", "❤️", "🧡",
+        "💛", "💚", "💙", "💜", "🤎", "🖤", "🤍", "🩷", "🩵", "🩶",
+        "♥️", "♦️", "♣️", "♠️", "♈", "♉", "♊", "♋", "♌", "♍",
+        "♎", "♏", "♐", "♑", "♒", "♓", "⛎", "♀️", "♂️", "⚧️",
+        "💭", "🗯️", "💬", "🗨️", "❕", "❔", "❗", "❓", "⁉️", "‼️",
+        "⭕", "❌", "🚫", "🚳", "🚭", "🚯", "🚱", "🚷", "📵", "🔞",
+        "🔕", "🔇", "🅰️", "🆎", "🅱️", "🅾️", "🆑", "🆘", "🛑", "⛔",
+        "📛", "♨️", "💢", "🔻", "🔺", "🉐", "㊙️", "㊗️", "🈴", "🈵",
+        "🈹", "🈲", "🉑", "🈶", "🈚", "🈸", "🈺", "🈷️", "✴️", "🔶",
+        "🔸", "🔆", "🔅", "🆚", "🎦", "📶", "🔁", "🔂", "🔀", "▶️",
+        "⏩", "⏭️", "⏯️", "◀️", "⏪", "⏮️", "🔼", "⏫", "🔽", "⏬",
+        "⏸️", "⏹️", "⏺️", "⏏️", "📴", "🛜", "📳", "📲", "☢️", "☣️",
+        "⚠️", "🚸", "⚜️", "🔱", "〽️", "🔰", "✳️", "❇️", "♻️", "💱",
+        "💲", "💹", "🈯", "❎", "✅", "✔️", "☑️", "⬆️", "↗️", "➡️",
+        "↘️", "⬇️", "↙️", "⬅️", "↖️", "↕️", "↔️", "↩️", "↪️", "⤴️",
+        "⤵️", "🔃", "🔄", "🔙", "🔛", "🔝", "🔚", "🔜", "🆕", "🆓",
+        "🆙", "🆗", "🆒", "🆖", "ℹ️", "🅿️", "🈁", "🈂️", "🈳", "🔣",
+        "🔤", "🔠", "🔡", "🔢", "#️⃣", "*️⃣", "0️⃣", "1️⃣", "2️⃣", "3️⃣",
+        "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🌐", "💠", "🔷",
+        "🔹", "🏧", "Ⓜ️", "🚾", "🚻", "🚹", "🚺", "♿", "🚼", "🛗",
+        "🚮", "🚰", "🛂", "🛃", "🛄", "🛅", "💟", "⚛️", "🛐", "🕉️",
+        "☸️", "☮️", "☯️", "☪️", "🪯", "✝️", "☦️", "✡️", "🔯", "🕎",
+        "♾️", "🆔", /*"🧑‍🧑‍🧒", "🧑‍🧑‍🧒‍🧒", "🧑‍🧒", "🧑‍🧒‍🧒",*/ "⚕️", "🎼", "🎵", "🎶",
+        "✖️", "➕", "➖", "➗", "🟰", "➰", "➿", "〰️", "©️", "®️",
+        "™️", "🔘", "🔳", "◼️", "◾", "▪️", "🔲", "◻️", "◽", "▫️",
+        "👁️‍🗨️"
+    )
 
-        emojiChunks.forEach { row ->
-            emojiRows.add(
-                row.map { emoji ->
-                    KeyData.character(emoji, emoji)
-                }
-            )
-        }
+    val emojiCategoryTravelPlaces = listOf(
+        "🛑", "🚧", "🚨", "⛽", "🛢️", "🧭", "🛞", "🛟", "⚓", "🚏",
+        "🚇", "🚥", "🚦", "🛴", "🦽", "🦼", "🩼", "🚲", "🛵", "🏍️",
+        "🚙", "🚗", "🛻", "🚐", "🚚", "🚛", "🚜", "🏎️", "🚒", "🚑",
+        "🚓", "🚕", "🛺", "🚌", "🚈", "🚝", "🚅", "🚄", "🚂", "🚃",
+        "🚋", "🚎", "🚞", "🚊", "🚉", "🚍", "🚔", "🚘", "🚖", "🚆",
+        "🚢", "🛳️", "🛥️", "🚤", "⛴️", "⛵", "🛶", "🚟", "🚠", "🚡",
+        "🚁", "🛸", "🚀", "✈️", "🛫", "🛬", "🛩️", "🛝", "🎢", "🎡",
+        "🎠", "🎪", "🗼", "🗽", "🗿", "🗻", "🏛️", "💈", "⛲", "⛩️",
+        "🕍", "🕌", "🕋", "🛕", "⛪", "💒", "🏩", "🏯", "🏰", "🏗️",
+        "🏢", "🏭", "🏬", "🏪", "🏟️", "🏦", "🏫", "🏨", "🏣", "🏤",
+        "🏥", "🏚️", "🏠", "🏡", "🏘️", "🛖", "⛺", "🏕️", "⛱️", "🏙️",
+        "🌆", "🌇", "🌃", "🌉", "🌁", "🛤️", "🛣️", "🗾", "🗺️", "🌐",
+        "💺", "🧳"
+    )
 
-        // Add control row
-        emojiRows.add(
-            listOf(
-                KeyData.modeSwitch("ABC"),
-                KeyData.space(),
-                KeyData.backspace(),
-                KeyData.enter()
-            )
+    val emojiCategoryPeople = listOf(
+        "🙇", "🙇‍♀️", "🙇‍♂️", "🙋", "🙋‍♀️", "🙋‍♂️", "💁", "💁‍♀️", "💁‍♂️", "🙆",
+        "🙆‍♀️", "🙆‍♂️", "🙅", "🙅‍♀️", "🙅‍♂️", "🤷", "🤷‍♀️", "🤷‍♂️", "🤦", "🤦‍♀️",
+        "🤦‍♂️", "🙍", "🙍‍♀️", "🙍‍♂️", "🙎", "🙎‍♀️", "🙎‍♂️", "🧏", "🧏‍♀️", "🧏‍♂️",
+        "💆", "💆‍♀️", "💆‍♂️", "💇", "💇‍♀️", "💇‍♂️", "🧖", "🧖‍♀️", "🧖‍♂️", "🛀",
+        "🛌", "🧘", "🧘‍♀️", "🧘‍♂️", "👨‍🦯", "👩‍🦯", "👨‍🦼", "👩‍🦼", "👨‍🦽", "👩‍🦽",
+        "🧎", "🧎‍♀️", "🧎‍♂️", "🧍", "🧍‍♀️", "🧍‍♂️", "🚶", "🚶‍♀️", "🚶‍♂️", "🏃",
+        "🏃‍♀️", "🏃‍♂️", "🤸", "🤸‍♀️", "🤸‍♂️", "🏋️", "🏋️‍♀", "️🏋️", "⛹️", "⛹️‍♀",
+        "️⛹️", "🤾", "🤾‍♀️", "🤾‍♂️", "🚴", "🚴‍♀️", "🚴‍♂️", "🚵", "🚵‍♀️", "🚵‍♂️",
+        "🧗", "🧗‍♀️", "🧗‍♂️", "🤼", "🤼‍♀️", "🤼‍♂️", "🤹", "🤹‍♀️", "🤹‍♂️", "🏌️",
+        "🏌️‍♀️", "🏌️‍♂️", "🏇", "🤺", "⛷️", "🏂", "🪂", "🏄", "🏄‍♀️", "🏄‍♂️",
+        "🚣", "🚣‍♀️", "🚣‍♂️", "🏊", "🏊‍♀️", "🏊‍♂️", "🤽", "🤽‍♀️", "🤽‍♂️", "🧜",
+        "🧜‍♀️", "🧜‍♂️", "🧚", "🧚‍♀️", "🧚‍♂️", "🧞", "🧞‍♀️", "🧞‍♂️", "🦸", "🦸‍♀️",
+        "🦸‍♂️", "🦹", "🦹‍♀️", "🦹‍♂️", "🧝", "🧝‍♀️", "🧝‍♂️", "🧙", "🧙‍♀️", "🧙‍♂️",
+        "🧟", "🧟‍♀️", "🧟‍♂️", "🧛", "🧛‍♀️", "🧛‍♂️", "👼", "🎅", "🤶", "💂",
+        "💂‍♀️", "💂‍♂️", "🤴", "👸", "🤵", "👰", "👩‍🚀", "👨‍🚀", "👷", "👷‍♀️",
+        "👷‍♂️", "👮", "👮‍♀️", "👮‍♂️", "🕵️", "🕵️‍♀️", "🕵️‍♂️", "👩‍✈️", "👨‍✈️", "👩‍🔬",
+        "👨‍🔬", "👩‍⚕️", "👨‍⚕️", "👩‍🔧", "👨‍🔧", "👩‍🏭", "👨‍🏭", "👩‍🚒", "👨‍🚒", "👩‍🌾",
+        "👨‍🌾", "👩‍🏫", "👨‍🏫", "👩‍🎓", "👨‍🎓", "👩‍💼", "👨‍💼", "👩‍⚖️", "👨‍⚖️", "👩‍💻",
+        "👨‍💻", "👩‍🎤", "👨‍🎤", "👩‍🎨", "👨‍🎨", "👩‍🍳", "👨‍🍳", "👳", "👳‍♀️", "👳‍♂️",
+        "🧕", "👲", "👶", "🧒", "👦", "👧", "🧑", "👨", "👩", "🧓",
+        "👴", "👵", "👨‍🦳", "👩‍🦳", "👨‍🦰", "👩‍🦰", "👱", "👱‍♀️", "👱‍♂️", "👨‍🦱",
+        "👩‍🦱", "👨‍🦲", "👩‍🦲", "🧔", "🕴️", "💃", "🕺", "👯", "👯‍♀️", "👯‍♂️",
+        "👭", "👫", "👬", "💏", "👩‍❤️‍💋‍👨", "👨‍❤️‍💋‍👨", "👩‍❤️‍💋‍👩", "💑", "👩‍❤️‍👨", "👨‍❤️‍👨",
+        "👩‍❤️‍👩", "👪", "👨‍👩‍👦", "👨‍👩‍👧", "👨‍👩‍👧‍👦", "👨‍👩‍👦‍👦", "👨‍👩‍👧‍👧", "👨‍👨‍👦", "👨‍👨‍👧", "👨‍👨‍👧‍👦",
+        "👨‍👨‍👦‍👦", "👨‍👨‍👧‍👧", "👩‍👩‍👦", "👩‍👩‍👧", "👩‍👩‍👧‍👦", "👩‍👩‍👦‍👦", "👩‍👩‍👧‍👧", "👨‍👦", "👨‍👦‍👦", "👨‍👧",
+        "👨‍👧‍👦", "👨‍👧‍👧", "👩‍👦", "👩‍👦‍👦", "👩‍👧", "👩‍👧‍👦", "👩‍👧‍👧", "🤰", "🤱"
+    )
+
+    fun getEmojisWithCategories(recentEmojis: List<String>): Map<Int, List<String>> {
+        return linkedMapOf(
+            R.drawable.ic_clock_3 to recentEmojis,
+            R.drawable.ic_smile to emojiCategoryEmotions,
+            R.drawable.ic_person_standing to emojiCategoryPeople,
+            R.drawable.ic_cat to emojiCategoryAnimalsNature,
+            R.drawable.ic_coffee to emojiCategoryFoodDrink,
+            R.drawable.ic_plane to emojiCategoryTravelPlaces,
+            R.drawable.ic_drum to emojiCategoryActivity,
+            R.drawable.ic_shirt to emojiCategoryObjects,
+            R.drawable.ic_shapes to emojiCategorySymbols,
+            R.drawable.ic_flag to emojiCategoryFlags,
         )
-
-        return emojiRows
     }
-
-    // Category-based emoji layouts
-    fun getEmojiLayoutByCategory(category: EmojiCategory): List<List<KeyData>> {
-        val emojis = when (category) {
-            EmojiCategory.SMILEYS -> smileysAndPeople
-            EmojiCategory.ANIMALS -> animalsAndNature
-            EmojiCategory.FOOD -> foodAndDrink
-            EmojiCategory.ACTIVITIES -> activities
-            EmojiCategory.SYMBOLS -> symbols
-        }
-
-        val emojiRows = mutableListOf<List<KeyData>>()
-        val emojiChunks = emojis.chunked(8)
-
-        emojiChunks.forEach { row ->
-            emojiRows.add(
-                row.map { emoji ->
-                    KeyData.character(emoji, emoji)
-                }
-            )
-        }
-
-        // Add control row
-        emojiRows.add(
-            listOf(
-                KeyData.modeSwitch("ABC"),
-                KeyData.space(),
-                KeyData.backspace(),
-                KeyData.enter()
-            )
-        )
-
-        return emojiRows
-    }
-}
-
-enum class EmojiCategory {
-    SMILEYS, ANIMALS, FOOD, ACTIVITIES, SYMBOLS
 }

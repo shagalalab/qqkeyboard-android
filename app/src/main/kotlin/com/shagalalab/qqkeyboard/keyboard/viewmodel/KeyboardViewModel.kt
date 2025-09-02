@@ -12,6 +12,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.LayoutType
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
+import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
 
 class KeyboardViewModel : ViewModel() {
 
@@ -19,6 +20,9 @@ class KeyboardViewModel : ViewModel() {
     private var feedbackManager: FeedbackManager? = null
 
     var keyboardState by mutableStateOf(KeyboardState())
+        private set
+
+    var recentEmojis by mutableStateOf<List<String>>(emptyList())
         private set
 
     private var inputConnection: InputConnection? = null
@@ -37,6 +41,8 @@ class KeyboardViewModel : ViewModel() {
             // Load last used layout
             val lastLayout = preferences?.lastUsedLayout ?: LayoutType.LATIN
             keyboardState = keyboardState.copy(layoutType = lastLayout)
+            // Initialize recent emojis state
+            recentEmojis = preferences?.recentEmojis ?: emptyList()
             wordSeparators = context.resources.getString(R.string.word_separators).toSet()
         }
     }
@@ -54,8 +60,12 @@ class KeyboardViewModel : ViewModel() {
                         // Delete selected text by replacing with empty string
                         ic.commitText("", 1)
                     } else {
-                        // No selection, delete one character before cursor
-                        ic.deleteSurroundingText(1, 0)
+                        // Smart deletion - handles emojis and regular characters
+                        val textBefore = ic.getTextBeforeCursor(20, 0)?.toString()
+                        val deleteLength = EmojiUtils.getGraphemeClusterLength(textBefore)
+                        if (deleteLength > 0) {
+                            ic.deleteSurroundingText(deleteLength, 0)
+                        }
                     }
                     feedbackManager?.playBackspaceFeedback()
                 }
@@ -69,7 +79,7 @@ class KeyboardViewModel : ViewModel() {
                     if (textBefore == " ") {
                         // Previous character is space - check context before the space
                         val contextBefore = ic.getTextBeforeCursor(3, 0)?.toString() ?: ""
-                        
+
                         // Check if there's already sentence-ending punctuation before the space
                         if (contextBefore.length >= 2) {
                             val charBeforeSpace = contextBefore[contextBefore.length - 2]
@@ -80,7 +90,7 @@ class KeyboardViewModel : ViewModel() {
                                 // No punctuation, convert "  " to ". "
                                 ic.deleteSurroundingText(1, 0) // Remove the previous space
                                 ic.commitText(". ", 1) // Add period and space
-                                
+
                                 // Auto-capitalize after period
                                 keyboardState = keyboardState.enableAutoCapitalization()
                             }
@@ -88,14 +98,14 @@ class KeyboardViewModel : ViewModel() {
                             // Not enough context, assume no punctuation - convert to period
                             ic.deleteSurroundingText(1, 0) // Remove the previous space
                             ic.commitText(". ", 1) // Add period and space
-                            
+
                             // Auto-capitalize after period
                             keyboardState = keyboardState.enableAutoCapitalization()
                         }
                     } else {
                         // Normal space insertion
                         ic.commitText(" ", 1)
-                        
+
                         // Check if we should auto-capitalize after this space
                         if (shouldAutoCapitalize()) {
                             keyboardState = keyboardState.enableAutoCapitalization()
@@ -131,7 +141,7 @@ class KeyboardViewModel : ViewModel() {
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "EMOJI" -> {
-                    switchToEmoji()
+                    toggleEmoji()
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "€~\\" -> {
@@ -147,8 +157,18 @@ class KeyboardViewModel : ViewModel() {
                     ic.commitText(textToCommit, 1)
                     feedbackManager?.playKeyPressFeedback()
 
-                    // Reset shift state after typing (except for caps lock)
-                    keyboardState = keyboardState.resetShift()
+                    // Track emoji usage for recent emojis
+                    if (isEmoji(key)) {
+                        addRecentEmoji(key)
+                    }
+
+                    // Check if we should auto-capitalize after this input
+                    keyboardState = if (shouldAutoCapitalizeAfterInput(textToCommit)) {
+                        keyboardState.enableAutoCapitalization()
+                    } else {
+                        // Reset shift state after typing (except for caps lock)
+                        keyboardState.resetShift()
+                    }
                 }
             }
         }
@@ -162,6 +182,10 @@ class KeyboardViewModel : ViewModel() {
         // This method is called by QqKeyboard.kt but the actual repetitive
         // deletion is handled by KeyButton.kt's LaunchedEffect mechanism
         // We can use this for any setup if needed in the future
+    }
+
+    fun toggleEmoji() {
+        keyboardState = keyboardState.toggleEmojiPopup()
     }
 
     private fun toggleShift() {
@@ -182,12 +206,15 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.switchMode(KeyboardMode.ALPHABETIC)
     }
 
-    private fun switchToEmoji() {
-        keyboardState = keyboardState.switchMode(KeyboardMode.EMOJI)
-    }
-
     private fun switchToSymbolic() {
         keyboardState = keyboardState.switchMode(KeyboardMode.SYMBOLIC)
+    }
+
+    private fun addRecentEmoji(emoji: String) {
+        // Update SharedPreferences
+        preferences?.addRecentEmoji(emoji)
+        // Update Compose state to trigger recomposition
+        recentEmojis = preferences?.recentEmojis ?: emptyList()
     }
 
     fun getLayoutSwitchButtonText(): String {
@@ -217,5 +244,43 @@ class KeyboardViewModel : ViewModel() {
             return textBefore.isEmpty() || textBefore.trim().isEmpty()
         }
         return false
+    }
+
+    private fun shouldAutoCapitalizeAfterInput(inputText: String): Boolean {
+        // Check if the input text ends with sentence-ending punctuation followed by space
+        return inputText.length >= 2 &&
+               inputText.endsWith(" ") &&
+               (inputText.endsWith(". ") || inputText.endsWith("! ") || inputText.endsWith("? "))
+    }
+
+    private fun isEmoji(text: String): Boolean {
+        if (text.isEmpty()) return false
+
+        // Use the EmojiUtils to check if this is an emoji
+        // We'll consider it an emoji if it's not a simple ASCII character
+        // and contains characters in the emoji Unicode ranges
+        val codePoint = text.codePointAt(0)
+
+        return when {
+            // Basic emoticons and symbols
+            codePoint in 0x1F600..0x1F64F -> true // Emoticons
+            codePoint in 0x1F300..0x1F5FF -> true // Miscellaneous Symbols
+            codePoint in 0x1F680..0x1F6FF -> true // Transport and Map Symbols
+            codePoint in 0x2600..0x26FF -> true   // Miscellaneous Symbols
+            codePoint in 0x2700..0x27BF -> true   // Dingbats
+            codePoint in 0xFE00..0xFE0F -> true   // Variation Selectors
+            codePoint in 0x1F900..0x1F9FF -> true // Supplemental Symbols
+            codePoint in 0x1F1E6..0x1F1FF -> true // Regional Indicators (flags)
+            // Additional ranges for newer emojis
+            codePoint in 0x1FA70..0x1FAFF -> true // Symbols and Pictographs Extended-A
+            else -> {
+                // Check if it's a multi-codepoint emoji by checking length vs display length
+                text.length > 1 && text.any { char ->
+                    val cp = char.code
+                    cp in 0x1F600..0x1F64F || cp in 0x1F300..0x1F5FF ||
+                    cp in 0x1F680..0x1F6FF || cp in 0x2600..0x26FF
+                }
+            }
+        }
     }
 }

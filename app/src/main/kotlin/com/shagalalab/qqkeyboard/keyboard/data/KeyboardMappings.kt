@@ -54,11 +54,11 @@ object KeyboardMappings {
             // Fourth row with special keys
             listOf(
                 KeyData.modeSwitch("123"),
-                KeyData.character(",", ","),
+                KeyData.character(", ", ","),
                 KeyData.layoutSwitch("ҚҚ"),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
-                KeyData.character(".", "."),
+                KeyData.character(". ", "."),
                 KeyData.enter()
             )
         )
@@ -120,11 +120,11 @@ object KeyboardMappings {
             ),
             listOf(
                 KeyData.modeSwitch("123"),
-                KeyData.character(",", ","),
+                KeyData.character(", ", ","),
                 KeyData.layoutSwitch("QQ"),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
-                KeyData.character(".", "."),
+                KeyData.character(". ", "."),
                 KeyData.enter(),
             )
         )
@@ -186,9 +186,9 @@ object KeyboardMappings {
             // Control row
             listOf(
                 KeyData.modeSwitch("ABC"),
-                KeyData.character(","),
+                KeyData.character(", ", ","),
                 KeyData.space(),
-                KeyData.character("."),
+                KeyData.character(". ", "."),
                 KeyData.enter()
             )
         )
@@ -227,16 +227,16 @@ object KeyboardMappings {
                 KeyData.character("”"),
                 KeyData.character("«"),
                 KeyData.character("»"),
-                KeyData.character("—"),
+                KeyData.character("±"),
             ),
             listOf(
                 KeyData.modeSwitch("123"),
                 KeyData.character("~"),
                 KeyData.character("\\"),
-                KeyData.character("±"),
                 KeyData.character("¦"),
-                KeyData.character("¡"),
-                KeyData.character("½"),
+                KeyData.character("—"),
+                KeyData.character("–"),
+                KeyData.character("¯"),
                 KeyData.backspace()
             ),
             // Control row

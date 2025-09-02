@@ -20,7 +20,7 @@ fun KeyboardLayout(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         rows.forEachIndexed { index, keyRow ->

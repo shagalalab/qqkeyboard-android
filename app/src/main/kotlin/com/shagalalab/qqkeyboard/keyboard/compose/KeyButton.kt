@@ -31,6 +31,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import kotlinx.coroutines.delay
 
+val KEY_HEIGHT = 48.dp
 private const val REPEAT_INTERVAL_DELAY_MS = 50L
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -91,7 +92,7 @@ fun KeyButton(
 
     Box(
         modifier = modifier
-            .height(48.dp)
+            .height(KEY_HEIGHT)
             .clip(keyShape)
             .background(backgroundColor)
             .border(
