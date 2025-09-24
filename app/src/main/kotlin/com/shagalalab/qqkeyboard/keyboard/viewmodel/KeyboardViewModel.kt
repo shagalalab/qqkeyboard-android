@@ -1,6 +1,7 @@
 package com.shagalalab.qqkeyboard.keyboard.viewmodel
 
 import android.content.Context
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +27,11 @@ class KeyboardViewModel : ViewModel() {
     var recentEmojis by mutableStateOf<List<String>>(emptyList())
         private set
 
+    var currentImeAction by mutableStateOf<Int?>(null)
+        private set
+
     private var inputConnection: InputConnection? = null
+    private var editorInfo: EditorInfo? = null
 
     private var wordSeparators: Set<Char> = setOf()
     private var lastShiftTapTime: Long = 0L
@@ -52,6 +57,12 @@ class KeyboardViewModel : ViewModel() {
         inputConnection = connection
     }
 
+    fun setEditorInfo(info: EditorInfo?) {
+        editorInfo = info
+        val newImeAction = info?.let { it.imeOptions and EditorInfo.IME_MASK_ACTION }
+        currentImeAction = newImeAction
+    }
+
     fun onKeyPressed(key: String) {
         inputConnection?.let { ic ->
             when (key) {
@@ -71,7 +82,25 @@ class KeyboardViewModel : ViewModel() {
                     feedbackManager?.playBackspaceFeedback()
                 }
                 "ENTER" -> {
-                    ic.commitText("\n", 1)
+                    editorInfo?.let { info ->
+                        when (info.imeOptions and EditorInfo.IME_MASK_ACTION) {
+                            EditorInfo.IME_ACTION_GO,
+                            EditorInfo.IME_ACTION_SEARCH,
+                            EditorInfo.IME_ACTION_SEND,
+                            EditorInfo.IME_ACTION_NEXT,
+                            EditorInfo.IME_ACTION_DONE -> {
+                                // Perform the IME action instead of inserting newline
+                                ic.performEditorAction(info.imeOptions and EditorInfo.IME_MASK_ACTION)
+                            }
+                            else -> {
+                                // Default behavior - insert newline
+                                ic.commitText("\n", 1)
+                            }
+                        }
+                    } ?: run {
+                        // Fallback if editorInfo is null - insert newline
+                        ic.commitText("\n", 1)
+                    }
                     feedbackManager?.playReturnFeedback()
                 }
                 "SPACE" -> {

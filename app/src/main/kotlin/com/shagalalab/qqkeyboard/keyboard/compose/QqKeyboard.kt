@@ -23,6 +23,7 @@ fun QqKeyboard(
     modifier: Modifier = Modifier
 ) {
     val keyboardState = viewModel.keyboardState
+    val currentImeAction = viewModel.currentImeAction
 
     Box(modifier.fillMaxWidth()
         .height(KEY_HEIGHT * 5 + 2.dp * 7)
@@ -35,22 +36,22 @@ fun QqKeyboard(
             // Get the appropriate layout based on current state
             val keyboardLayout: List<List<KeyData>> = when {
                 keyboardState.keyboardMode == KeyboardMode.NUMERIC -> {
-                    KeyboardMappings.getNumericLayout()
+                    KeyboardMappings.getNumericLayout(currentImeAction)
                 }
 
                 keyboardState.keyboardMode == KeyboardMode.SYMBOLIC -> {
-                    KeyboardMappings.getSymbolicLayout()
+                    KeyboardMappings.getSymbolicLayout(currentImeAction)
                 }
 
                 keyboardState.layoutType == LayoutType.LATIN -> {
-                    KeyboardMappings.getLatinLayout()
+                    KeyboardMappings.getLatinLayout(currentImeAction)
                 }
 
                 keyboardState.layoutType == LayoutType.CYRILLIC -> {
-                    KeyboardMappings.getCyrillicLayout()
+                    KeyboardMappings.getCyrillicLayout(currentImeAction)
                 }
 
-                else -> KeyboardMappings.getLatinLayout()
+                else -> KeyboardMappings.getLatinLayout(currentImeAction)
             }
 
             // Update layout switch button text dynamically

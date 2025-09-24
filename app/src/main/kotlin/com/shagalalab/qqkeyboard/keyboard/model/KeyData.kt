@@ -1,5 +1,6 @@
 package com.shagalalab.qqkeyboard.keyboard.model
 
+import android.view.inputmethod.EditorInfo
 import com.shagalalab.qqkeyboard.R
 
 enum class KeyType {
@@ -44,13 +45,24 @@ data class KeyData(
             widthRatio = 1.5f
         )
 
-        fun enter() = KeyData(
+        fun enterDynamic(imeAction: Int? = null) = KeyData(
             code = "ENTER",
             displayText = "",
             keyType = KeyType.ACTION,
-            iconResId = R.drawable.ic_corner_down_left,
+            iconResId = getReturnIconForImeAction(imeAction),
             widthRatio = 1.5f
         )
+
+        private fun getReturnIconForImeAction(imeAction: Int?): Int {
+            return when (imeAction) {
+                EditorInfo.IME_ACTION_GO -> R.drawable.ic_arrow_right
+                EditorInfo.IME_ACTION_SEARCH -> R.drawable.ic_search
+                EditorInfo.IME_ACTION_SEND -> R.drawable.ic_send_horizontal
+                EditorInfo.IME_ACTION_NEXT -> R.drawable.ic_arrow_right
+                EditorInfo.IME_ACTION_DONE -> R.drawable.ic_check
+                else -> R.drawable.ic_corner_down_left
+            }
+        }
 
         fun space() = KeyData(
             code = "SPACE",

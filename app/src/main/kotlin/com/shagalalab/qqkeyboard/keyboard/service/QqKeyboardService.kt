@@ -57,6 +57,7 @@ class QqKeyboardService : InputMethodService(), LifecycleOwner, SavedStateRegist
         handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         keyboardViewModel.initialize(this)
         keyboardViewModel.setInputConnection(currentInputConnection)
+        keyboardViewModel.setEditorInfo(info)
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {

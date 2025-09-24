@@ -5,7 +5,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 object KeyboardMappings {
 
     // Latin keyboard layout (QWERTY-based with Karakalpak modifications)
-    fun getLatinLayout(): List<List<KeyData>> {
+    fun getLatinLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(
                 KeyData.character("á"),
@@ -59,13 +59,13 @@ object KeyboardMappings {
                 KeyData.space(),
                 KeyData.emojiSwitch(),
                 KeyData.character(".", "."),
-                KeyData.enter()
+                KeyData.enterDynamic(imeAction)
             )
         )
     }
 
     // Cyrillic keyboard layout
-    fun getCyrillicLayout(): List<List<KeyData>> {
+    fun getCyrillicLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(
                 KeyData.character("ә"),
@@ -125,13 +125,13 @@ object KeyboardMappings {
                 KeyData.space(),
                 KeyData.emojiSwitch(),
                 KeyData.character(".", "."),
-                KeyData.enter(),
+                KeyData.enterDynamic(imeAction),
             )
         )
     }
 
     // Numbers and symbols layout
-    fun getNumericLayout(): List<List<KeyData>> {
+    fun getNumericLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             // Numbers row
             listOf(
@@ -189,12 +189,12 @@ object KeyboardMappings {
                 KeyData.character(",", ","),
                 KeyData.space(),
                 KeyData.character(".", "."),
-                KeyData.enter()
+                KeyData.enterDynamic(imeAction)
             )
         )
     }
 
-    fun getSymbolicLayout(): List<List<KeyData>> {
+    fun getSymbolicLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(
                 KeyData.character("£"),
@@ -243,7 +243,7 @@ object KeyboardMappings {
             listOf(
                 KeyData.modeSwitch("ABC"),
                 KeyData.space(),
-                KeyData.enter()
+                KeyData.enterDynamic(imeAction)
             )
         )
     }
