@@ -54,11 +54,11 @@ object KeyboardMappings {
             // Fourth row with special keys
             listOf(
                 KeyData.modeSwitch("123"),
-                KeyData.character(", ", ","),
+                KeyData.character(",", ","),
                 KeyData.layoutSwitch("ҚҚ"),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
-                KeyData.character(". ", "."),
+                KeyData.character(".", "."),
                 KeyData.enter()
             )
         )
@@ -120,11 +120,11 @@ object KeyboardMappings {
             ),
             listOf(
                 KeyData.modeSwitch("123"),
-                KeyData.character(", ", ","),
+                KeyData.character(",", ","),
                 KeyData.layoutSwitch("QQ"),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
-                KeyData.character(". ", "."),
+                KeyData.character(".", "."),
                 KeyData.enter(),
             )
         )
@@ -175,20 +175,20 @@ object KeyboardMappings {
             // Punctuation and special
             listOf(
                 KeyData.modeSwitch("€~\\"),
-                KeyData.character(";"),
-                KeyData.character(":"),
                 KeyData.character("'"),
                 KeyData.character("\""),
-                KeyData.character("?"),
+                KeyData.character(":"),
+                KeyData.character(";"),
                 KeyData.character("/"),
+                KeyData.character("?"),
                 KeyData.backspace()
             ),
             // Control row
             listOf(
                 KeyData.modeSwitch("ABC"),
-                KeyData.character(", ", ","),
+                KeyData.character(",", ","),
                 KeyData.space(),
-                KeyData.character(". ", "."),
+                KeyData.character(".", "."),
                 KeyData.enter()
             )
         )
