@@ -13,6 +13,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.LayoutType
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 
 class KeyboardViewModel : ViewModel() {
 
@@ -151,7 +152,7 @@ class KeyboardViewModel : ViewModel() {
                 }
                 else -> {
                     val textToCommit = if (keyboardState.shouldShowUpperCase) {
-                        key.uppercase()
+                        key.kaaUppercase()
                     } else {
                         key.lowercase()
                     }
@@ -262,24 +263,23 @@ class KeyboardViewModel : ViewModel() {
         // and contains characters in the emoji Unicode ranges
         val codePoint = text.codePointAt(0)
 
-        return when {
-            // Basic emoticons and symbols
-            codePoint in 0x1F600..0x1F64F -> true // Emoticons
-            codePoint in 0x1F300..0x1F5FF -> true // Miscellaneous Symbols
-            codePoint in 0x1F680..0x1F6FF -> true // Transport and Map Symbols
-            codePoint in 0x2600..0x26FF -> true   // Miscellaneous Symbols
-            codePoint in 0x2700..0x27BF -> true   // Dingbats
-            codePoint in 0xFE00..0xFE0F -> true   // Variation Selectors
-            codePoint in 0x1F900..0x1F9FF -> true // Supplemental Symbols
-            codePoint in 0x1F1E6..0x1F1FF -> true // Regional Indicators (flags)
+        return when (codePoint) {
+            in 0x1F600..0x1F64F -> true // Emoticons
+            in 0x1F300..0x1F5FF -> true // Miscellaneous Symbols
+            in 0x1F680..0x1F6FF -> true // Transport and Map Symbols
+            in 0x2600..0x26FF -> true   // Miscellaneous Symbols
+            in 0x2700..0x27BF -> true   // Dingbats
+            in 0xFE00..0xFE0F -> true   // Variation Selectors
+            in 0x1F900..0x1F9FF -> true // Supplemental Symbols
+            in 0x1F1E6..0x1F1FF -> true // Regional Indicators (flags)
             // Additional ranges for newer emojis
-            codePoint in 0x1FA70..0x1FAFF -> true // Symbols and Pictographs Extended-A
+            in 0x1FA70..0x1FAFF -> true // Symbols and Pictographs Extended-A
             else -> {
                 // Check if it's a multi-codepoint emoji by checking length vs display length
                 text.length > 1 && text.any { char ->
                     val cp = char.code
                     cp in 0x1F600..0x1F64F || cp in 0x1F300..0x1F5FF ||
-                    cp in 0x1F680..0x1F6FF || cp in 0x2600..0x26FF
+                        cp in 0x1F680..0x1F6FF || cp in 0x2600..0x26FF
                 }
             }
         }

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import kotlinx.coroutines.delay
 
 val KEY_HEIGHT = 48.dp
@@ -126,7 +127,7 @@ fun KeyButton(
             keyData.displayText.isNotEmpty() -> {
                 Text(
                     text = if (isShiftActive && keyData.keyType == KeyType.CHARACTER) {
-                        keyData.displayText.uppercase()
+                        keyData.displayText.kaaUppercase()
                     } else {
                         keyData.displayText
                     },
