@@ -77,30 +77,31 @@ class KeyboardViewModel : ViewModel() {
                     // Check for double-space to period conversion
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
                     if (textBefore == " ") {
-                        // Previous character is space - check context before the space
-                        val contextBefore = ic.getTextBeforeCursor(3, 0)?.toString() ?: ""
+                        // Previous character is space - check if we should convert to period
+                        // Use larger context window for regex-based detection
+                        val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
 
-                        // Check if there's already sentence-ending punctuation before the space
-                        if (contextBefore.length >= 2) {
-                            val charBeforeSpace = contextBefore[contextBefore.length - 2]
-                            if (charBeforeSpace == '.' || charBeforeSpace == '!' || charBeforeSpace == '?') {
-                                // Already has punctuation, just add another space
+                        // Use regex to check if there's already a period followed by any number of spaces at the end
+                        // Pattern: period followed by one or more spaces at end of string
+                        val periodSpacePattern = Regex("""\.\s+$""")
+                        val exclamationSpacePattern = Regex("""!\s+$""")
+                        val questionSpacePattern = Regex("""\?\s+$""")
+
+                        when {
+                            periodSpacePattern.containsMatchIn(contextBefore) ||
+                            exclamationSpacePattern.containsMatchIn(contextBefore) ||
+                            questionSpacePattern.containsMatchIn(contextBefore) -> {
+                                // Already has sentence-ending punctuation followed by space(s), just add another space
                                 ic.commitText(" ", 1)
-                            } else {
-                                // No punctuation, convert "  " to ". "
+                            }
+                            else -> {
+                                // No sentence-ending punctuation found, convert "  " to ". "
                                 ic.deleteSurroundingText(1, 0) // Remove the previous space
                                 ic.commitText(". ", 1) // Add period and space
 
                                 // Auto-capitalize after period
                                 keyboardState = keyboardState.enableAutoCapitalization()
                             }
-                        } else {
-                            // Not enough context, assume no punctuation - convert to period
-                            ic.deleteSurroundingText(1, 0) // Remove the previous space
-                            ic.commitText(". ", 1) // Add period and space
-
-                            // Auto-capitalize after period
-                            keyboardState = keyboardState.enableAutoCapitalization()
                         }
                     } else {
                         // Normal space insertion
