@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +53,11 @@ fun KeyButton(
 
     // Key colors based on type
     val (backgroundColor, borderColor, contentColor) = when {
+        keyData.code == "SPACER" -> Triple(
+            Color.Transparent,
+            Color.Transparent,
+            Color.Transparent
+        )
         isPressed -> Triple(
             MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
             MaterialTheme.colorScheme.primary,
@@ -101,18 +107,24 @@ fun KeyButton(
                 color = borderColor,
                 shape = keyShape
             )
-            .combinedClickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = { onKeyClick(keyData.code) },
-                onLongClick = {
-                    if (keyData.code == "BACKSPACE") {
-                        isLongPressing = true
-                    } else {
-                        onKeyLongPress?.invoke()
-                    }
+            .let { modifier ->
+                if (keyData.code != "SPACER") {
+                    modifier.combinedClickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = { onKeyClick(keyData.code) },
+                        onLongClick = {
+                            if (keyData.code == "BACKSPACE") {
+                                isLongPressing = true
+                            } else {
+                                onKeyLongPress?.invoke()
+                            }
+                        }
+                    )
+                } else {
+                    modifier
                 }
-            ),
+            },
         contentAlignment = Alignment.Center
     ) {
         when {

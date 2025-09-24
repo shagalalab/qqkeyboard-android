@@ -8,12 +8,14 @@ object KeyboardMappings {
     fun getLatinLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(
+                KeyData.spacer(),
                 KeyData.character("á"),
                 KeyData.character("ǵ"),
                 KeyData.character("ú"),
                 KeyData.character("ń"),
                 KeyData.character("ı"),
                 KeyData.character("ó"),
+                KeyData.spacer(),
             ),
             listOf(
                 KeyData.character("q"),

@@ -96,5 +96,12 @@ data class KeyData(
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_smile
         )
+
+        fun spacer(widthRatio: Float = 1.5f) = KeyData(
+            code = "SPACER",
+            displayText = "",
+            keyType = KeyType.CHARACTER,
+            widthRatio = widthRatio
+        )
     }
 }
