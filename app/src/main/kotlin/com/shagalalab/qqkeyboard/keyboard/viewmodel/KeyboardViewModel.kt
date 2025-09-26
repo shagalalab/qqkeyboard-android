@@ -59,7 +59,7 @@ class KeyboardViewModel : ViewModel() {
 
     fun setEditorInfo(info: EditorInfo?) {
         editorInfo = info
-        val newImeAction = info?.let { it.imeOptions and EditorInfo.IME_MASK_ACTION }
+        val newImeAction = info?.let { it.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION) }
         currentImeAction = newImeAction
     }
 
@@ -83,7 +83,8 @@ class KeyboardViewModel : ViewModel() {
                 }
                 "ENTER" -> {
                     editorInfo?.let { info ->
-                        when (info.imeOptions and EditorInfo.IME_MASK_ACTION) {
+                        val imeAction = info.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION)
+                        when (imeAction) {
                             EditorInfo.IME_ACTION_GO,
                             EditorInfo.IME_ACTION_SEARCH,
                             EditorInfo.IME_ACTION_SEND,
@@ -91,7 +92,7 @@ class KeyboardViewModel : ViewModel() {
                             EditorInfo.IME_ACTION_PREVIOUS,
                             EditorInfo.IME_ACTION_DONE -> {
                                 // Perform the IME action instead of inserting newline
-                                ic.performEditorAction(info.imeOptions and EditorInfo.IME_MASK_ACTION)
+                                ic.performEditorAction(imeAction)
                             }
                             else -> {
                                 // Default behavior - insert newline
