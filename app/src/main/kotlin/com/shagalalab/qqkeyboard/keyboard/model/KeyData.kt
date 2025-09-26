@@ -58,7 +58,8 @@ data class KeyData(
                 EditorInfo.IME_ACTION_GO -> R.drawable.ic_arrow_right
                 EditorInfo.IME_ACTION_SEARCH -> R.drawable.ic_search
                 EditorInfo.IME_ACTION_SEND -> R.drawable.ic_send_horizontal
-                EditorInfo.IME_ACTION_NEXT -> R.drawable.ic_arrow_right
+                EditorInfo.IME_ACTION_NEXT -> R.drawable.ic_arrow_right_to_line
+                EditorInfo.IME_ACTION_PREVIOUS -> R.drawable.ic_arrow_left_to_line
                 EditorInfo.IME_ACTION_DONE -> R.drawable.ic_check
                 else -> R.drawable.ic_corner_down_left
             }

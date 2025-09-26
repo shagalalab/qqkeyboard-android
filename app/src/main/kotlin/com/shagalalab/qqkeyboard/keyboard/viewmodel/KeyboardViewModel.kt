@@ -88,6 +88,7 @@ class KeyboardViewModel : ViewModel() {
                             EditorInfo.IME_ACTION_SEARCH,
                             EditorInfo.IME_ACTION_SEND,
                             EditorInfo.IME_ACTION_NEXT,
+                            EditorInfo.IME_ACTION_PREVIOUS,
                             EditorInfo.IME_ACTION_DONE -> {
                                 // Perform the IME action instead of inserting newline
                                 ic.performEditorAction(info.imeOptions and EditorInfo.IME_MASK_ACTION)
