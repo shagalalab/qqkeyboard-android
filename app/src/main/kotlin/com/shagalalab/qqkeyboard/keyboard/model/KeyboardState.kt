@@ -1,8 +1,10 @@
 package com.shagalalab.qqkeyboard.keyboard.model
 
-enum class LayoutType {
-    LATIN,
-    CYRILLIC
+enum class KeyboardLayout {
+    LATIN,      // Alphabetic Latin (persistable)
+    CYRILLIC,   // Alphabetic Cyrillic (persistable)
+    NUMERIC,    // Numbers (reset to LATIN on restart)
+    SYMBOLIC    // Symbols (reset to LATIN on restart)
 }
 
 enum class ShiftState {
@@ -11,16 +13,9 @@ enum class ShiftState {
     CAPS_LOCK
 }
 
-enum class KeyboardMode {
-    ALPHABETIC,
-    NUMERIC,
-    SYMBOLIC,
-}
-
 data class KeyboardState(
-    val layoutType: LayoutType = LayoutType.LATIN,
+    val layout: KeyboardLayout = KeyboardLayout.LATIN,
     val shiftState: ShiftState = ShiftState.OFF,
-    val keyboardMode: KeyboardMode = KeyboardMode.ALPHABETIC,
     val isEmojiShown: Boolean = false,
     val isShiftLocked: Boolean = false,
 ) {
@@ -39,17 +34,20 @@ data class KeyboardState(
         return copy(shiftState = ShiftState.CAPS_LOCK, isShiftLocked = true)
     }
 
-    fun switchLayout(): KeyboardState {
+    fun switchLanguage(): KeyboardState {
         return copy(
-            layoutType = when (layoutType) {
-                LayoutType.LATIN -> LayoutType.CYRILLIC
-                LayoutType.CYRILLIC -> LayoutType.LATIN
+            layout = when (layout) {
+                KeyboardLayout.LATIN -> KeyboardLayout.CYRILLIC
+                KeyboardLayout.CYRILLIC -> KeyboardLayout.LATIN
+                // For numeric/symbolic, this method shouldn't be called directly
+                // ViewModel handles language switching for non-language layouts
+                else -> KeyboardLayout.LATIN
             }
         )
     }
 
-    fun switchMode(mode: KeyboardMode): KeyboardState {
-        return copy(keyboardMode = mode)
+    fun switchToLayout(newLayout: KeyboardLayout): KeyboardState {
+        return copy(layout = newLayout)
     }
 
     fun resetShift(): KeyboardState {

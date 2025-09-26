@@ -13,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
-import com.shagalalab.qqkeyboard.keyboard.model.KeyboardMode
-import com.shagalalab.qqkeyboard.keyboard.model.LayoutType
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.viewmodel.KeyboardViewModel
 
 @Composable
@@ -34,24 +33,11 @@ fun QqKeyboard(
             modifier = modifier.fillMaxSize()
         ) {
             // Get the appropriate layout based on current state
-            val keyboardLayout: List<List<KeyData>> = when {
-                keyboardState.keyboardMode == KeyboardMode.NUMERIC -> {
-                    KeyboardMappings.getNumericLayout(currentImeAction)
-                }
-
-                keyboardState.keyboardMode == KeyboardMode.SYMBOLIC -> {
-                    KeyboardMappings.getSymbolicLayout(currentImeAction)
-                }
-
-                keyboardState.layoutType == LayoutType.LATIN -> {
-                    KeyboardMappings.getLatinLayout(currentImeAction)
-                }
-
-                keyboardState.layoutType == LayoutType.CYRILLIC -> {
-                    KeyboardMappings.getCyrillicLayout(currentImeAction)
-                }
-
-                else -> KeyboardMappings.getLatinLayout(currentImeAction)
+            val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
+                KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
+                KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(currentImeAction)
+                KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
+                KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
             }
 
             // Update layout switch button text dynamically

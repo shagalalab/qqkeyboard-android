@@ -4,24 +4,33 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.shagalalab.qqkeyboard.keyboard.compose.COLLECTION_GRID_COLS_SIZE
-import com.shagalalab.qqkeyboard.keyboard.model.LayoutType
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import org.json.JSONArray
 
 class KeyboardPreferences(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    var lastUsedLayout: LayoutType
+    var lastUsedLayout: KeyboardLayout
         get() {
-            val layoutName = prefs.getString(KEY_LAST_LAYOUT, LayoutType.LATIN.name)
+            val layoutName = prefs.getString(KEY_LAST_LAYOUT, KeyboardLayout.LATIN.name)
             return try {
-                LayoutType.valueOf(layoutName ?: LayoutType.LATIN.name)
+                val layout = KeyboardLayout.valueOf(layoutName ?: KeyboardLayout.LATIN.name)
+                // Only return language layouts, default others to LATIN
+                if (layout == KeyboardLayout.LATIN || layout == KeyboardLayout.CYRILLIC) {
+                    layout
+                } else {
+                    KeyboardLayout.LATIN
+                }
             } catch (e: IllegalArgumentException) {
-                LayoutType.LATIN
+                KeyboardLayout.LATIN
             }
         }
         set(value) {
-            prefs.edit { putString(KEY_LAST_LAYOUT, value.name) }
+            // Only persist language layouts
+            if (value == KeyboardLayout.LATIN || value == KeyboardLayout.CYRILLIC) {
+                prefs.edit { putString(KEY_LAST_LAYOUT, value.name) }
+            }
         }
 
     var soundEnabled: Boolean

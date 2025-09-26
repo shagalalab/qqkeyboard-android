@@ -9,9 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
-import com.shagalalab.qqkeyboard.keyboard.model.KeyboardMode
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
-import com.shagalalab.qqkeyboard.keyboard.model.LayoutType
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
@@ -44,13 +43,13 @@ class KeyboardViewModel : ViewModel() {
         if (preferences == null) {
             preferences = KeyboardPreferences(context)
             feedbackManager = FeedbackManager(context)
-            // Load last used layout
-            val lastLayout = preferences?.lastUsedLayout ?: LayoutType.LATIN
-            keyboardState = keyboardState.copy(layoutType = lastLayout)
             // Initialize recent emojis state
             recentEmojis = preferences?.recentEmojis ?: emptyList()
             wordSeparators = context.resources.getString(R.string.word_separators).toSet()
         }
+        // Load last used layout
+        val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+        keyboardState = keyboardState.copy(layout = lastLayout)
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -162,15 +161,15 @@ class KeyboardViewModel : ViewModel() {
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "LAYOUT_SWITCH" -> {
-                    switchLayout()
+                    switchLanguage()
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "123" -> {
-                    switchToNumeric()
+                    switchToLayout(KeyboardLayout.NUMERIC)
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "ABC" -> {
-                    switchToAlphabetic()
+                    switchToLastLanguage()
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "EMOJI" -> {
@@ -178,7 +177,7 @@ class KeyboardViewModel : ViewModel() {
                     feedbackManager?.playKeyPressFeedback()
                 }
                 "€~\\" -> {
-                    switchToSymbolic()
+                    switchToLayout(KeyboardLayout.SYMBOLIC)
                     feedbackManager?.playKeyPressFeedback()
                 }
                 else -> {
@@ -225,22 +224,38 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.toggleShift()
     }
 
-    private fun switchLayout() {
-        keyboardState = keyboardState.switchLayout()
-        // Save the new layout preference
-        preferences?.lastUsedLayout = keyboardState.layoutType
+    private fun switchLanguage() {
+        when (keyboardState.layout) {
+            KeyboardLayout.LATIN, KeyboardLayout.CYRILLIC -> {
+                // Direct language switching for alphabetic layouts
+                keyboardState = keyboardState.switchLanguage()
+                preferences?.lastUsedLayout = keyboardState.layout
+            }
+            KeyboardLayout.NUMERIC, KeyboardLayout.SYMBOLIC -> {
+                // For numeric/symbolic modes, switch the underlying language preference
+                val currentLanguage = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+                val newLanguage = when (currentLanguage) {
+                    KeyboardLayout.LATIN -> KeyboardLayout.CYRILLIC
+                    KeyboardLayout.CYRILLIC -> KeyboardLayout.LATIN
+                    else -> KeyboardLayout.CYRILLIC
+                }
+                preferences?.lastUsedLayout = newLanguage
+                // Stay in current input mode, just update the preference
+            }
+        }
     }
 
-    private fun switchToNumeric() {
-        keyboardState = keyboardState.switchMode(KeyboardMode.NUMERIC)
+    private fun switchToLayout(layout: KeyboardLayout) {
+        keyboardState = keyboardState.switchToLayout(layout)
+        // Save preference only for language layouts
+        if (layout == KeyboardLayout.LATIN || layout == KeyboardLayout.CYRILLIC) {
+            preferences?.lastUsedLayout = layout
+        }
     }
 
-    private fun switchToAlphabetic() {
-        keyboardState = keyboardState.switchMode(KeyboardMode.ALPHABETIC)
-    }
-
-    private fun switchToSymbolic() {
-        keyboardState = keyboardState.switchMode(KeyboardMode.SYMBOLIC)
+    private fun switchToLastLanguage() {
+        val lastLanguageLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+        keyboardState = keyboardState.switchToLayout(lastLanguageLayout)
     }
 
     private fun addRecentEmoji(emoji: String) {
@@ -251,9 +266,17 @@ class KeyboardViewModel : ViewModel() {
     }
 
     fun getLayoutSwitchButtonText(): String {
-        return when (keyboardState.layoutType) {
-            LayoutType.LATIN -> "ҚҚ"
-            LayoutType.CYRILLIC -> "QQ"
+        return when (keyboardState.layout) {
+            KeyboardLayout.LATIN -> "ҚҚ"
+            KeyboardLayout.CYRILLIC -> "QQ"
+            // For numeric/symbolic modes, show switch based on last language
+            else -> {
+                val lastLanguage = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+                when (lastLanguage) {
+                    KeyboardLayout.LATIN -> "ҚҚ"
+                    else -> "QQ"
+                }
+            }
         }
     }
 
