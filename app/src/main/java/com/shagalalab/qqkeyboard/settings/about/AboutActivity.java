@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-
-import com.shagalalab.qqkeyboard.BuildConfig;
-import com.shagalalab.qqkeyboard.R;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.shagalalab.qqkeyboard.BuildConfig;
+import com.shagalalab.qqkeyboard.R;
+import com.shagalalab.qqkeyboard.util.ViewUtils;
 
 /**
  * Created by atabek on 14/12/16.
@@ -38,6 +38,8 @@ public class AboutActivity extends AppCompatActivity {
             intent.setData(Uri.parse("market://search?q=pub:Shag'ala Lab"));
             startActivity(intent);
         });
+
+        ViewUtils.applyInsetsToView(findViewById(android.R.id.content));
     }
 
     @Override

@@ -19,10 +19,11 @@ package com.shagalalab.qqkeyboard.settings;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.shagalalab.qqkeyboard.R;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.shagalalab.qqkeyboard.R;
+import com.shagalalab.qqkeyboard.util.ViewUtils;
 
 /**
  * Displays the IME preferences inside the input method setting.
@@ -40,6 +41,8 @@ public class ImePreferencesActivity extends AppCompatActivity {
         }
 
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
+
+        ViewUtils.applyInsetsToView(findViewById(android.R.id.content));
     }
 
     @Override

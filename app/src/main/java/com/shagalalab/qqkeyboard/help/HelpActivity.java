@@ -18,19 +18,20 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.shagalalab.qqkeyboard.R;
-import com.shagalalab.qqkeyboard.settings.ImePreferencesActivity;
-import com.shagalalab.qqkeyboard.settings.about.AboutActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.shagalalab.qqkeyboard.R;
+import com.shagalalab.qqkeyboard.settings.ImePreferencesActivity;
+import com.shagalalab.qqkeyboard.settings.about.AboutActivity;
+import com.shagalalab.qqkeyboard.util.ViewUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -80,6 +81,8 @@ public class HelpActivity extends AppCompatActivity {
         ExpandableListView expandableListView = findViewById(R.id.help_expandable_list);
         ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(LayoutInflater.from(this), data);
         expandableListView.setAdapter(expandableListViewAdapter);
+
+        ViewUtils.applyInsetsToView(findViewById(android.R.id.content));
     }
 
     @Override

@@ -3,19 +3,19 @@ package com.shagalalab.qqkeyboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.shagalalab.qqkeyboard.help.HelpActivity;
 import com.shagalalab.qqkeyboard.settings.ImePreferencesActivity;
 import com.shagalalab.qqkeyboard.settings.about.AboutActivity;
+import com.shagalalab.qqkeyboard.util.ViewUtils;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.keyboard_settings).setOnClickListener(v -> startActivity(new Intent(this, ImePreferencesActivity.class)));
         findViewById(R.id.about_keyboard).setOnClickListener(v -> startActivity(new Intent(this, AboutActivity.class)));
         findViewById(R.id.help).setOnClickListener(v -> startActivity(new Intent(this, HelpActivity.class)));
+
+        ViewUtils.applyInsetsToView(findViewById(android.R.id.content));
     }
 
     private void openEnableKeyboard() {
