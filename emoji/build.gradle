@@ -3,7 +3,7 @@ apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace "github.ankushsachdeva.emojicon"
-    compileSdk 36
+    compileSdk  = 36
 
     defaultConfig {
         minSdkVersion 24
