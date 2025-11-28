@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
     namespace "com.shagalalab.qqkeyboard"
@@ -14,7 +15,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources = true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
