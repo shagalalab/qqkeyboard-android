@@ -3,14 +3,10 @@ package com.shagalalab.qqkeyboard.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.shagalalab.qqkeyboard.R;
-
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
-/**
- * Created by atabek on 2/09/2016.
- */
+import com.shagalalab.qqkeyboard.R;
 
 public class SettingsUtil {
 
@@ -55,9 +51,9 @@ public class SettingsUtil {
 
     public static void setDefaultKeyboard(Context context, @StringRes int layout) {
         getPreferences(context)
-            .edit()
-            .putString(context.getString(R.string.pref_keypress_default_layout), context.getString(layout))
-            .apply();
+                .edit()
+                .putString(context.getString(R.string.pref_keypress_default_layout), context.getString(layout))
+                .apply();
     }
 
     public static boolean isKeyboardWithFirstRowNumbers(Context context) {
