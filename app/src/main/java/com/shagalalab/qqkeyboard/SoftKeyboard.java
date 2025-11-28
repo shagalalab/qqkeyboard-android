@@ -16,6 +16,14 @@
 
 package com.shagalalab.qqkeyboard;
 
+import static android.text.InputType.TYPE_CLASS_DATETIME;
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.text.InputType.TYPE_CLASS_PHONE;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+import static android.text.InputType.TYPE_TEXT_VARIATION_URI;
+import static android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
+
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -37,17 +45,7 @@ import android.view.inputmethod.InputMethodSubtype;
 
 import com.shagalalab.qqkeyboard.util.SettingsUtil;
 
-import github.ankushsachdeva.emojicon.EmojiconGridView;
 import github.ankushsachdeva.emojicon.EmojiconsPopup;
-import github.ankushsachdeva.emojicon.emoji.Emojicon;
-
-import static android.text.InputType.TYPE_CLASS_DATETIME;
-import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.text.InputType.TYPE_CLASS_PHONE;
-import static android.text.InputType.TYPE_CLASS_TEXT;
-import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-import static android.text.InputType.TYPE_TEXT_VARIATION_URI;
-import static android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
 
 /**
  * Example of writing an input method for a soft keyboard.  This code is
@@ -628,7 +626,7 @@ public class SoftKeyboard extends InputMethodService implements KeyboardView.OnK
         //TODO: different sounds for keys
         AudioManager audioManager = getAudioManager();
         if (audioManager != null) {
-            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, soundVolume / 100);
+            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK, soundVolume / 100f);
         }
     }
 
