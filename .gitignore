@@ -3,6 +3,7 @@
 /local.properties
 /.idea/*
 !/.idea/codeStyles/
+.claude/settings.local.json
 .DS_Store
 /build
 /captures
