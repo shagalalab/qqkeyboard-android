@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<input-method xmlns:android="http://schemas.android.com/apk/res/android">
-    <subtype android:imeSubtypeMode="keyboard" />
+<input-method xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.shagalalab.qqkeyboard.SettingsActivity">
+
+    <subtype
+        android:name="@string/subtype_latin"
+        android:imeSubtypeLocale="kaa"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="true" />
+
+    <subtype
+        android:name="@string/subtype_cyrillic"
+        android:imeSubtypeLocale="kaa"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false" />
+
 </input-method>
