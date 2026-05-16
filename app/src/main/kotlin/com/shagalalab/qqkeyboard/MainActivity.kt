@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,16 +25,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shagalalab.qqkeyboard.ui.settings.AboutScreen
+import com.shagalalab.qqkeyboard.ui.settings.HelpScreen
 import com.shagalalab.qqkeyboard.ui.settings.KeyboardSettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
+
+private enum class Screen { Main, Settings, About, Help }
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -42,26 +49,26 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QqKeyboardTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(stringResource(R.string.app_name))
-                            }
-                        )
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    val (showSettings, setShowSettings) = remember { mutableStateOf(false) }
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    var currentScreen by remember { mutableStateOf(Screen.Main) }
 
-                    if (showSettings) {
-                        KeyboardSettingsScreen(
-                            onBackClick = { setShowSettings(false) },
+                    when (currentScreen) {
+                        Screen.Settings -> KeyboardSettingsScreen(
+                            onBackClick = { currentScreen = Screen.Main },
                             modifier = Modifier.padding(innerPadding)
                         )
-                    } else {
-                        MainScreen(
-                            onSettingsClick = { setShowSettings(true) },
+                        Screen.About -> AboutScreen(
+                            onBackClick = { currentScreen = Screen.Main },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                        Screen.Help -> HelpScreen(
+                            onBackClick = { currentScreen = Screen.Main },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                        Screen.Main -> MainScreen(
+                            onSettingsClick = { currentScreen = Screen.Settings },
+                            onAboutClick = { currentScreen = Screen.About },
+                            onHelpClick = { currentScreen = Screen.Help },
                             modifier = Modifier.padding(innerPadding)
                         )
                     }
@@ -71,17 +78,27 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     onSettingsClick: () -> Unit = {},
+    onAboutClick: () -> Unit = {},
+    onHelpClick: () -> Unit = {},
 ) {
-    Column(modifier
-        .padding(16.dp)
-        .verticalScroll(rememberScrollState())
-        .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(modifier.fillMaxWidth()) {
+        TopAppBar(
+            title = { Text(stringResource(R.string.app_name)) },
+            windowInsets = WindowInsets(0)
+        )
+
+        Column(
+            Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         val context = LocalContext.current
         val (text, setTextValue) = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -95,19 +112,13 @@ fun MainScreen(
         }) {
             Text(text = stringResource(R.string.change_default_keyboard))
         }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            // TODO: go to keyboard settings
-        }) {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = onSettingsClick) {
             Text(text = stringResource(R.string.keyboard_settings))
         }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            // TODO: go to about screen
-        }) {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = onAboutClick) {
             Text(text = stringResource(R.string.about_keyboard))
         }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            // TODO: go to help screen
-        }) {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = onHelpClick) {
             Text(text = stringResource(R.string.help))
         }
 
@@ -120,6 +131,7 @@ fun MainScreen(
             shape = RoundedCornerShape(16.dp),
             placeholder = { Text(stringResource(R.string.test_keyboard_here)) }
         )
+        }
     }
 }
 
