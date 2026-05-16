@@ -9,8 +9,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.ui.settings.AboutScreen
 import com.shagalalab.qqkeyboard.ui.settings.HelpScreen
-import com.shagalalab.qqkeyboard.ui.settings.KeyboardSettingsScreen
+import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
 private enum class Screen { Main, Settings, About, Help }
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     var currentScreen by remember { mutableStateOf(Screen.Main) }
 
                     when (currentScreen) {
-                        Screen.Settings -> KeyboardSettingsScreen(
+                        Screen.Settings -> SettingsScreen(
                             onBackClick = { currentScreen = Screen.Main },
                             modifier = Modifier.padding(innerPadding)
                         )

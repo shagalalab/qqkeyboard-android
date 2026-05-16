@@ -1,10 +1,10 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,7 +38,7 @@ import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KeyboardSettingsScreen(
+fun SettingsScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

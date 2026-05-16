@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
-import com.shagalalab.qqkeyboard.ui.settings.KeyboardSettingsScreen
+import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
 class SettingsActivity : ComponentActivity() {
@@ -17,7 +17,7 @@ class SettingsActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QqKeyboardTheme {
-                KeyboardSettingsScreen(
+                SettingsScreen(
                     onBackClick = { finish() },
                     modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
                 )
