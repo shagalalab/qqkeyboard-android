@@ -1,16 +1,35 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
@@ -24,12 +43,12 @@ fun KeyboardSettingsScreen(
 ) {
     val context = LocalContext.current
     val preferences = remember { KeyboardPreferences(context) }
-    
+
     var soundEnabled by remember { mutableStateOf(preferences.soundEnabled) }
     var vibrationEnabled by remember { mutableStateOf(preferences.vibrationEnabled) }
     var selectedTheme by remember { mutableStateOf(preferences.selectedTheme) }
     var showThemeDialog by remember { mutableStateOf(false) }
-    
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -39,11 +58,11 @@ fun KeyboardSettingsScreen(
             title = { Text("Keyboard Settings") },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
                 }
             }
         )
-        
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,7 +81,7 @@ fun KeyboardSettingsScreen(
                         text = "Sound & Feedback",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -71,13 +90,13 @@ fun KeyboardSettingsScreen(
                         Text("Key press sound")
                         Switch(
                             checked = soundEnabled,
-                            onCheckedChange = { 
+                            onCheckedChange = {
                                 soundEnabled = it
                                 preferences.soundEnabled = it
                             }
                         )
                     }
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -86,7 +105,7 @@ fun KeyboardSettingsScreen(
                         Text("Vibration")
                         Switch(
                             checked = vibrationEnabled,
-                            onCheckedChange = { 
+                            onCheckedChange = {
                                 vibrationEnabled = it
                                 preferences.vibrationEnabled = it
                             }
@@ -94,7 +113,7 @@ fun KeyboardSettingsScreen(
                     }
                 }
             }
-            
+
             // Theme Settings
             Card(
                 modifier = Modifier.fillMaxWidth()
@@ -107,7 +126,7 @@ fun KeyboardSettingsScreen(
                         text = "Appearance",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -129,7 +148,7 @@ fun KeyboardSettingsScreen(
                     }
                 }
             }
-            
+
             // About Section
             Card(
                 modifier = Modifier.fillMaxWidth()
@@ -142,7 +161,7 @@ fun KeyboardSettingsScreen(
                         text = "About",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    
+
                     Text(
                         text = "Karakalpak Keyboard v1.0\n\nSupports both Latin and Cyrillic scripts for the Karakalpak language.",
                         style = MaterialTheme.typography.bodyMedium
@@ -151,7 +170,7 @@ fun KeyboardSettingsScreen(
             }
         }
     }
-    
+
     // Theme Selection Dialog
     if (showThemeDialog) {
         AlertDialog(
