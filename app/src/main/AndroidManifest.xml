@@ -23,6 +23,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QqKeyboard" />
+
         <service
             android:name="com.shagalalab.qqkeyboard.keyboard.service.QqKeyboardService"
             android:exported="false"
