@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,7 +87,10 @@ fun MainScreen(
     onHelpClick: () -> Unit = {},
 ) {
     Column(modifier.fillMaxWidth()) {
-        TopAppBar(title = { Text(stringResource(R.string.app_name)) })
+        TopAppBar(
+            title = { Text(stringResource(R.string.app_name)) },
+            windowInsets = WindowInsets(0)
+        )
 
         Column(
             Modifier

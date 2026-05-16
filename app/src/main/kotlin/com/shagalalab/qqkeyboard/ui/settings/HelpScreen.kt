@@ -5,6 +5,7 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +42,8 @@ fun HelpScreen(
                 IconButton(onClick = onBackClick) {
                     Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
                 }
-            }
+            },
+            windowInsets = WindowInsets(0)
         )
 
         Column(

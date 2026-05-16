@@ -3,6 +3,7 @@ package com.shagalalab.qqkeyboard.ui.settings
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,7 +43,8 @@ fun AboutScreen(
                 IconButton(onClick = onBackClick) {
                     Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
                 }
-            }
+            },
+            windowInsets = WindowInsets(0)
         )
 
         Column(

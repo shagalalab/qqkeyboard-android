@@ -1,6 +1,7 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,7 +61,8 @@ fun KeyboardSettingsScreen(
                 IconButton(onClick = onBackClick) {
                     Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
                 }
-            }
+            },
+            windowInsets = WindowInsets(0)
         )
 
         Column(
