@@ -48,16 +48,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QqKeyboardTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(stringResource(R.string.app_name))
-                            }
-                        )
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     var currentScreen by remember { mutableStateOf(Screen.Main) }
 
                     when (currentScreen) {
@@ -86,6 +77,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -93,12 +85,16 @@ fun MainScreen(
     onAboutClick: () -> Unit = {},
     onHelpClick: () -> Unit = {},
 ) {
-    Column(modifier
-        .padding(16.dp)
-        .verticalScroll(rememberScrollState())
-        .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(modifier.fillMaxWidth()) {
+        TopAppBar(title = { Text(stringResource(R.string.app_name)) })
+
+        Column(
+            Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         val context = LocalContext.current
         val (text, setTextValue) = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -131,6 +127,7 @@ fun MainScreen(
             shape = RoundedCornerShape(16.dp),
             placeholder = { Text(stringResource(R.string.test_keyboard_here)) }
         )
+        }
     }
 }
 
