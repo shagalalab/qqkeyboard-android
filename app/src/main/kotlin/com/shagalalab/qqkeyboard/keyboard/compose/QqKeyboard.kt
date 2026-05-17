@@ -3,10 +3,13 @@ package com.shagalalab.qqkeyboard.keyboard.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,15 +27,17 @@ fun QqKeyboard(
     val keyboardState = viewModel.keyboardState
     val currentImeAction = viewModel.currentImeAction
 
-    Box(modifier.fillMaxWidth()
-        .height(KEY_HEIGHT * 5 + 2.dp * 7)
-        .background(MaterialTheme.colorScheme.surfaceContainer)
-        .padding(2.dp)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
-        Column(
-            modifier = modifier.fillMaxSize()
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(KEY_HEIGHT * 5 + 2.dp * 7)
+                .padding(2.dp)
         ) {
-            // Get the appropriate layout based on current state
             val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
                 KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
                 KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(currentImeAction)
@@ -40,7 +45,6 @@ fun QqKeyboard(
                 KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
             }
 
-            // Update layout switch button text dynamically
             val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
                 row.map { keyData ->
                     when (keyData.code) {
@@ -69,10 +73,12 @@ fun QqKeyboard(
                 isShiftActive = keyboardState.shouldShowUpperCase,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (keyboardState.isEmojiShown) {
+                EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
+            }
         }
 
-        if (keyboardState.isEmojiShown) {
-            EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
-        }
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
 }
