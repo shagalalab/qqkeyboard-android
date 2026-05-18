@@ -8,14 +8,12 @@ object KeyboardMappings {
     fun getLatinLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(
-                KeyData.spacer(),
                 KeyData.character("á"),
                 KeyData.character("ǵ"),
                 KeyData.character("ú"),
                 KeyData.character("ń"),
                 KeyData.character("ı"),
                 KeyData.character("ó"),
-                KeyData.spacer(),
             ),
             listOf(
                 KeyData.character("q"),
@@ -51,7 +49,7 @@ object KeyboardMappings {
                 KeyData.character("b"),
                 KeyData.character("n"),
                 KeyData.character("m"),
-                KeyData.backspace()
+                KeyData.backspace(fillRight = true)
             ),
             // Fourth row with special keys
             listOf(
@@ -118,7 +116,7 @@ object KeyboardMappings {
                 KeyData.character("ь"),
                 KeyData.character("б"),
                 KeyData.character("ю"),
-                KeyData.backspace(widthRatio = 1f),
+                KeyData.backspace(fillRight = true),
             ),
             listOf(
                 KeyData.modeSwitch("123"),
@@ -183,7 +181,7 @@ object KeyboardMappings {
                 KeyData.character(";"),
                 KeyData.character("/"),
                 KeyData.character("?"),
-                KeyData.backspace()
+                KeyData.backspace(fillRight = true)
             ),
             // Control row
             listOf(
@@ -239,7 +237,7 @@ object KeyboardMappings {
                 KeyData.character("—"),
                 KeyData.character("–"),
                 KeyData.character("¯"),
-                KeyData.backspace()
+                KeyData.backspace(fillRight = true)
             ),
             // Control row
             listOf(

@@ -17,6 +17,7 @@ data class KeyData(
     val keyType: KeyType = KeyType.CHARACTER,
     val iconResId: Int? = null,
     val widthRatio: Float = 1f,
+    val fillRight: Boolean = false,
     val longPressCode: String? = null,
     val alternativeChars: List<String> = emptyList()
 ) {
@@ -37,12 +38,13 @@ data class KeyData(
             widthRatio = widthRatio
         )
 
-        fun backspace(widthRatio: Float = 1.5f) = KeyData(
+        fun backspace(fillRight: Boolean = false) = KeyData(
             code = "BACKSPACE",
             displayText = "",
             keyType = KeyType.ACTION,
             iconResId = R.drawable.ic_delete,
-            widthRatio = widthRatio
+            widthRatio = 1.5f,
+            fillRight = fillRight
         )
 
         fun enterDynamic(imeAction: Int? = null) = KeyData(

@@ -41,10 +41,10 @@ fun KeyRow(
                     { onKeyLongPress(keyData.code) }
                 } else null,
                 isShiftActive = isShiftActive,
-                modifier = if (hasSpaceKey) {
-                    Modifier.weight(keyData.widthRatio)
-                } else {
-                    Modifier.width(standardKeyWidth * keyData.widthRatio)
+                modifier = when {
+                    hasSpaceKey -> Modifier.weight(keyData.widthRatio)
+                    keyData.fillRight -> Modifier.weight(1f)
+                    else -> Modifier.width(standardKeyWidth * keyData.widthRatio)
                 }
             )
         }
