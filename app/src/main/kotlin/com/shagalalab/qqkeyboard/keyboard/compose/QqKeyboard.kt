@@ -61,8 +61,11 @@ fun QqKeyboard(
                 }
             }
 
+            val maxKeysInRow = if (keyboardState.layout == KeyboardLayout.CYRILLIC) 11 else 10
+
             KeyboardLayout(
                 rows = updatedLayout,
+                maxKeysInRow = maxKeysInRow,
                 modifier = Modifier.fillMaxWidth(),
                 onKeyClick = { key -> viewModel.onKeyPressed(key) },
                 onKeyLongPress = { key ->

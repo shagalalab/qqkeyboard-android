@@ -108,7 +108,7 @@ object KeyboardMappings {
                 KeyData.character("э"),
             ),
             listOf(
-                KeyData.shift(),
+                KeyData.shift(widthRatio = 1f),
                 KeyData.character("я"),
                 KeyData.character("ч"),
                 KeyData.character("с"),
@@ -118,7 +118,7 @@ object KeyboardMappings {
                 KeyData.character("ь"),
                 KeyData.character("б"),
                 KeyData.character("ю"),
-                KeyData.backspace()
+                KeyData.backspace(widthRatio = 1f),
             ),
             listOf(
                 KeyData.modeSwitch("123"),

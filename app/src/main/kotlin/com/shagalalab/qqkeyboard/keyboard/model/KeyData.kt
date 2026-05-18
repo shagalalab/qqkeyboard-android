@@ -29,20 +29,20 @@ data class KeyData(
         )
 
         // Modifier keys
-        fun shift() = KeyData(
+        fun shift(widthRatio: Float = 1.5f) = KeyData(
             code = "SHIFT",
             displayText = "",
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_arrow_big_up_dash,
-            widthRatio = 1.5f
+            widthRatio = widthRatio
         )
 
-        fun backspace() = KeyData(
+        fun backspace(widthRatio: Float = 1.5f) = KeyData(
             code = "BACKSPACE",
             displayText = "",
             keyType = KeyType.ACTION,
             iconResId = R.drawable.ic_delete,
-            widthRatio = 1.5f
+            widthRatio = widthRatio
         )
 
         fun enterDynamic(imeAction: Int? = null) = KeyData(
