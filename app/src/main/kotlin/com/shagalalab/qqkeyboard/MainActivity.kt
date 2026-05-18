@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,12 +36,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shagalalab.qqkeyboard.ui.debug.KeyboardTestScreen
 import com.shagalalab.qqkeyboard.ui.settings.AboutScreen
 import com.shagalalab.qqkeyboard.ui.settings.HelpScreen
 import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
-private enum class Screen { Main, Settings, About, Help }
+private enum class Screen { Main, Settings, About, Help, TestKeyboard }
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -65,10 +67,15 @@ class MainActivity : ComponentActivity() {
                             onBackClick = { currentScreen = Screen.Main },
                             modifier = Modifier.padding(innerPadding)
                         )
+                        Screen.TestKeyboard -> KeyboardTestScreen(
+                            onBackClick = { currentScreen = Screen.Main },
+                            modifier = Modifier.padding(innerPadding)
+                        )
                         Screen.Main -> MainScreen(
                             onSettingsClick = { currentScreen = Screen.Settings },
                             onAboutClick = { currentScreen = Screen.About },
                             onHelpClick = { currentScreen = Screen.Help },
+                            onTestKeyboardClick = { currentScreen = Screen.TestKeyboard },
                             modifier = Modifier.padding(innerPadding)
                         )
                     }
@@ -85,6 +92,7 @@ fun MainScreen(
     onSettingsClick: () -> Unit = {},
     onAboutClick: () -> Unit = {},
     onHelpClick: () -> Unit = {},
+    onTestKeyboardClick: () -> Unit = {},
 ) {
     Column(modifier.fillMaxWidth()) {
         TopAppBar(
@@ -99,38 +107,45 @@ fun MainScreen(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-        val context = LocalContext.current
-        val (text, setTextValue) = remember { mutableStateOf(TextFieldValue("")) }
+            val context = LocalContext.current
+            val (text, setTextValue) = remember { mutableStateOf(TextFieldValue("")) }
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
-        }) {
-            Text(text = stringResource(R.string.enable_keyboard))
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showInputMethodPicker()
-        }) {
-            Text(text = stringResource(R.string.change_default_keyboard))
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onSettingsClick) {
-            Text(text = stringResource(R.string.keyboard_settings))
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onAboutClick) {
-            Text(text = stringResource(R.string.about_keyboard))
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onHelpClick) {
-            Text(text = stringResource(R.string.help))
-        }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+            }) {
+                Text(text = stringResource(R.string.enable_keyboard))
+            }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showInputMethodPicker()
+            }) {
+                Text(text = stringResource(R.string.change_default_keyboard))
+            }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = onSettingsClick) {
+                Text(text = stringResource(R.string.keyboard_settings))
+            }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = onAboutClick) {
+                Text(text = stringResource(R.string.about_keyboard))
+            }
+            Button(modifier = Modifier.fillMaxWidth(), onClick = onHelpClick) {
+                Text(text = stringResource(R.string.help))
+            }
 
-        OutlinedTextField(
-            value = text,
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 100.dp),
-            onValueChange = setTextValue,
-            shape = RoundedCornerShape(16.dp),
-            placeholder = { Text(stringResource(R.string.test_keyboard_here)) }
-        )
+            OutlinedTextField(
+                value = text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 100.dp),
+                onValueChange = setTextValue,
+                shape = RoundedCornerShape(16.dp),
+                keyboardOptions = KeyboardOptions.Default,
+                placeholder = { Text(stringResource(R.string.test_keyboard_here)) }
+            )
+
+            if (BuildConfig.DEBUG) {
+                Button(modifier = Modifier.fillMaxWidth(), onClick = onTestKeyboardClick) {
+                    Text("Test keyboard")
+                }
+            }
         }
     }
 }

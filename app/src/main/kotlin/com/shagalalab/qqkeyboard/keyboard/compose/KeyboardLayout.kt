@@ -12,8 +12,8 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 @Composable
 fun KeyboardLayout(
     rows: List<List<KeyData>>,
-    onKeyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onKeyClick: (String) -> Unit,
     onKeyLongPress: ((String) -> Unit)? = null,
     isShiftActive: Boolean = false,
 ) {

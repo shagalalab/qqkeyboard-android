@@ -63,6 +63,7 @@ fun QqKeyboard(
 
             KeyboardLayout(
                 rows = updatedLayout,
+                modifier = Modifier.fillMaxWidth(),
                 onKeyClick = { key -> viewModel.onKeyPressed(key) },
                 onKeyLongPress = { key ->
                     when (key) {
@@ -71,7 +72,6 @@ fun QqKeyboard(
                     }
                 },
                 isShiftActive = keyboardState.shouldShowUpperCase,
-                modifier = Modifier.fillMaxWidth()
             )
 
             if (keyboardState.isEmojiShown) {
