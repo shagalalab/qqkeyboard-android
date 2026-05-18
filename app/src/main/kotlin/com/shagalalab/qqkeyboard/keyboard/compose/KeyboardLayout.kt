@@ -22,7 +22,9 @@ fun KeyboardLayout(
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         // 4.dp = 2.dp left + 2.dp right from Column padding
         // (maxKeysInRow - 1) * 2.dp = gaps between keys in the widest row
-        val standardKeyWidth = (maxWidth - 4.dp - 2.dp * (maxKeysInRow - 1)) / maxKeysInRow
+        // Gaps between keys are now handled as inner visual padding in KeyButton (1dp each side),
+        // so no gap space is deducted here — touch areas tile flush across the full row width.
+        val standardKeyWidth = (maxWidth - 4.dp) / maxKeysInRow
         Column(
             modifier = Modifier.fillMaxWidth().padding(2.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp)

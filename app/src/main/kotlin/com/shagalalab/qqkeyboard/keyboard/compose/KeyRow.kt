@@ -28,9 +28,9 @@ fun KeyRow(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = if (hasSpaceKey) {
-            Arrangement.spacedBy(2.dp)
+            Arrangement.spacedBy(0.dp)
         } else {
-            Arrangement.spacedBy(2.dp, Alignment.CenterHorizontally)
+            Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally)
         }
     ) {
         keys.forEach { keyData ->

@@ -7,7 +7,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -97,19 +99,16 @@ fun KeyButton(
         }
     }
 
+    // Outer box: full allocated width — this is the touch target.
+    // Inner box: inset by 1dp on each side — this is what the user sees.
+    // Adjacent keys' outer boxes are flush (0dp gap), so there is no dead zone between keys,
+    // while the visual 2dp gap is preserved via the 1dp insets on each side.
     Box(
         modifier = modifier
             .height(KEY_HEIGHT)
-            .clip(keyShape)
-            .background(backgroundColor)
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = keyShape
-            )
-            .let { modifier ->
+            .let { m ->
                 if (keyData.code != "SPACER") {
-                    modifier.combinedClickable(
+                    m.combinedClickable(
                         interactionSource = interactionSource,
                         indication = null,
                         onClick = { onKeyClick(keyData.code) },
@@ -121,41 +120,48 @@ fun KeyButton(
                             }
                         }
                     )
-                } else {
-                    modifier
-                }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        when {
-            keyData.iconResId != null -> {
-                Icon(
-                    painter = painterResource(keyData.iconResId),
-                    contentDescription = keyData.code,
-                    tint = contentColor,
-                    modifier = Modifier.size(20.dp)
-                )
+                } else m
             }
-            keyData.displayText.isNotEmpty() -> {
-                Text(
-                    text = if (isShiftActive && keyData.keyType == KeyType.CHARACTER) {
-                        keyData.displayText.kaaUppercase()
-                    } else {
-                        keyData.displayText
-                    },
-                    color = contentColor,
-                    fontSize = when (keyData.keyType) {
-                        KeyType.CHARACTER -> 22.sp
-                        KeyType.LAYOUT_SWITCH -> 16.sp
-                        else -> 14.sp
-                    },
-                    fontWeight = when (keyData.keyType) {
-                        KeyType.MODIFIER, KeyType.ACTION -> FontWeight.Medium
-                        else -> FontWeight.Normal
-                    },
-                    textAlign = TextAlign.Center,
-                    maxLines = 1
-                )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 1.dp)
+                .clip(keyShape)
+                .background(backgroundColor)
+                .border(width = 1.dp, color = borderColor, shape = keyShape),
+            contentAlignment = Alignment.Center
+        ) {
+            when {
+                keyData.iconResId != null -> {
+                    Icon(
+                        painter = painterResource(keyData.iconResId),
+                        contentDescription = keyData.code,
+                        tint = contentColor,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                keyData.displayText.isNotEmpty() -> {
+                    Text(
+                        text = if (isShiftActive && keyData.keyType == KeyType.CHARACTER) {
+                            keyData.displayText.kaaUppercase()
+                        } else {
+                            keyData.displayText
+                        },
+                        color = contentColor,
+                        fontSize = when (keyData.keyType) {
+                            KeyType.CHARACTER -> 22.sp
+                            KeyType.LAYOUT_SWITCH -> 16.sp
+                            else -> 14.sp
+                        },
+                        fontWeight = when (keyData.keyType) {
+                            KeyType.MODIFIER, KeyType.ACTION -> FontWeight.Medium
+                            else -> FontWeight.Normal
+                        },
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
