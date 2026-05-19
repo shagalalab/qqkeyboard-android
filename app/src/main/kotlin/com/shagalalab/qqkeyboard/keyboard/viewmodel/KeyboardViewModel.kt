@@ -59,7 +59,7 @@ class KeyboardViewModel : ViewModel() {
         }
         // Reload per-session preferences (re-evaluated every time keyboard is shown)
         val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
-        keyboardState = keyboardState.copy(layout = lastLayout)
+        keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
         currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
     }
