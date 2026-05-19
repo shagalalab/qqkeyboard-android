@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -33,6 +33,28 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
 
+private val keyboardTypes = listOf(
+    "Text" to KeyboardType.Text,
+    "Number" to KeyboardType.Number,
+    "Phone" to KeyboardType.Phone,
+    "Uri" to KeyboardType.Uri,
+    "Email" to KeyboardType.Email,
+    "Password" to KeyboardType.Password,
+    "NumberPassword" to KeyboardType.NumberPassword,
+    "Decimal" to KeyboardType.Decimal,
+)
+
+private val imeActions = listOf(
+    "Default" to ImeAction.Default,
+    "None" to ImeAction.None,
+    "Go" to ImeAction.Go,
+    "Search" to ImeAction.Search,
+    "Send" to ImeAction.Send,
+    "Next" to ImeAction.Next,
+    "Previous" to ImeAction.Previous,
+    "Done" to ImeAction.Done,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KeyboardTestScreen(
@@ -41,11 +63,14 @@ fun KeyboardTestScreen(
 ) {
     val focusManager = LocalFocusManager.current
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
+    var selectedKeyboardType by remember { mutableStateOf(keyboardTypes[0]) }
+    var selectedImeAction by remember { mutableStateOf(imeActions[0]) }
+    var fieldValue by remember(selectedKeyboardType, selectedImeAction) { mutableStateOf("") }
+
+    val isObscured = selectedKeyboardType.second == KeyboardType.Password ||
+            selectedKeyboardType.second == KeyboardType.NumberPassword
+
+    Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text("Test Keyboard") },
             navigationIcon = {
@@ -62,96 +87,49 @@ fun KeyboardTestScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            TestField(
-                label = "Plain text (KeyboardType.Text + ImeAction.Done)",
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done,
-                onDone = { focusManager.clearFocus() }
+            OutlinedTextField(
+                value = fieldValue,
+                onValueChange = { fieldValue = it },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = if (isObscured) PasswordVisualTransformation() else VisualTransformation.None,
+                placeholder = { Text("Enter your text here") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = selectedKeyboardType.second,
+                    imeAction = selectedImeAction.second
+                ),
+                keyboardActions = KeyboardActions(
+                    onAny = { focusManager.clearFocus() }
+                )
             )
-            TestField(
-                label = "Text → Next (1 of 3) (KeyboardType.Text + ImeAction.Next)",
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+
+            LabeledDropdown(
+                label = "KeyboardType",
+                options = keyboardTypes.map { it.first },
+                selected = selectedKeyboardType.first,
+                onSelect = { name -> selectedKeyboardType = keyboardTypes.first { it.first == name } }
             )
-            TestField(
-                label = "Text → Next (2 of 3) (KeyboardType.Text + ImeAction.Next)",
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
-            )
-            TestField(
-                label = "Text → Done (3 of 3) (KeyboardType.Text + ImeAction.Done)",
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Password (KeyboardType.Password + ImeAction.Done)",
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done,
-                obscured = true,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "PIN / Number password (KeyboardType.NumberPassword + ImeAction.Done)",
-                keyboardType = KeyboardType.NumberPassword,
-                imeAction = ImeAction.Done,
-                obscured = true,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Number (KeyboardType.Number + ImeAction.Done)",
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Decimal (KeyboardType.Decimal + ImeAction.Done)",
-                keyboardType = KeyboardType.Decimal,
-                imeAction = ImeAction.Done,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Phone (KeyboardType.Phone + ImeAction.Done)",
-                keyboardType = KeyboardType.Phone,
-                imeAction = ImeAction.Done,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Email (KeyboardType.Email + ImeAction.Next)",
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next,
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
-            )
-            TestField(
-                label = "URL (KeyboardType.Uri + ImeAction.Go)",
-                keyboardType = KeyboardType.Uri,
-                imeAction = ImeAction.Go,
-                onDone = { focusManager.clearFocus() }
-            )
-            TestField(
-                label = "Multiline text (KeyboardType.Text + ImeAction.Default)",
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Default,
-                singleLine = false
+
+            LabeledDropdown(
+                label = "ImeAction",
+                options = imeActions.map { it.first },
+                selected = selectedImeAction.first,
+                onSelect = { name -> selectedImeAction = imeActions.first { it.first == name } }
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TestField(
+private fun LabeledDropdown(
     label: String,
-    keyboardType: KeyboardType,
-    imeAction: ImeAction,
+    options: List<String>,
+    selected: String,
+    onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
-    obscured: Boolean = false,
-    singleLine: Boolean = true,
-    onNext: (() -> Unit)? = null,
-    onDone: (() -> Unit)? = null,
 ) {
-    var value by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
@@ -159,23 +137,33 @@ private fun TestField(
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        OutlinedTextField(
-            value = value,
-            onValueChange = { value = it },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = singleLine,
-            visualTransformation = if (obscured) PasswordVisualTransformation() else VisualTransformation.None,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType,
-                imeAction = imeAction
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { onDone?.invoke() },
-                onGo = { onDone?.invoke() },
-                onNext = { onNext?.invoke() },
-                onSearch = { onDone?.invoke() },
-                onSend = { onDone?.invoke() }
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it }
+        ) {
+            OutlinedTextField(
+                value = selected,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
             )
-        )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onSelect(option)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
     }
 }
