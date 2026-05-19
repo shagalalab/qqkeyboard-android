@@ -17,6 +17,7 @@ fun KeyboardLayout(
     modifier: Modifier = Modifier,
     onKeyClick: (String) -> Unit,
     onKeyLongPress: ((String) -> Unit)? = null,
+    onKeyRepeat: ((String) -> Unit)? = null,
     isShiftActive: Boolean = false,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
@@ -35,6 +36,7 @@ fun KeyboardLayout(
                     standardKeyWidth = standardKeyWidth,
                     onKeyClick = onKeyClick,
                     onKeyLongPress = onKeyLongPress,
+                    onKeyRepeat = onKeyRepeat,
                     isShiftActive = isShiftActive,
                     modifier = Modifier.fillMaxWidth()
                 )

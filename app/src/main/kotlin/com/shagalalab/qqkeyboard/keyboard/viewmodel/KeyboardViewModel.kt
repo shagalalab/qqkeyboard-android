@@ -242,6 +242,21 @@ class KeyboardViewModel : ViewModel() {
         }
     }
 
+    fun onBackspaceRepeat() {
+        inputConnection?.let { ic ->
+            val selectedText = ic.getSelectedText(0)
+            if (selectedText != null && selectedText.isNotEmpty()) {
+                ic.commitText("", 1)
+            } else {
+                val textBefore = ic.getTextBeforeCursor(20, 0)?.toString()
+                val deleteLength = EmojiUtils.getGraphemeClusterLength(textBefore)
+                if (deleteLength > 0) {
+                    ic.deleteSurroundingText(deleteLength, 0)
+                }
+            }
+        }
+    }
+
     fun onShiftLongPress() {
         keyboardState = keyboardState.doubleTapShift()
     }

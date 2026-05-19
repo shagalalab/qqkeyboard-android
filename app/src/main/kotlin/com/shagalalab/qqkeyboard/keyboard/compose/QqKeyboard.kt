@@ -80,6 +80,7 @@ fun QqKeyboard(
                 maxKeysInRow = maxKeysInRow,
                 modifier = Modifier.fillMaxWidth(),
                 onKeyClick = { key -> viewModel.onKeyPressed(key) },
+                onKeyRepeat = { viewModel.onBackspaceRepeat() },
                 onKeyLongPress = { key ->
                     when (key) {
                         "SHIFT" -> viewModel.onShiftLongPress()
