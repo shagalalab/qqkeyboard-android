@@ -260,7 +260,7 @@ object KeyboardMappings {
                 KeyData.phoneDigit("4", "GHI"),
                 KeyData.phoneDigit("5", "JKL"),
                 KeyData.phoneDigit("6", "MNO"),
-                KeyData.character(".").copy(fillRight = true)
+                KeyData.numpadSpace().copy(fillRight = true)
             ),
             listOf(
                 KeyData.phoneDigit("7", "PQRS"),
@@ -271,7 +271,7 @@ object KeyboardMappings {
             listOf(
                 KeyData.character("*"),
                 KeyData.character("0"),
-                KeyData.numpadSpace(),
+                KeyData.character("."),
                 KeyData.enterDynamic(imeAction).copy(fillRight = true)
             )
         )

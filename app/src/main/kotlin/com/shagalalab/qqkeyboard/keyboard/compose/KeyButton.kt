@@ -6,7 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -143,21 +145,21 @@ fun KeyButton(
                     )
                 }
                 keyData.hintText != null -> {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Spacer(Modifier.weight(1f))
                         Text(
                             text = keyData.displayText,
                             color = contentColor,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
                             maxLines = 1
                         )
                         Text(
                             text = keyData.hintText,
+                            modifier = Modifier.weight(1f),
                             color = contentColor.copy(alpha = 0.55f),
-                            fontSize = 8.sp,
+                            fontSize = 10.sp,
                             letterSpacing = 0.5.sp,
-                            textAlign = TextAlign.Center,
                             maxLines = 1
                         )
                     }
