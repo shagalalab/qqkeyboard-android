@@ -15,6 +15,7 @@ data class KeyboardColors(
     val pressedBorder: Color,
     val shiftActiveBackground: Color,
     val shiftActiveContent: Color,
+    val bubbleBackground: Color,
 )
 
 data class KeyboardTheme(
@@ -40,6 +41,7 @@ object KeyboardThemes {
             pressedBorder = Color(0xFF4A90D9),
             shiftActiveBackground = Color(0xFF4A90D9),
             shiftActiveContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFFE0ECFF),
         )
     )
 
@@ -57,6 +59,7 @@ object KeyboardThemes {
             pressedBorder = Color(0xFF1976D2),
             shiftActiveBackground = Color(0xFF1976D2),
             shiftActiveContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF3A3A3C),
         )
     )
 
@@ -74,6 +77,7 @@ object KeyboardThemes {
             pressedBorder = Color(0xFF1565C0),
             shiftActiveBackground = Color(0xFF1565C0),
             shiftActiveContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF222222),
         )
     )
 
@@ -91,6 +95,7 @@ object KeyboardThemes {
             pressedBorder = Color(0xFF0079C8),
             shiftActiveBackground = Color(0xFF0079C8),
             shiftActiveContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF1D4A6E),
         )
     )
 

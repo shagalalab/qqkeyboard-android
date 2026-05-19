@@ -228,7 +228,7 @@ fun KeyButton(
                     .defaultMinSize(minWidth = KEY_HEIGHT)
                     .height(KEY_HEIGHT)
                     .shadow(6.dp, BUBBLE_SHAPE)
-                    .background(colors.keyBackground, BUBBLE_SHAPE)
+                    .background(colors.bubbleBackground, BUBBLE_SHAPE)
                     .border(1.dp, colors.keyBorder, BUBBLE_SHAPE)
                     .padding(horizontal = 10.dp),
                 contentAlignment = Alignment.Center
