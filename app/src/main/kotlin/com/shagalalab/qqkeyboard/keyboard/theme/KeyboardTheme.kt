@@ -1,75 +1,103 @@
 package com.shagalalab.qqkeyboard.keyboard.theme
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+
+data class KeyboardColors(
+    val keyboardBackground: Color,
+    val keyBackground: Color,
+    val keyBorder: Color,
+    val keyContent: Color,
+    val modifierBackground: Color,
+    val modifierBorder: Color,
+    val modifierContent: Color,
+    val pressedBackground: Color,
+    val pressedBorder: Color,
+    val shiftActiveBackground: Color,
+    val shiftActiveContent: Color,
+)
 
 data class KeyboardTheme(
     val name: String,
-    val colorScheme: ColorScheme,
-    val keyBackground: Color,
-    val keyBorder: Color,
-    val keyText: Color,
-    val modifierKeyBackground: Color,
-    val modifierKeyBorder: Color,
-    val modifierKeyText: Color,
-    val spaceKeyBackground: Color,
-    val layoutSwitchBackground: Color,
-    val pressedKeyBackground: Color,
-    val activeModifierBackground: Color
+    val colors: KeyboardColors,
 )
 
+val LocalKeyboardColors = staticCompositionLocalOf { KeyboardThemes.Light.colors }
+
 object KeyboardThemes {
+
     val Light = KeyboardTheme(
         name = "Light",
-        colorScheme = lightColorScheme(),
-        keyBackground = Color(0xFFFFFFFF),
-        keyBorder = Color(0xFFE0E0E0),
-        keyText = Color(0xFF000000),
-        modifierKeyBackground = Color(0xFFF5F5F5),
-        modifierKeyBorder = Color(0xFFBDBDBD),
-        modifierKeyText = Color(0xFF424242),
-        spaceKeyBackground = Color(0xFFF9F9F9),
-        layoutSwitchBackground = Color(0xFFE8F5E8),
-        pressedKeyBackground = Color(0xFFE3F2FD),
-        activeModifierBackground = Color(0xFF2196F3)
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFEFF0F3),
+            keyBackground = Color(0xFFFFFFFF),
+            keyBorder = Color(0xFFD1D3D8),
+            keyContent = Color(0xFF1A1A1A),
+            modifierBackground = Color(0xFFD1D3D8),
+            modifierBorder = Color(0xFFB0B3BA),
+            modifierContent = Color(0xFF1A1A1A),
+            pressedBackground = Color(0xFFBBD3FA),
+            pressedBorder = Color(0xFF4A90D9),
+            shiftActiveBackground = Color(0xFF4A90D9),
+            shiftActiveContent = Color(0xFFFFFFFF),
+        )
     )
-    
+
     val Dark = KeyboardTheme(
         name = "Dark",
-        colorScheme = darkColorScheme(),
-        keyBackground = Color(0xFF2C2C2C),
-        keyBorder = Color(0xFF404040),
-        keyText = Color(0xFFFFFFFF),
-        modifierKeyBackground = Color(0xFF363636),
-        modifierKeyBorder = Color(0xFF505050),
-        modifierKeyText = Color(0xFFE0E0E0),
-        spaceKeyBackground = Color(0xFF242424),
-        layoutSwitchBackground = Color(0xFF1B4B1B),
-        pressedKeyBackground = Color(0xFF1976D2),
-        activeModifierBackground = Color(0xFF1976D2)
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF1C1C1E),
+            keyBackground = Color(0xFF2C2C2E),
+            keyBorder = Color(0xFF3A3A3C),
+            keyContent = Color(0xFFE8E8EA),
+            modifierBackground = Color(0xFF1C1C1E),
+            modifierBorder = Color(0xFF3A3A3C),
+            modifierContent = Color(0xFFAEAEB2),
+            pressedBackground = Color(0xFF1565C0),
+            pressedBorder = Color(0xFF1976D2),
+            shiftActiveBackground = Color(0xFF1976D2),
+            shiftActiveContent = Color(0xFFFFFFFF),
+        )
     )
-    
-    val KarakalpakBlue = KeyboardTheme(
-        name = "Karakalpak Blue",
-        colorScheme = lightColorScheme(
-            primary = Color(0xFF0066CC),
-            secondary = Color(0xFF4A90E2)
-        ),
-        keyBackground = Color(0xFFF8FAFF),
-        keyBorder = Color(0xFFD1E2FF),
-        keyText = Color(0xFF1A1A1A),
-        modifierKeyBackground = Color(0xFFE8F2FF),
-        modifierKeyBorder = Color(0xFF0066CC),
-        modifierKeyText = Color(0xFF0066CC),
-        spaceKeyBackground = Color(0xFFF0F7FF),
-        layoutSwitchBackground = Color(0xFFE0F0FF),
-        pressedKeyBackground = Color(0xFFB3D9FF),
-        activeModifierBackground = Color(0xFF0066CC)
+
+    val Amoled = KeyboardTheme(
+        name = "Amoled",
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF000000),
+            keyBackground = Color(0xFF161616),
+            keyBorder = Color(0xFF242424),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF0A0A0A),
+            modifierBorder = Color(0xFF242424),
+            modifierContent = Color(0xFFAAAAAA),
+            pressedBackground = Color(0xFF0D47A1),
+            pressedBorder = Color(0xFF1565C0),
+            shiftActiveBackground = Color(0xFF1565C0),
+            shiftActiveContent = Color(0xFFFFFFFF),
+        )
     )
-    
+
+    val Ocean = KeyboardTheme(
+        name = "Ocean",
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF0D2137),
+            keyBackground = Color(0xFF15304D),
+            keyBorder = Color(0xFF1E4570),
+            keyContent = Color(0xFFCDE8FF),
+            modifierBackground = Color(0xFF0A1E30),
+            modifierBorder = Color(0xFF1E4570),
+            modifierContent = Color(0xFF8AB8D8),
+            pressedBackground = Color(0xFF005F9E),
+            pressedBorder = Color(0xFF0079C8),
+            shiftActiveBackground = Color(0xFF0079C8),
+            shiftActiveContent = Color(0xFFFFFFFF),
+        )
+    )
+
+    fun getByName(name: String): KeyboardTheme =
+        getAllThemes().firstOrNull { it.name == name } ?: Light
+
     fun getDefaultTheme(): KeyboardTheme = Light
-    
-    fun getAllThemes(): List<KeyboardTheme> = listOf(Light, Dark, KarakalpakBlue)
+
+    fun getAllThemes(): List<KeyboardTheme> = listOf(Light, Dark, Amoled, Ocean)
 }

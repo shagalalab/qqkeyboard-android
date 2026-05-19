@@ -13,6 +13,8 @@ import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardTheme
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 
@@ -28,6 +30,9 @@ class KeyboardViewModel : ViewModel() {
         private set
 
     var currentImeAction by mutableStateOf<Int?>(null)
+        private set
+
+    var currentTheme by mutableStateOf<KeyboardTheme>(KeyboardThemes.Light)
         private set
 
     private var inputConnection: InputConnection? = null
@@ -48,9 +53,10 @@ class KeyboardViewModel : ViewModel() {
             recentEmojis = preferences?.recentEmojis ?: emptyList()
             wordSeparators = context.resources.getString(R.string.word_separators).toSet()
         }
-        // Load last used layout
+        // Reload per-session preferences (re-evaluated every time keyboard is shown)
         val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
         keyboardState = keyboardState.copy(layout = lastLayout)
+        currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
     }
 
     fun setInputConnection(connection: InputConnection?) {
