@@ -12,6 +12,7 @@ import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
+import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardTheme
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
@@ -33,6 +34,9 @@ class KeyboardViewModel : ViewModel() {
         private set
 
     var currentTheme by mutableStateOf<KeyboardTheme>(KeyboardThemes.Light)
+        private set
+
+    var topRowMode by mutableStateOf(TopRowMode.EXTRA_LETTERS)
         private set
 
     private var inputConnection: InputConnection? = null
@@ -57,6 +61,7 @@ class KeyboardViewModel : ViewModel() {
         val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
         keyboardState = keyboardState.copy(layout = lastLayout)
         currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
+        topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
     }
 
     fun setInputConnection(connection: InputConnection?) {

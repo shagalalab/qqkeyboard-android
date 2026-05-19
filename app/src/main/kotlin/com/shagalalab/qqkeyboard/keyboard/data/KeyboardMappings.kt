@@ -1,20 +1,27 @@
 package com.shagalalab.qqkeyboard.keyboard.data
 
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
+import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 
 object KeyboardMappings {
 
     // Latin keyboard layout (QWERTY-based with Karakalpak modifications)
-    fun getLatinLayout(imeAction: Int? = null): List<List<KeyData>> {
-        return listOf(
+    fun getLatinLayout(topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS, imeAction: Int? = null): List<List<KeyData>> {
+        val topRow = if (topRowMode == TopRowMode.NUMBERS) {
             listOf(
-                KeyData.character("á"),
-                KeyData.character("ǵ"),
-                KeyData.character("ú"),
-                KeyData.character("ń"),
-                KeyData.character("ı"),
-                KeyData.character("ó"),
-            ),
+                KeyData.character("1"), KeyData.character("2"), KeyData.character("3"),
+                KeyData.character("4"), KeyData.character("5"), KeyData.character("6"),
+                KeyData.character("7"), KeyData.character("8"), KeyData.character("9"),
+                KeyData.character("0"),
+            )
+        } else {
+            listOf(
+                KeyData.character("á"), KeyData.character("ǵ"), KeyData.character("ú"),
+                KeyData.character("ń"), KeyData.character("ı"), KeyData.character("ó"),
+            )
+        }
+        return listOf(
+            topRow,
             listOf(
                 KeyData.character("q"),
                 KeyData.character("w"),
@@ -22,22 +29,22 @@ object KeyboardMappings {
                 KeyData.character("r"),
                 KeyData.character("t"),
                 KeyData.character("y"),
-                KeyData.character("u"),
-                KeyData.character("i"),
-                KeyData.character("o"),
+                latinSecondary("u", "ú", topRowMode),
+                latinSecondary("i", "ı", topRowMode),
+                latinSecondary("o", "ó", topRowMode),
                 KeyData.character("p"),
             ),
             // Second row
             listOf(
-                KeyData.character("a"),
+                latinSecondary("a", "á", topRowMode),
                 KeyData.character("s"),
                 KeyData.character("d"),
                 KeyData.character("f"),
-                KeyData.character("g"),
+                latinSecondary("g", "ǵ", topRowMode),
                 KeyData.character("h"),
                 KeyData.character("j"),
                 KeyData.character("k"),
-                KeyData.character("l")
+                KeyData.character("l"),
             ),
             // Third row with shift and backspace
             listOf(
@@ -47,7 +54,7 @@ object KeyboardMappings {
                 KeyData.character("c"),
                 KeyData.character("v"),
                 KeyData.character("b"),
-                KeyData.character("n"),
+                latinSecondary("n", "ń", topRowMode),
                 KeyData.character("m"),
                 KeyData.backspace(fillRight = true)
             ),
@@ -64,42 +71,62 @@ object KeyboardMappings {
         )
     }
 
+    private fun latinSecondary(base: String, extra: String, mode: TopRowMode): KeyData {
+        return if (mode == TopRowMode.NUMBERS) {
+            KeyData.character(base).copy(longPressCode = extra, secondaryLabel = extra)
+        } else {
+            KeyData.character(base)
+        }
+    }
+
+    private fun cyrillicSecondary(base: String, extra: String, mode: TopRowMode): KeyData {
+        return if (mode == TopRowMode.NUMBERS) {
+            KeyData.character(base).copy(longPressCode = extra, secondaryLabel = extra)
+        } else {
+            KeyData.character(base)
+        }
+    }
+
     // Cyrillic keyboard layout
-    fun getCyrillicLayout(imeAction: Int? = null): List<List<KeyData>> {
-        return listOf(
+    fun getCyrillicLayout(topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS, imeAction: Int? = null): List<List<KeyData>> {
+        val topRow = if (topRowMode == TopRowMode.NUMBERS) {
             listOf(
-                KeyData.character("ә"),
-                KeyData.character("ў"),
-                KeyData.character("ү"),
-                KeyData.character("қ"),
-                KeyData.character("ё"),
-                KeyData.character("ң"),
-                KeyData.character("ғ"),
-                KeyData.character("ө"),
-                KeyData.character("ъ"),
+                KeyData.character("1"), KeyData.character("2"), KeyData.character("3"),
+                KeyData.character("4"), KeyData.character("5"), KeyData.character("6"),
+                KeyData.character("7"), KeyData.character("8"), KeyData.character("9"),
+                KeyData.character("0"),
+            )
+        } else {
+            listOf(
+                KeyData.character("ә"), KeyData.character("ў"), KeyData.character("ү"),
+                KeyData.character("қ"), KeyData.character("ё"), KeyData.character("ң"),
+                KeyData.character("ғ"), KeyData.character("ө"), KeyData.character("ъ"),
                 KeyData.character("ҳ"),
-            ),
+            )
+        }
+        return listOf(
+            topRow,
             listOf(
-                KeyData.character("й"),
+                cyrillicSecondary("й", "ў", topRowMode),
                 KeyData.character("ц"),
-                KeyData.character("у"),
-                KeyData.character("к"),
-                KeyData.character("е"),
-                KeyData.character("н"),
-                KeyData.character("г"),
+                cyrillicSecondary("у", "ү", topRowMode),
+                cyrillicSecondary("к", "қ", topRowMode),
+                cyrillicSecondary("е", "ё", topRowMode),
+                cyrillicSecondary("н", "ң", topRowMode),
+                cyrillicSecondary("г", "ғ", topRowMode),
                 KeyData.character("ш"),
                 KeyData.character("щ"),
                 KeyData.character("з"),
-                KeyData.character("х"),
+                cyrillicSecondary("х", "ҳ", topRowMode),
             ),
             listOf(
                 KeyData.character("ф"),
                 KeyData.character("ы"),
                 KeyData.character("в"),
-                KeyData.character("а"),
+                cyrillicSecondary("а", "ә", topRowMode),
                 KeyData.character("п"),
                 KeyData.character("р"),
-                KeyData.character("о"),
+                cyrillicSecondary("о", "ө", topRowMode),
                 KeyData.character("л"),
                 KeyData.character("д"),
                 KeyData.character("ж"),
@@ -113,7 +140,7 @@ object KeyboardMappings {
                 KeyData.character("м"),
                 KeyData.character("и"),
                 KeyData.character("т"),
-                KeyData.character("ь"),
+                cyrillicSecondary("ь", "ъ", topRowMode),
                 KeyData.character("б"),
                 KeyData.character("ю"),
                 KeyData.backspace(fillRight = true),

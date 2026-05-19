@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
+import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 
@@ -48,6 +49,7 @@ fun SettingsScreen(
     var soundEnabled by remember { mutableStateOf(preferences.soundEnabled) }
     var vibrationEnabled by remember { mutableStateOf(preferences.vibrationEnabled) }
     var selectedTheme by remember { mutableStateOf(preferences.selectedTheme) }
+    var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
     var showThemeDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -146,6 +148,45 @@ fun SettingsScreen(
                             onClick = { showThemeDialog = true }
                         ) {
                             Text("Change")
+                        }
+                    }
+                }
+            }
+
+            // Top Row Layout
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Top Row Layout",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "Takes effect next time the keyboard opens.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    listOf(
+                        TopRowMode.EXTRA_LETTERS to "Extra letters (á, ǵ, ү, қ…)",
+                        TopRowMode.NUMBERS to "Numbers (1–9, 0) with long-press letters"
+                    ).forEach { (mode, label) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = topRowMode == mode,
+                                onClick = {
+                                    topRowMode = mode
+                                    preferences.topRowMode = mode
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(label)
                         }
                     }
                 }

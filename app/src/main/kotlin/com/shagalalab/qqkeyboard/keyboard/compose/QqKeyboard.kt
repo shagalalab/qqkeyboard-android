@@ -35,9 +35,10 @@ fun QqKeyboard(
             .fillMaxWidth()
             .background(colors.keyboardBackground)
     ) {
+        val topRowMode = viewModel.topRowMode
         val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
-            KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
-            KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(currentImeAction)
+            KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
+            KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
             KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
             KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
             KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
@@ -83,6 +84,7 @@ fun QqKeyboard(
                     when (key) {
                         "SHIFT" -> viewModel.onShiftLongPress()
                         "BACKSPACE" -> viewModel.onBackspaceLongPress()
+                        else -> viewModel.onKeyPressed(key)
                     }
                 },
                 isShiftActive = keyboardState.shouldShowUpperCase,

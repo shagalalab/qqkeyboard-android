@@ -10,6 +10,11 @@ enum class KeyboardLayout {
     PHONE             // Phone numpad with telecom letter hints
 }
 
+enum class TopRowMode {
+    EXTRA_LETTERS,
+    NUMBERS
+}
+
 enum class ShiftState {
     OFF,
     ON,

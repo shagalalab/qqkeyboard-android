@@ -21,6 +21,7 @@ data class KeyData(
     val longPressCode: String? = null,
     val alternativeChars: List<String> = emptyList(),
     val hintText: String? = null,
+    val secondaryLabel: String? = null,
 ) {
     companion object {
         // Character keys

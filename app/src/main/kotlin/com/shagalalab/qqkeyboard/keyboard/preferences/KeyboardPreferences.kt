@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.shagalalab.qqkeyboard.keyboard.compose.COLLECTION_GRID_COLS_SIZE
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import org.json.JSONArray
 
 class KeyboardPreferences(context: Context) {
@@ -51,6 +52,19 @@ class KeyboardPreferences(context: Context) {
             prefs.edit { putString(KEY_SELECTED_THEME, value) }
         }
 
+    var topRowMode: TopRowMode
+        get() {
+            val name = prefs.getString(KEY_TOP_ROW_MODE, TopRowMode.EXTRA_LETTERS.name)
+            return try {
+                TopRowMode.valueOf(name ?: TopRowMode.EXTRA_LETTERS.name)
+            } catch (e: IllegalArgumentException) {
+                TopRowMode.EXTRA_LETTERS
+            }
+        }
+        set(value) {
+            prefs.edit { putString(KEY_TOP_ROW_MODE, value.name) }
+        }
+
     var recentEmojis: List<String>
         get() {
             val jsonString = prefs.getString(KEY_RECENT_EMOJIS, "[]") ?: "[]"
@@ -90,6 +104,7 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_SOUND_ENABLED = "sound_enabled"
         private const val KEY_VIBRATION_ENABLED = "vibration_enabled"
         private const val KEY_SELECTED_THEME = "selected_theme"
+        private const val KEY_TOP_ROW_MODE = "top_row_mode"
         private const val KEY_RECENT_EMOJIS = "recent_emojis"
         private const val MAX_RECENT_EMOJIS = COLLECTION_GRID_COLS_SIZE * 5
     }

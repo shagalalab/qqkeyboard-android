@@ -186,6 +186,17 @@ fun KeyButton(
                     )
                 }
             }
+            if (keyData.secondaryLabel != null) {
+                Text(
+                    text = keyData.secondaryLabel,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 3.dp, top = 2.dp),
+                    color = contentColor.copy(alpha = 0.6f),
+                    fontSize = 9.sp,
+                    maxLines = 1
+                )
+            }
         }
     }
 }
