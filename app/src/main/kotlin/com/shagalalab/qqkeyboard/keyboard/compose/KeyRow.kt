@@ -19,6 +19,7 @@ fun KeyRow(
     onKeyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     onKeyLongPress: ((String) -> Unit)? = null,
+    onKeyRepeat: ((String) -> Unit)? = null,
     isShiftActive: Boolean = false,
 ) {
     // Rows containing a space key fill the full width with weights (space expands to fill).
@@ -37,6 +38,7 @@ fun KeyRow(
             KeyButton(
                 keyData = keyData,
                 onKeyClick = onKeyClick,
+                onKeyRepeat = onKeyRepeat,
                 onKeyLongPress = if (onKeyLongPress != null) {
                     when {
                         keyData.code == "SHIFT" || keyData.code == "BACKSPACE" ->

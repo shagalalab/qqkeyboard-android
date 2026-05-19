@@ -54,6 +54,7 @@ fun KeyButton(
     onKeyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     onKeyLongPress: (() -> Unit)? = null,
+    onKeyRepeat: ((String) -> Unit)? = null,
     isShiftActive: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -93,11 +94,12 @@ fun KeyButton(
         )
     }
 
-    // Handle repetitive long press for backspace
+    // Handle repetitive long press for backspace — uses onKeyRepeat (no feedback)
+    // so only the initial onClick vibration fires, matching standard keyboard behaviour.
     LaunchedEffect(isLongPressing) {
         if (isLongPressing && (keyData.code == "BACKSPACE")) {
             while (isLongPressing) {
-                onKeyClick(keyData.code)
+                (onKeyRepeat ?: onKeyClick)(keyData.code)
                 delay(REPEAT_INTERVAL_DELAY_MS)
             }
         }
