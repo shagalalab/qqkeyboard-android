@@ -8,10 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
+import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardTheme
@@ -42,7 +42,6 @@ class KeyboardViewModel : ViewModel() {
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
-    private var wordSeparators: Set<Char> = setOf()
     private var lastShiftTapTime: Long = 0L
 
     companion object {
@@ -55,7 +54,6 @@ class KeyboardViewModel : ViewModel() {
             feedbackManager = FeedbackManager(context)
             // Initialize recent emojis state
             recentEmojis = preferences?.recentEmojis ?: emptyList()
-            wordSeparators = context.resources.getString(R.string.word_separators).toSet()
         }
         // Reload per-session preferences (re-evaluated every time keyboard is shown)
         val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
@@ -96,6 +94,7 @@ class KeyboardViewModel : ViewModel() {
                 keyboardState = keyboardState.switchToLayout(lastLayout)
             }
         }
+        updateShiftForCursor()
     }
 
     fun onKeyPressed(key: String) {
@@ -115,6 +114,7 @@ class KeyboardViewModel : ViewModel() {
                         }
                     }
                     feedbackManager?.playBackspaceFeedback()
+                    updateShiftForCursor()
                 }
                 "ENTER" -> {
                     editorInfo?.let { info ->
@@ -130,13 +130,13 @@ class KeyboardViewModel : ViewModel() {
                                 ic.performEditorAction(imeAction)
                             }
                             else -> {
-                                // Default behavior - insert newline
                                 ic.commitText("\n", 1)
+                                updateShiftForCursor()
                             }
                         }
                     } ?: run {
-                        // Fallback if editorInfo is null - insert newline
                         ic.commitText("\n", 1)
+                        updateShiftForCursor()
                     }
                     feedbackManager?.playReturnFeedback()
                 }
@@ -158,26 +158,17 @@ class KeyboardViewModel : ViewModel() {
                             periodSpacePattern.containsMatchIn(contextBefore) ||
                             exclamationSpacePattern.containsMatchIn(contextBefore) ||
                             questionSpacePattern.containsMatchIn(contextBefore) -> {
-                                // Already has sentence-ending punctuation followed by space(s), just add another space
                                 ic.commitText(" ", 1)
                             }
                             else -> {
-                                // No sentence-ending punctuation found, convert "  " to ". "
-                                ic.deleteSurroundingText(1, 0) // Remove the previous space
-                                ic.commitText(". ", 1) // Add period and space
-
-                                // Auto-capitalize after period
-                                keyboardState = keyboardState.enableAutoCapitalization()
+                                ic.deleteSurroundingText(1, 0)
+                                ic.commitText(". ", 1)
                             }
                         }
+                        updateShiftForCursor()
                     } else {
-                        // Normal space insertion
                         ic.commitText(" ", 1)
-
-                        // Check if we should auto-capitalize after this space
-                        if (shouldAutoCapitalize()) {
-                            keyboardState = keyboardState.enableAutoCapitalization()
-                        }
+                        updateShiftForCursor()
                     }
                     feedbackManager?.playSpacebarFeedback()
                 }
@@ -230,13 +221,8 @@ class KeyboardViewModel : ViewModel() {
                         addRecentEmoji(key)
                     }
 
-                    // Check if we should auto-capitalize after this input
-                    keyboardState = if (shouldAutoCapitalizeAfterInput(textToCommit)) {
-                        keyboardState.enableAutoCapitalization()
-                    } else {
-                        // Reset shift state after typing (except for caps lock)
-                        keyboardState.resetShift()
-                    }
+                    keyboardState = keyboardState.resetShift()
+                    updateShiftForCursor()
                 }
             }
         }
@@ -334,33 +320,17 @@ class KeyboardViewModel : ViewModel() {
         }
     }
 
-    private fun shouldAutoCapitalize(): Boolean {
-        inputConnection?.let { ic ->
-            // Get text before cursor (up to 10 characters should be enough)
-            val textBefore = ic.getTextBeforeCursor(10, 0)?.toString() ?: return false
-
-            // Check if text ends with sentence ending punctuation followed by space
-            if (textBefore.length >= 2) {
-                val lastChar = textBefore[textBefore.length - 1]
-                val secondLastChar = textBefore[textBefore.length - 2]
-
-                // Check for pattern: punctuation + space
-                if (lastChar == ' ' && wordSeparators.contains(secondLastChar)) {
-                    return true
-                }
-            }
-
-            // Also check if we're at the beginning of input (should capitalize first letter)
-            return textBefore.isEmpty() || textBefore.trim().isEmpty()
+    // Uses Android's built-in getCursorCapsMode which reads the editor's autocap flags
+    // (CAP_SENTENCES, CAP_WORDS, CAP_CHARACTERS) and the actual cursor context together,
+    // correctly handling empty fields, after newline, and after sentence-ending punctuation.
+    private fun updateShiftForCursor() {
+        if (keyboardState.shiftState == ShiftState.CAPS_LOCK) return
+        val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
+        keyboardState = if (capsMode != 0) {
+            keyboardState.enableAutoCapitalization()
+        } else {
+            keyboardState.resetShift()
         }
-        return false
-    }
-
-    private fun shouldAutoCapitalizeAfterInput(inputText: String): Boolean {
-        // Check if the input text ends with sentence-ending punctuation followed by space
-        return inputText.length >= 2 &&
-               inputText.endsWith(" ") &&
-               (inputText.endsWith(". ") || inputText.endsWith("! ") || inputText.endsWith("? "))
     }
 
     private fun isEmoji(text: String): Boolean {
