@@ -60,6 +60,7 @@ fun KeyButton(
     val isPressed by interactionSource.collectIsPressedAsState()
     var isLongPressing by remember { mutableStateOf(false) }
     var showBubble by remember { mutableStateOf(false) }
+    var bubbleLabel by remember { mutableStateOf("") }
 
     val keyShape = RoundedCornerShape(6.dp)
     val colors = LocalKeyboardColors.current
@@ -134,7 +135,10 @@ fun KeyButton(
                             if (keyData.code == "BACKSPACE") {
                                 isLongPressing = true
                             } else {
-                                if (keyData.secondaryLabel != null) showBubble = true
+                                if (keyData.secondaryLabel != null) {
+                                    bubbleLabel = if (isShiftActive) keyData.secondaryLabel.kaaUppercase() else keyData.secondaryLabel
+                                    showBubble = true
+                                }
                                 onKeyLongPress?.invoke()
                             }
                         }
@@ -218,8 +222,7 @@ fun KeyButton(
         // Long-press bubble: floats above the key, drawn over the row above via
         // negative offset. Compose Column paints rows in order so this row draws
         // on top of the previous row — no Popup/separate window needed.
-        if (showBubble && keyData.secondaryLabel != null) {
-            val label = if (isShiftActive) keyData.secondaryLabel.kaaUppercase() else keyData.secondaryLabel
+        if (showBubble && bubbleLabel.isNotEmpty()) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -234,7 +237,7 @@ fun KeyButton(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = label,
+                    text = bubbleLabel,
                     color = colors.keyContent,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Normal,
