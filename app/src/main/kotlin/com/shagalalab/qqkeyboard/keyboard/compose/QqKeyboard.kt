@@ -10,13 +10,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.viewmodel.KeyboardViewModel
 
 @Composable
@@ -27,10 +28,12 @@ fun QqKeyboard(
     val keyboardState = viewModel.keyboardState
     val currentImeAction = viewModel.currentImeAction
 
+    CompositionLocalProvider(LocalKeyboardColors provides viewModel.currentTheme.colors) {
+    val colors = LocalKeyboardColors.current
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(colors.keyboardBackground)
     ) {
         val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
             KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
@@ -92,4 +95,5 @@ fun QqKeyboard(
 
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
+    } // CompositionLocalProvider
 }

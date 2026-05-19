@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import kotlinx.coroutines.delay
 
@@ -55,8 +55,8 @@ fun KeyButton(
     var isLongPressing by remember { mutableStateOf(false) }
 
     val keyShape = RoundedCornerShape(6.dp)
+    val colors = LocalKeyboardColors.current
 
-    // Key colors based on type
     val (backgroundColor, borderColor, contentColor) = when {
         keyData.code == "SPACER" -> Triple(
             Color.Transparent,
@@ -64,24 +64,24 @@ fun KeyButton(
             Color.Transparent
         )
         isPressed -> Triple(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-            MaterialTheme.colorScheme.primary,
-            MaterialTheme.colorScheme.onSurface
+            colors.pressedBackground,
+            colors.pressedBorder,
+            colors.keyContent
         )
         keyData.keyType == KeyType.MODIFIER && keyData.code == "SHIFT" && isShiftActive -> Triple(
-            MaterialTheme.colorScheme.primary,
-            MaterialTheme.colorScheme.primary,
-            MaterialTheme.colorScheme.onPrimary
+            colors.shiftActiveBackground,
+            colors.shiftActiveBackground,
+            colors.shiftActiveContent
         )
         keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Triple(
-            MaterialTheme.colorScheme.secondaryContainer,
-            MaterialTheme.colorScheme.outline,
-            MaterialTheme.colorScheme.onSecondaryContainer
+            colors.modifierBackground,
+            colors.modifierBorder,
+            colors.modifierContent
         )
         else -> Triple(
-            MaterialTheme.colorScheme.surface,
-            MaterialTheme.colorScheme.outline,
-            MaterialTheme.colorScheme.onSurface
+            colors.keyBackground,
+            colors.keyBorder,
+            colors.keyContent
         )
     }
 
