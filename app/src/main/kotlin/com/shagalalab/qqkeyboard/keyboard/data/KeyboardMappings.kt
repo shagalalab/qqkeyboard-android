@@ -194,6 +194,89 @@ object KeyboardMappings {
         )
     }
 
+    fun getNumberPadLayout(imeAction: Int? = null): List<List<KeyData>> {
+        return listOf(
+            listOf(
+                KeyData.character("1"),
+                KeyData.character("2"),
+                KeyData.character("3"),
+                KeyData.character("-").copy(fillRight = true)
+            ),
+            listOf(
+                KeyData.character("4"),
+                KeyData.character("5"),
+                KeyData.character("6"),
+                KeyData.numpadSpace().copy(fillRight = true)
+            ),
+            listOf(
+                KeyData.character("7"),
+                KeyData.character("8"),
+                KeyData.character("9"),
+                KeyData.backspace(fillRight = true)
+            ),
+            listOf(
+                KeyData.character(","),
+                KeyData.character("0"),
+                KeyData.character("."),
+                KeyData.enterDynamic(imeAction).copy(fillRight = true)
+            )
+        )
+    }
+
+    fun getNumberPasswordLayout(imeAction: Int? = null): List<List<KeyData>> {
+        return listOf(
+            listOf(
+                KeyData.character("1"),
+                KeyData.character("2"),
+                KeyData.character("3")
+            ),
+            listOf(
+                KeyData.character("4"),
+                KeyData.character("5"),
+                KeyData.character("6")
+            ),
+            listOf(
+                KeyData.character("7"),
+                KeyData.character("8"),
+                KeyData.character("9")
+            ),
+            listOf(
+                KeyData.backspace(widthRatio = 1.5f),
+                KeyData.character("0"),
+                KeyData.enterDynamic(imeAction, widthRatio = 1.5f)
+            )
+        )
+    }
+
+    fun getPhoneLayout(imeAction: Int? = null): List<List<KeyData>> {
+        return listOf(
+            listOf(
+                KeyData.character("1"),
+                KeyData.phoneDigit("2", "ABC"),
+                KeyData.phoneDigit("3", "DEF"),
+                KeyData.character("-").copy(fillRight = true)
+            ),
+            listOf(
+                KeyData.phoneDigit("4", "GHI"),
+                KeyData.phoneDigit("5", "JKL"),
+                KeyData.phoneDigit("6", "MNO"),
+                KeyData.character(".").copy(fillRight = true)
+            ),
+            listOf(
+                KeyData.phoneDigit("7", "PQRS"),
+                KeyData.phoneDigit("8", "TUV"),
+                KeyData.phoneDigit("9", "WXYZ"),
+                KeyData.backspace(fillRight = true)
+            ),
+            listOf(
+                KeyData.character("*"),
+                KeyData.character("0"),
+                KeyData.numpadSpace(),
+                KeyData.enterDynamic(imeAction).copy(fillRight = true)
+            )
+        )
+    }
+
     fun getSymbolicLayout(imeAction: Int? = null): List<List<KeyData>> {
         return listOf(
             listOf(

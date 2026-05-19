@@ -19,7 +19,8 @@ data class KeyData(
     val widthRatio: Float = 1f,
     val fillRight: Boolean = false,
     val longPressCode: String? = null,
-    val alternativeChars: List<String> = emptyList()
+    val alternativeChars: List<String> = emptyList(),
+    val hintText: String? = null,
 ) {
     companion object {
         // Character keys
@@ -38,21 +39,21 @@ data class KeyData(
             widthRatio = widthRatio
         )
 
-        fun backspace(fillRight: Boolean = false) = KeyData(
+        fun backspace(fillRight: Boolean = false, widthRatio: Float = 1.5f) = KeyData(
             code = "BACKSPACE",
             displayText = "",
             keyType = KeyType.ACTION,
             iconResId = R.drawable.ic_delete,
-            widthRatio = 1.5f,
+            widthRatio = widthRatio,
             fillRight = fillRight
         )
 
-        fun enterDynamic(imeAction: Int? = null) = KeyData(
+        fun enterDynamic(imeAction: Int? = null, widthRatio: Float = 1.5f) = KeyData(
             code = "ENTER",
             displayText = "",
             keyType = KeyType.ACTION,
             iconResId = getReturnIconForImeAction(imeAction),
-            widthRatio = 1.5f
+            widthRatio = widthRatio
         )
 
         private fun getReturnIconForImeAction(imeAction: Int?): Int {
@@ -98,6 +99,21 @@ data class KeyData(
             displayText = "",
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_smile
+        )
+
+        fun numpadSpace() = KeyData(
+            code = "SPACE",
+            displayText = "",
+            keyType = KeyType.MODIFIER,
+            iconResId = R.drawable.ic_space,
+            widthRatio = 1f
+        )
+
+        fun phoneDigit(digit: String, hint: String) = KeyData(
+            code = digit,
+            displayText = digit,
+            keyType = KeyType.CHARACTER,
+            hintText = hint
         )
 
         fun spacer(widthRatio: Float = 1.5f) = KeyData(

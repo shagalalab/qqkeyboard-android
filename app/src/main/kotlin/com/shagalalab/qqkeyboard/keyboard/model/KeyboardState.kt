@@ -1,10 +1,13 @@
 package com.shagalalab.qqkeyboard.keyboard.model
 
 enum class KeyboardLayout {
-    LATIN,      // Alphabetic Latin (persistable)
-    CYRILLIC,   // Alphabetic Cyrillic (persistable)
-    NUMERIC,    // Numbers (reset to LATIN on restart)
-    SYMBOLIC    // Symbols (reset to LATIN on restart)
+    LATIN,            // Alphabetic Latin (persistable)
+    CYRILLIC,         // Alphabetic Cyrillic (persistable)
+    NUMERIC,          // Numbers (reset to LATIN on restart)
+    SYMBOLIC,         // Symbols (reset to LATIN on restart)
+    NUMBER_PAD,       // Compact 4×4 numpad for Number/NumberDecimal fields
+    NUMBER_PASSWORD,  // Centered PIN pad for NumberPassword fields
+    PHONE             // Phone numpad with telecom letter hints
 }
 
 enum class ShiftState {

@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -140,6 +141,26 @@ fun KeyButton(
                         tint = contentColor,
                         modifier = Modifier.size(20.dp)
                     )
+                }
+                keyData.hintText != null -> {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = keyData.displayText,
+                            color = contentColor,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = keyData.hintText,
+                            color = contentColor.copy(alpha = 0.55f),
+                            fontSize = 8.sp,
+                            letterSpacing = 0.5.sp,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1
+                        )
+                    }
                 }
                 keyData.displayText.isNotEmpty() -> {
                     Text(

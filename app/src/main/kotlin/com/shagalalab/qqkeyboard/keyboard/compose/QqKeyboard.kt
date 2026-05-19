@@ -32,19 +32,29 @@ fun QqKeyboard(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
+        val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
+            KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
+            KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(currentImeAction)
+            KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
+            KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
+            KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
+            KeyboardLayout.NUMBER_PASSWORD -> KeyboardMappings.getNumberPasswordLayout(currentImeAction)
+            KeyboardLayout.PHONE -> KeyboardMappings.getPhoneLayout(currentImeAction)
+        }
+
+        val numRows = keyboardLayout.size
+        val maxKeysInRow = when (keyboardState.layout) {
+            KeyboardLayout.CYRILLIC -> 11
+            KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> 4
+            else -> 10
+        }
+
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(KEY_HEIGHT * 5 + 2.dp * 7)
+                .height(KEY_HEIGHT * numRows + 2.dp * (numRows + 2))
                 .padding(2.dp)
         ) {
-            val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
-                KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(currentImeAction)
-                KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(currentImeAction)
-                KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
-                KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
-            }
-
             val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
                 row.map { keyData ->
                     when (keyData.code) {
@@ -60,8 +70,6 @@ fun QqKeyboard(
                     }
                 }
             }
-
-            val maxKeysInRow = if (keyboardState.layout == KeyboardLayout.CYRILLIC) 11 else 10
 
             KeyboardLayout(
                 rows = updatedLayout,

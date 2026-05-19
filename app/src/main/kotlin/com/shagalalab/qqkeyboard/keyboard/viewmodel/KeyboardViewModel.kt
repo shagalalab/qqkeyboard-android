@@ -1,6 +1,7 @@
 package com.shagalalab.qqkeyboard.keyboard.viewmodel
 
 import android.content.Context
+import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.compose.runtime.getValue
@@ -60,6 +61,30 @@ class KeyboardViewModel : ViewModel() {
         editorInfo = info
         val newImeAction = info?.let { it.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION) }
         currentImeAction = newImeAction
+
+        if (info != null) {
+            val inputClass = info.inputType and InputType.TYPE_MASK_CLASS
+            val inputVariation = info.inputType and InputType.TYPE_MASK_VARIATION
+            val specialLayout = when (inputClass) {
+                InputType.TYPE_CLASS_PHONE -> KeyboardLayout.PHONE
+                InputType.TYPE_CLASS_NUMBER -> when (inputVariation) {
+                    InputType.TYPE_NUMBER_VARIATION_PASSWORD -> KeyboardLayout.NUMBER_PASSWORD
+                    else -> KeyboardLayout.NUMBER_PAD
+                }
+                else -> null
+            }
+            if (specialLayout != null) {
+                keyboardState = keyboardState.switchToLayout(specialLayout)
+            } else if (keyboardState.layout in setOf(
+                    KeyboardLayout.NUMBER_PAD,
+                    KeyboardLayout.NUMBER_PASSWORD,
+                    KeyboardLayout.PHONE
+                )
+            ) {
+                val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+                keyboardState = keyboardState.switchToLayout(lastLayout)
+            }
+        }
     }
 
     fun onKeyPressed(key: String) {
@@ -241,6 +266,9 @@ class KeyboardViewModel : ViewModel() {
                 }
                 preferences?.lastUsedLayout = newLanguage
                 // Stay in current input mode, just update the preference
+            }
+            KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> {
+                // No language switch in specialized input layouts
             }
         }
     }
