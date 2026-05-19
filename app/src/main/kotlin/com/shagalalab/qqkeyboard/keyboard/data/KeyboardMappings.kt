@@ -241,9 +241,9 @@ object KeyboardMappings {
                 KeyData.character("9")
             ),
             listOf(
-                KeyData.backspace(widthRatio = 1.5f),
+                KeyData.backspace(widthRatio = 1f),
                 KeyData.character("0"),
-                KeyData.enterDynamic(imeAction, widthRatio = 1.5f)
+                KeyData.enterDynamic(imeAction, widthRatio = 1f)
             )
         )
     }
