@@ -53,7 +53,7 @@ class KeyboardViewModel : ViewModel() {
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
-        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!")
+        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
     }
 
     fun initialize(context: Context) {
