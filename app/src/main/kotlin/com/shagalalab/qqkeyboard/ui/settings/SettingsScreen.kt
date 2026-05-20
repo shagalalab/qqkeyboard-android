@@ -163,8 +163,7 @@ fun SettingsScreen(
                     )
                     listOf(
                         KeyboardHeight.SHORT to "Short",
-                        KeyboardHeight.DEFAULT to "Default",
-                        KeyboardHeight.TALL to "Tall"
+                        KeyboardHeight.DEFAULT to "Default"
                     ).forEach { (height, label) ->
                         Row(
                             modifier = Modifier.fillMaxWidth(),

@@ -33,7 +33,6 @@ val LocalKeyboardBorderEnabled = staticCompositionLocalOf { true }
 fun KeyboardHeight.toDp(): Dp = when (this) {
     KeyboardHeight.SHORT -> 40.dp
     KeyboardHeight.DEFAULT -> 48.dp
-    KeyboardHeight.TALL -> 58.dp
 }
 
 object KeyboardThemes {
