@@ -17,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
+import com.shagalalab.qqkeyboard.keyboard.theme.toDp
 import com.shagalalab.qqkeyboard.keyboard.viewmodel.KeyboardViewModel
 
 @Composable
@@ -28,8 +31,13 @@ fun QqKeyboard(
     val keyboardState = viewModel.keyboardState
     val currentImeAction = viewModel.currentImeAction
 
-    CompositionLocalProvider(LocalKeyboardColors provides viewModel.currentTheme.colors) {
+    CompositionLocalProvider(
+        LocalKeyboardColors provides viewModel.currentTheme.colors,
+        LocalKeyboardHeight provides viewModel.keyboardHeight,
+        LocalKeyboardBorderEnabled provides viewModel.keyBorderEnabled,
+    ) {
     val colors = LocalKeyboardColors.current
+    val keyHeight = LocalKeyboardHeight.current.toDp()
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -56,7 +64,7 @@ fun QqKeyboard(
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(KEY_HEIGHT * numRows + 2.dp * (numRows + 2))
+                .height(keyHeight * numRows + 2.dp * (numRows + 2))
                 .padding(2.dp)
         ) {
             val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->

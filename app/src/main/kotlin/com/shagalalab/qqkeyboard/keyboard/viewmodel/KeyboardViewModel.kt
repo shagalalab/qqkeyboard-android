@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
@@ -39,6 +40,15 @@ class KeyboardViewModel : ViewModel() {
     var topRowMode by mutableStateOf(TopRowMode.EXTRA_LETTERS)
         private set
 
+    var keyboardHeight by mutableStateOf(KeyboardHeight.DEFAULT)
+        private set
+
+    var keyBorderEnabled by mutableStateOf(true)
+        private set
+
+    private var autoCapEnabled = true
+    private var doubleSpacePeriodEnabled = true
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -60,6 +70,10 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
         currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
+        keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
+        keyBorderEnabled = preferences?.keyBorderEnabled ?: true
+        autoCapEnabled = preferences?.autoCapEnabled ?: true
+        doubleSpacePeriodEnabled = preferences?.doubleSpacePeriodEnabled ?: true
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -143,7 +157,7 @@ class KeyboardViewModel : ViewModel() {
                 "SPACE" -> {
                     // Check for double-space to period conversion
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
-                    if (textBefore == " ") {
+                    if (doubleSpacePeriodEnabled && textBefore == " ") {
                         // Previous character is space - check if we should convert to period
                         // Use larger context window for regex-based detection
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
@@ -325,6 +339,10 @@ class KeyboardViewModel : ViewModel() {
     // correctly handling empty fields, after newline, and after sentence-ending punctuation.
     private fun updateShiftForCursor() {
         if (keyboardState.shiftState == ShiftState.CAPS_LOCK) return
+        if (!autoCapEnabled) {
+            keyboardState = keyboardState.resetShift()
+            return
+        }
         val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
         keyboardState = if (capsMode != 0) {
             keyboardState.enableAutoCapitalization()

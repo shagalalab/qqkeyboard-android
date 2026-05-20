@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.shagalalab.qqkeyboard.keyboard.compose.COLLECTION_GRID_COLS_SIZE
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
+import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
 import org.json.JSONArray
 
 class KeyboardPreferences(context: Context) {
@@ -65,6 +67,34 @@ class KeyboardPreferences(context: Context) {
             prefs.edit { putString(KEY_TOP_ROW_MODE, value.name) }
         }
 
+    var autoCapEnabled: Boolean
+        get() = prefs.getBoolean(KEY_AUTO_CAP, true)
+        set(value) { prefs.edit { putBoolean(KEY_AUTO_CAP, value) } }
+
+    var doubleSpacePeriodEnabled: Boolean
+        get() = prefs.getBoolean(KEY_DOUBLE_SPACE_PERIOD, true)
+        set(value) { prefs.edit { putBoolean(KEY_DOUBLE_SPACE_PERIOD, value) } }
+
+    var keyboardHeight: KeyboardHeight
+        get() {
+            val name = prefs.getString(KEY_KEYBOARD_HEIGHT, KeyboardHeight.DEFAULT.name)
+            return try { KeyboardHeight.valueOf(name ?: KeyboardHeight.DEFAULT.name) }
+            catch (e: IllegalArgumentException) { KeyboardHeight.DEFAULT }
+        }
+        set(value) { prefs.edit { putString(KEY_KEYBOARD_HEIGHT, value.name) } }
+
+    var keyBorderEnabled: Boolean
+        get() = prefs.getBoolean(KEY_KEY_BORDER, true)
+        set(value) { prefs.edit { putBoolean(KEY_KEY_BORDER, value) } }
+
+    var vibrationStrength: VibrationStrength
+        get() {
+            val name = prefs.getString(KEY_VIBRATION_STRENGTH, VibrationStrength.MEDIUM.name)
+            return try { VibrationStrength.valueOf(name ?: VibrationStrength.MEDIUM.name) }
+            catch (e: IllegalArgumentException) { VibrationStrength.MEDIUM }
+        }
+        set(value) { prefs.edit { putString(KEY_VIBRATION_STRENGTH, value.name) } }
+
     var recentEmojis: List<String>
         get() {
             val jsonString = prefs.getString(KEY_RECENT_EMOJIS, "[]") ?: "[]"
@@ -106,6 +136,11 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_SELECTED_THEME = "selected_theme"
         private const val KEY_TOP_ROW_MODE = "top_row_mode"
         private const val KEY_RECENT_EMOJIS = "recent_emojis"
+        private const val KEY_AUTO_CAP = "auto_cap_enabled"
+        private const val KEY_DOUBLE_SPACE_PERIOD = "double_space_period"
+        private const val KEY_KEYBOARD_HEIGHT = "keyboard_height"
+        private const val KEY_KEY_BORDER = "key_border_enabled"
+        private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
         private const val MAX_RECENT_EMOJIS = COLLECTION_GRID_COLS_SIZE * 5
     }
 }

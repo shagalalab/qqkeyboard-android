@@ -31,7 +31,7 @@ class FeedbackManager(private val context: Context) {
             vibrator.vibrate(
                 VibrationEffect.createOneShot(
                     KEY_PRESS_VIBRATION_DURATION,
-                    VibrationEffect.DEFAULT_AMPLITUDE
+                    preferences.vibrationStrength.amplitude
                 )
             )
         }
@@ -53,7 +53,7 @@ class FeedbackManager(private val context: Context) {
             vibrator.vibrate(
                 VibrationEffect.createOneShot(
                     BACKSPACE_VIBRATION_DURATION,
-                    VibrationEffect.DEFAULT_AMPLITUDE
+                    preferences.vibrationStrength.amplitude
                 )
             )
         }

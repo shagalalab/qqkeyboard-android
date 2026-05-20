@@ -15,6 +15,14 @@ enum class TopRowMode {
     NUMBERS
 }
 
+enum class KeyboardHeight { SHORT, DEFAULT, TALL }
+
+enum class VibrationStrength(val amplitude: Int) {
+    LIGHT(70),
+    MEDIUM(140),
+    STRONG(220)
+}
+
 enum class ShiftState {
     OFF,
     ON,
