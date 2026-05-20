@@ -90,11 +90,6 @@ fun SettingsScreen(
                         text = "Input",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Text(
-                        text = "Takes effect next time the keyboard opens.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),

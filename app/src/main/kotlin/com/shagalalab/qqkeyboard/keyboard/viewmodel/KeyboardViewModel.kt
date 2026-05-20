@@ -46,9 +46,6 @@ class KeyboardViewModel : ViewModel() {
     var keyBorderEnabled by mutableStateOf(true)
         private set
 
-    private var autoCapEnabled = true
-    private var doubleSpacePeriodEnabled = true
-
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -72,8 +69,6 @@ class KeyboardViewModel : ViewModel() {
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
         keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
         keyBorderEnabled = preferences?.keyBorderEnabled ?: true
-        autoCapEnabled = preferences?.autoCapEnabled ?: true
-        doubleSpacePeriodEnabled = preferences?.doubleSpacePeriodEnabled ?: true
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -157,7 +152,7 @@ class KeyboardViewModel : ViewModel() {
                 "SPACE" -> {
                     // Check for double-space to period conversion
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
-                    if (doubleSpacePeriodEnabled && textBefore == " ") {
+                    if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
                         // Previous character is space - check if we should convert to period
                         // Use larger context window for regex-based detection
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
@@ -339,7 +334,7 @@ class KeyboardViewModel : ViewModel() {
     // correctly handling empty fields, after newline, and after sentence-ending punctuation.
     private fun updateShiftForCursor() {
         if (keyboardState.shiftState == ShiftState.CAPS_LOCK) return
-        if (!autoCapEnabled) {
+        if (!(preferences?.autoCapEnabled ?: true)) {
             keyboardState = keyboardState.resetShift()
             return
         }
