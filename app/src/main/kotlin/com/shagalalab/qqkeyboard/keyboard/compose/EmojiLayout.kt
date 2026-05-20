@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,10 +40,9 @@ import kotlinx.coroutines.launch
 
 const val COLLECTION_GRID_COLS_SIZE = 10
 private const val EMOJI_KEY_SIZE = 40
-private const val EMOJI_FONT_SIZE = 26
-private const val CATEGORY_ICON_SIZE = 28
-private const val CATEGORY_VPADDING = 8
-private const val CATEGORY_HPADDING = 8
+private const val EMOJI_FONT_SIZE = 28
+private const val CATEGORY_ICON_SIZE = 24
+private const val CATEGORY_PADDING = 6
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -69,14 +70,14 @@ fun EmojiLayout(
             Box(
                 modifier = Modifier
                     .clickable { onCloseEmojiLayout() }
-                    .padding(horizontal = CATEGORY_HPADDING.dp, vertical = CATEGORY_VPADDING.dp),
+                    .padding(CATEGORY_PADDING.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_circle_arrow_left),
+                    painter = painterResource(R.drawable.arrow_circle_left_24px),
                     contentDescription = null,
                     tint = colors.keyContent,
-                    modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
+                    modifier = Modifier.size((CATEGORY_ICON_SIZE + 8).dp)
                 )
             }
 
@@ -91,15 +92,25 @@ fun EmojiLayout(
                                 pagerState.animateScrollToPage(index)
                             }
                         }
-                        .padding(horizontal = CATEGORY_HPADDING.dp, vertical = CATEGORY_VPADDING.dp),
+                        .padding(CATEGORY_PADDING.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        painter = painterResource(categoryIconResId),
-                        contentDescription = null,
-                        tint = if (isActive) colors.shiftActiveBackground else colors.keyContent,
-                        modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size((CATEGORY_ICON_SIZE + 6).dp)
+                            .background(
+                                color = if (isActive) colors.shiftActiveBackground else Color.Transparent,
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(categoryIconResId),
+                            contentDescription = null,
+                            tint = if (isActive) colors.shiftActiveContent else colors.keyContent,
+                            modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
+                        )
+                    }
                 }
             }
         }
