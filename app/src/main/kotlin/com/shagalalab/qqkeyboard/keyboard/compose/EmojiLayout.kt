@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -29,14 +30,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.data.EmojiData
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import kotlinx.coroutines.launch
 
 const val COLLECTION_GRID_COLS_SIZE = 10
-const val EMOJI_KEY_SIZE = 36
-const val KEY_VPADDING_SIZE = 6
-const val KEY_HPADDING_SIZE = 4
+private const val EMOJI_KEY_SIZE = 40
+private const val EMOJI_FONT_SIZE = 26
+private const val CATEGORY_ICON_SIZE = 28
+private const val CATEGORY_VPADDING = 8
+private const val CATEGORY_HPADDING = 8
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -48,11 +53,12 @@ fun EmojiLayout(
     val categories = EmojiData.getEmojisWithCategories(recentEmojis).keys.toList()
     val pagerState = rememberPagerState(pageCount = { categories.size })
     val coroutineScope = rememberCoroutineScope()
+    val colors = LocalKeyboardColors.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(colors.keyboardBackground)
     ) {
         // Category navigation row
         Row(
@@ -63,12 +69,14 @@ fun EmojiLayout(
             Box(
                 modifier = Modifier
                     .clickable { onCloseEmojiLayout() }
-                    .padding(horizontal = KEY_HPADDING_SIZE.dp, vertical = KEY_VPADDING_SIZE.dp),
+                    .padding(horizontal = CATEGORY_HPADDING.dp, vertical = CATEGORY_VPADDING.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_circle_arrow_left),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = colors.keyContent,
+                    modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
                 )
             }
 
@@ -83,34 +91,23 @@ fun EmojiLayout(
                                 pagerState.animateScrollToPage(index)
                             }
                         }
-                        .padding(horizontal = KEY_HPADDING_SIZE.dp, vertical = KEY_VPADDING_SIZE.dp),
+                        .padding(horizontal = CATEGORY_HPADDING.dp, vertical = CATEGORY_VPADDING.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(categoryIconResId),
                         contentDescription = null,
-                        tint = if (isActive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = if (isActive) colors.shiftActiveBackground else colors.keyContent,
+                        modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
                     )
                 }
-            }
-
-            Box(
-                modifier = Modifier
-                    .clickable { onKeyClick("BACKSPACE") }
-                    .padding(horizontal = KEY_HPADDING_SIZE.dp, vertical = KEY_VPADDING_SIZE.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
 
         // Horizontal pager for emoji categories
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) { page ->
             val categoryIcon = categories[page]
             val emojis = EmojiData.getEmojisWithCategories(recentEmojis)[categoryIcon] ?: emptyList()
@@ -131,7 +128,6 @@ private fun EmojiCategoryPage(
     isRecentCategory: Boolean = false
 ) {
     if (isRecentCategory && emojis.isEmpty()) {
-        // Empty state for recent emojis
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -140,12 +136,11 @@ private fun EmojiCategoryPage(
             Text(
                 text = stringResource(R.string.no_recent_emojis),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = LocalKeyboardColors.current.keyContent,
                 textAlign = TextAlign.Center
             )
         }
     } else {
-        // Emoji grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(COLLECTION_GRID_COLS_SIZE),
             modifier = Modifier.fillMaxSize()
@@ -162,7 +157,7 @@ private fun EmojiCategoryPage(
                 ) {
                     Text(
                         text = emoji,
-                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = EMOJI_FONT_SIZE.sp,
                         textAlign = TextAlign.Center,
                     )
                 }
