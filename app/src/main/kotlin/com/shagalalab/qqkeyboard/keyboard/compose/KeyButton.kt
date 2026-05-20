@@ -38,11 +38,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
+import com.shagalalab.qqkeyboard.keyboard.theme.toDp
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import kotlinx.coroutines.delay
 
-val KEY_HEIGHT = 48.dp
 private const val REPEAT_INTERVAL_DELAY_MS = 50L
 private const val BUBBLE_DISMISS_MS = 500L
 private val BUBBLE_SHAPE = RoundedCornerShape(8.dp)
@@ -65,6 +67,8 @@ fun KeyButton(
 
     val keyShape = RoundedCornerShape(6.dp)
     val colors = LocalKeyboardColors.current
+    val keyHeight = LocalKeyboardHeight.current.toDp()
+    val borderEnabled = LocalKeyboardBorderEnabled.current
 
     val (backgroundColor, borderColor, contentColor) = when {
         keyData.code == "SPACER" -> Triple(
@@ -126,7 +130,7 @@ fun KeyButton(
     // while the visual 2dp gap is preserved via the 1dp insets on each side.
     Box(
         modifier = modifier
-            .height(KEY_HEIGHT)
+            .height(keyHeight)
             .let { m ->
                 if (keyData.code != "SPACER") {
                     m.combinedClickable(
@@ -154,7 +158,7 @@ fun KeyButton(
                 .padding(horizontal = 1.dp)
                 .clip(keyShape)
                 .background(backgroundColor)
-                .border(width = 1.dp, color = borderColor, shape = keyShape),
+                .let { m -> if (borderEnabled) m.border(1.dp, borderColor, keyShape) else m },
             contentAlignment = Alignment.Center
         ) {
             when {
@@ -228,10 +232,10 @@ fun KeyButton(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = -(KEY_HEIGHT + 6.dp))
+                    .offset(y = -(keyHeight + 6.dp))
                     .zIndex(1f)
-                    .defaultMinSize(minWidth = KEY_HEIGHT)
-                    .height(KEY_HEIGHT)
+                    .defaultMinSize(minWidth = keyHeight)
+                    .height(keyHeight)
                     .shadow(6.dp, BUBBLE_SHAPE)
                     .background(colors.bubbleBackground, BUBBLE_SHAPE)
                     .border(1.dp, colors.keyBorder, BUBBLE_SHAPE)

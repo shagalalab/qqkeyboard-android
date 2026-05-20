@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
@@ -39,6 +40,12 @@ class KeyboardViewModel : ViewModel() {
     var topRowMode by mutableStateOf(TopRowMode.EXTRA_LETTERS)
         private set
 
+    var keyboardHeight by mutableStateOf(KeyboardHeight.DEFAULT)
+        private set
+
+    var keyBorderEnabled by mutableStateOf(true)
+        private set
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -46,6 +53,7 @@ class KeyboardViewModel : ViewModel() {
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
+        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!")
     }
 
     fun initialize(context: Context) {
@@ -60,6 +68,8 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
         currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
+        keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
+        keyBorderEnabled = preferences?.keyBorderEnabled ?: true
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -143,7 +153,7 @@ class KeyboardViewModel : ViewModel() {
                 "SPACE" -> {
                     // Check for double-space to period conversion
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
-                    if (textBefore == " ") {
+                    if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
                         // Previous character is space - check if we should convert to period
                         // Use larger context window for regex-based detection
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
@@ -214,6 +224,9 @@ class KeyboardViewModel : ViewModel() {
                         key.lowercase()
                     }
                     ic.commitText(textToCommit, 1)
+                    if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
+                        ic.commitText(" ", 1)
+                    }
                     feedbackManager?.playKeyPressFeedback()
 
                     // Track emoji usage for recent emojis
@@ -325,6 +338,10 @@ class KeyboardViewModel : ViewModel() {
     // correctly handling empty fields, after newline, and after sentence-ending punctuation.
     private fun updateShiftForCursor() {
         if (keyboardState.shiftState == ShiftState.CAPS_LOCK) return
+        if (!(preferences?.autoCapEnabled ?: true)) {
+            keyboardState = keyboardState.resetShift()
+            return
+        }
         val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
         keyboardState = if (capsMode != 0) {
             keyboardState.enableAutoCapitalization()

@@ -33,7 +33,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
+import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 
@@ -48,8 +50,14 @@ fun SettingsScreen(
 
     var soundEnabled by remember { mutableStateOf(preferences.soundEnabled) }
     var vibrationEnabled by remember { mutableStateOf(preferences.vibrationEnabled) }
+    var vibrationStrength by remember { mutableStateOf(preferences.vibrationStrength) }
     var selectedTheme by remember { mutableStateOf(preferences.selectedTheme) }
+    var keyboardHeight by remember { mutableStateOf(preferences.keyboardHeight) }
+    var keyBorderEnabled by remember { mutableStateOf(preferences.keyBorderEnabled) }
     var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
+    var autoCapEnabled by remember { mutableStateOf(preferences.autoCapEnabled) }
+    var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
+    var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
     var showThemeDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -73,10 +81,141 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Sound Settings
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            // Input Settings
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Input",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Auto-capitalization")
+                        Switch(
+                            checked = autoCapEnabled,
+                            onCheckedChange = {
+                                autoCapEnabled = it
+                                preferences.autoCapEnabled = it
+                            }
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Auto-space after punctuation")
+                        Switch(
+                            checked = autoSpaceAfterPunctuation,
+                            onCheckedChange = {
+                                autoSpaceAfterPunctuation = it
+                                preferences.autoSpaceAfterPunctuation = it
+                            }
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Double-space to period")
+                        Switch(
+                            checked = doubleSpacePeriodEnabled,
+                            onCheckedChange = {
+                                doubleSpacePeriodEnabled = it
+                                preferences.doubleSpacePeriodEnabled = it
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Appearance Settings
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Appearance",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "Takes effect next time the keyboard opens.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Theme")
+                            Text(
+                                text = selectedTheme,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        TextButton(onClick = { showThemeDialog = true }) {
+                            Text("Change")
+                        }
+                    }
+
+                    Text(
+                        text = "Keyboard height",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    listOf(
+                        KeyboardHeight.SHORT to "Short",
+                        KeyboardHeight.DEFAULT to "Default"
+                    ).forEach { (height, label) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = keyboardHeight == height,
+                                onClick = {
+                                    keyboardHeight = height
+                                    preferences.keyboardHeight = height
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(label)
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Key border")
+                        Switch(
+                            checked = keyBorderEnabled,
+                            onCheckedChange = {
+                                keyBorderEnabled = it
+                                preferences.keyBorderEnabled = it
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Sound & Feedback Settings
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -115,48 +254,43 @@ fun SettingsScreen(
                             }
                         )
                     }
-                }
-            }
 
-            // Theme Settings
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
                     Text(
-                        text = "Appearance",
-                        style = MaterialTheme.typography.titleMedium
+                        text = "Vibration intensity",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface
+                                else MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text("Theme")
-                            Text(
-                                text = selectedTheme,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        TextButton(
-                            onClick = { showThemeDialog = true }
+                    listOf(
+                        VibrationStrength.LIGHT to "Light",
+                        VibrationStrength.MEDIUM to "Medium",
+                        VibrationStrength.STRONG to "Strong"
+                    ).forEach { (strength, label) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Change")
+                            RadioButton(
+                                selected = vibrationStrength == strength,
+                                enabled = vibrationEnabled,
+                                onClick = {
+                                    vibrationStrength = strength
+                                    preferences.vibrationStrength = strength
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = label,
+                                color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
             }
 
             // Top Row Layout
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -193,9 +327,7 @@ fun SettingsScreen(
             }
 
             // About Section
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -242,9 +374,7 @@ fun SettingsScreen(
                 }
             },
             confirmButton = {
-                TextButton(
-                    onClick = { showThemeDialog = false }
-                ) {
+                TextButton(onClick = { showThemeDialog = false }) {
                     Text("OK")
                 }
             }

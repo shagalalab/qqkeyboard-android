@@ -28,11 +28,9 @@ class FeedbackManager(private val context: Context) {
 
     fun playKeyPressVibration() {
         if (preferences.vibrationEnabled && vibrator.hasVibrator()) {
+            val strength = preferences.vibrationStrength
             vibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    KEY_PRESS_VIBRATION_DURATION,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
+                VibrationEffect.createOneShot(strength.durationMs, strength.amplitude)
             )
         }
     }
@@ -50,11 +48,9 @@ class FeedbackManager(private val context: Context) {
 
     fun playBackspaceVibration() {
         if (preferences.vibrationEnabled && vibrator.hasVibrator()) {
+            val strength = preferences.vibrationStrength
             vibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    BACKSPACE_VIBRATION_DURATION,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
+                VibrationEffect.createOneShot(strength.durationMs + 10L, strength.amplitude)
             )
         }
     }
@@ -86,8 +82,5 @@ class FeedbackManager(private val context: Context) {
         playKeyPressVibration()
     }
 
-    companion object {
-        private const val KEY_PRESS_VIBRATION_DURATION = 30L
-        private const val BACKSPACE_VIBRATION_DURATION = 40L
-    }
+
 }

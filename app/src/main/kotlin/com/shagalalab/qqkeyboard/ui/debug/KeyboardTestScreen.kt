@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -96,7 +97,12 @@ fun KeyboardTestScreen(
                 placeholder = { Text("Enter your text here") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = selectedKeyboardType.second,
-                    imeAction = selectedImeAction.second
+                    imeAction = selectedImeAction.second,
+                    capitalization = if (selectedKeyboardType.second == KeyboardType.Text) {
+                        KeyboardCapitalization.Sentences
+                    } else {
+                        KeyboardCapitalization.None
+                    }
                 ),
                 keyboardActions = KeyboardActions(
                     onAny = { focusManager.clearFocus() }
