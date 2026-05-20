@@ -56,6 +56,7 @@ fun SettingsScreen(
     var keyBorderEnabled by remember { mutableStateOf(preferences.keyBorderEnabled) }
     var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
     var autoCapEnabled by remember { mutableStateOf(preferences.autoCapEnabled) }
+    var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
     var showThemeDialog by remember { mutableStateOf(false) }
 
@@ -102,6 +103,21 @@ fun SettingsScreen(
                             onCheckedChange = {
                                 autoCapEnabled = it
                                 preferences.autoCapEnabled = it
+                            }
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Auto-space after punctuation")
+                        Switch(
+                            checked = autoSpaceAfterPunctuation,
+                            onCheckedChange = {
+                                autoSpaceAfterPunctuation = it
+                                preferences.autoSpaceAfterPunctuation = it
                             }
                         )
                     }

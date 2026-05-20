@@ -53,6 +53,7 @@ class KeyboardViewModel : ViewModel() {
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
+        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!")
     }
 
     fun initialize(context: Context) {
@@ -223,6 +224,9 @@ class KeyboardViewModel : ViewModel() {
                         key.lowercase()
                     }
                     ic.commitText(textToCommit, 1)
+                    if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
+                        ic.commitText(" ", 1)
+                    }
                     feedbackManager?.playKeyPressFeedback()
 
                     // Track emoji usage for recent emojis
