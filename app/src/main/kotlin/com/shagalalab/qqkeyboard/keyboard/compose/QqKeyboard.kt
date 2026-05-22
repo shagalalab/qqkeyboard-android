@@ -43,6 +43,13 @@ fun QqKeyboard(
             .fillMaxWidth()
             .background(colors.keyboardBackground)
     ) {
+        if (keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) {
+            SuggestionStrip(
+                suggestions = viewModel.suggestions,
+                onSuggestionClick = viewModel::onSuggestionSelected,
+            )
+        }
+
         val topRowMode = viewModel.topRowMode
         val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
             KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
