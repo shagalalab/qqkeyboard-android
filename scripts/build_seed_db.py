@@ -16,7 +16,6 @@ Options:
 """
 
 import argparse
-import os
 import re
 import sqlite3
 import unicodedata
@@ -29,7 +28,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 CYRILLIC_PATTERN = re.compile(r'[Ѐ-ӿ]')
-LATIN_PATTERN = re.compile(r'[a-zA-ZÀ-ÖØ-öø-ÿ]')
+LATIN_PATTERN = re.compile(r'[a-zA-ZÀ-ɏ]')
 DIGIT_PATTERN = re.compile(r'\d')
 
 
@@ -41,7 +40,7 @@ def detect_script(word: str) -> str | None:
         return 'cyrillic'
     if has_latin and not has_cyrillic:
         return 'latin'
-    return None  # mixed or neither — discard
+    return None  # mixed or neither
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +66,7 @@ def extract_pdf(path: Path) -> str:
                     text_parts.append(t)
         return '\n'.join(text_parts)
     except ImportError:
-        print("  [warn] pdfplumber not installed. Skipping PDF files. Run: pip install pdfplumber")
+        print("  [warn] pdfplumber not installed. Run: pip install pdfplumber")
         return ''
     except Exception as e:
         print(f"  [warn] Could not read PDF {path.name}: {e}")
@@ -80,7 +79,7 @@ def extract_docx(path: Path) -> str:
         doc = Document(path)
         return '\n'.join(p.text for p in doc.paragraphs)
     except ImportError:
-        print("  [warn] python-docx not installed. Skipping .docx files. Run: pip install python-docx")
+        print("  [warn] python-docx not installed. Run: pip install python-docx")
         return ''
     except Exception as e:
         print(f"  [warn] Could not read DOCX {path.name}: {e}")
@@ -88,7 +87,7 @@ def extract_docx(path: Path) -> str:
 
 
 def extract_doc(path: Path) -> str:
-    """Legacy .doc — requires antiword or libreoffice on PATH."""
+    """Legacy .doc -- requires antiword or libreoffice on PATH."""
     import subprocess
     for tool in ('antiword', 'libreoffice'):
         try:
@@ -110,7 +109,7 @@ def extract_doc(path: Path) -> str:
                     return text
         except (FileNotFoundError, subprocess.TimeoutExpired):
             continue
-    print(f"  [warn] Could not extract .doc {path.name} — install antiword or libreoffice")
+    print(f"  [warn] Could not extract .doc {path.name} -- install antiword or libreoffice")
     return ''
 
 
@@ -135,27 +134,62 @@ def extract_text(path: Path) -> str:
 # Tokenization and normalization
 # ---------------------------------------------------------------------------
 
-# Punctuation to strip from word boundaries (ASCII + common Unicode punctuation)
-STRIP_CHARS = ".,!?;:()[]{}\"'“”‘’«»—–…/\\"
+# Characters to strip from word boundaries
+STRIP_CHARS = (
+    '.,!?;:()[]{}"\''
+    + '“”'   # curved double quotes
+    + '‘’'   # curved single quotes
+    + '«»'   # << >>
+    + '—–'   # em dash, en dash
+    + '…'         # ellipsis
+    + '/\\'
+)
+
+# Exact Karakalpak Latin character set from the keyboard layout (lowercase only; input is lowercased first)
+VALID_LATIN_CHARS = frozenset(
+    'abcdefghijklmnopqrstuvwxyz'
+    + 'á'   # a-acute (a with acute)
+    + 'ǵ'   # g-acute (g with acute)
+    + 'ı'   # dotless i
+    + 'ń'   # n-acute
+    + 'ó'   # o-acute
+    + 'ú'   # u-acute
+    + '-'
+)
 
 
 def normalize_word(word: str) -> str:
-    """Lowercase and strip surrounding punctuation."""
     word = word.lower().strip(STRIP_CHARS)
-    word = unicodedata.normalize('NFC', word)
-    return word
+    return unicodedata.normalize('NFC', word)
 
 
 def tokenize(text: str) -> list[str]:
-    """Split text into words by whitespace."""
     return text.split()
 
 
-def is_valid_token(word: str, min_len: int) -> bool:
+def is_valid_word(word: str, script: str, min_len: int) -> bool:
     if len(word) < min_len:
         return False
+
     if DIGIT_PATTERN.search(word):
         return False
+
+    # Rule 1: must start and end with a letter
+    if not (word[0].isalpha() and word[-1].isalpha()):
+        return False
+
+    # Rule 2: only letters and dashes -- no other symbols allowed
+    if not all(c.isalpha() or c == '-' for c in word):
+        return False
+
+    # Rule 3: all letters must belong to the detected script's valid set
+    if script == 'latin':
+        if not all(c in VALID_LATIN_CHARS for c in word):
+            return False
+    elif script == 'cyrillic':
+        if not all('Ѐ' <= c <= 'ӿ' or c == '-' for c in word):
+            return False
+
     return True
 
 
@@ -164,7 +198,6 @@ def is_valid_token(word: str, min_len: int) -> bool:
 # ---------------------------------------------------------------------------
 
 def collect_words(input_dir: Path, min_len: int) -> Counter:
-    """Extract and count all words from all files, keyed by (word, script)."""
     counts: Counter = Counter()
     files = [
         p for p in input_dir.rglob('*')
@@ -181,10 +214,10 @@ def collect_words(input_dir: Path, min_len: int) -> Counter:
             continue
         for raw_token in tokenize(text):
             word = normalize_word(raw_token)
-            if not is_valid_token(word, min_len):
-                continue
             script = detect_script(word)
             if script is None:
+                continue
+            if not is_valid_word(word, script, min_len):
                 continue
             counts[(word, script)] += 1
 
@@ -208,7 +241,7 @@ def write_db(counts: Counter, output_path: Path, min_freq: int) -> None:
             PRIMARY KEY (word, script)
         )
     """)
-    cur.execute("CREATE INDEX idx_seed_word ON seed_words(word, script)")
+    cur.execute('CREATE INDEX idx_seed_word ON seed_words(word, script)')
 
     rows = [
         (word, script, freq)
@@ -218,14 +251,14 @@ def write_db(counts: Counter, output_path: Path, min_freq: int) -> None:
     rows.sort(key=lambda r: r[2], reverse=True)
 
     cur.executemany(
-        "INSERT INTO seed_words (word, script, frequency) VALUES (?, ?, ?)",
+        'INSERT INTO seed_words (word, script, frequency) VALUES (?, ?, ?)',
         rows
     )
     conn.commit()
     conn.close()
 
-    latin_count = sum(1 for _, script, _ in rows if script == 'latin')
-    cyrillic_count = sum(1 for _, script, _ in rows if script == 'cyrillic')
+    latin_count = sum(1 for _, s, _ in rows if s == 'latin')
+    cyrillic_count = sum(1 for _, s, _ in rows if s == 'cyrillic')
     print(f"\nWrote {len(rows)} words to {output_path}")
     print(f"  Latin:    {latin_count}")
     print(f"  Cyrillic: {cyrillic_count}")
@@ -259,7 +292,7 @@ def main():
 
     counts = collect_words(input_dir, args.min_len)
     if not counts:
-        print("No words collected — check your input files.")
+        print("No words collected -- check your input files.")
         return
 
     write_db(counts, output_path, args.min_freq)
