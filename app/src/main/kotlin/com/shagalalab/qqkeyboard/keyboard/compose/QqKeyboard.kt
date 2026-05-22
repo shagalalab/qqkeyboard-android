@@ -43,7 +43,7 @@ fun QqKeyboard(
             .fillMaxWidth()
             .background(colors.keyboardBackground)
     ) {
-        if (keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) {
+        if ((keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown) {
             SuggestionStrip(
                 suggestions = viewModel.suggestions,
                 onSuggestionClick = viewModel::onSuggestionSelected,
