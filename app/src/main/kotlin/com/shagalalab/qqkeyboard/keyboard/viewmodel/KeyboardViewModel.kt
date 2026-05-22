@@ -57,6 +57,9 @@ class KeyboardViewModel : ViewModel() {
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
+    var suggestionShiftState by mutableStateOf(ShiftState.OFF)
+        private set
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -328,6 +331,16 @@ class KeyboardViewModel : ViewModel() {
         return true
     }
 
+    private fun shiftStateForWord(word: String): ShiftState {
+        val letters = word.filter { it.isLetter() }
+        return when {
+            letters.isEmpty() -> keyboardState.shiftState
+            letters.length > 1 && letters.all { it.isUpperCase() } -> ShiftState.CAPS_LOCK
+            letters.first().isUpperCase() -> ShiftState.ON
+            else -> ShiftState.OFF
+        }
+    }
+
     private fun applyCapitalization(typed: String, suggestion: String): String {
         val letters = typed.filter { it.isLetter() }
         return when {
@@ -357,6 +370,7 @@ class KeyboardViewModel : ViewModel() {
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
         val word = getCurrentWord()
+        suggestionShiftState = shiftStateForWord(word)
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {

@@ -47,7 +47,7 @@ fun QqKeyboard(
             SuggestionStrip(
                 suggestions = viewModel.suggestions,
                 onSuggestionClick = viewModel::onSuggestionSelected,
-                shiftState = keyboardState.shiftState,
+                shiftState = viewModel.suggestionShiftState,
             )
         }
 
