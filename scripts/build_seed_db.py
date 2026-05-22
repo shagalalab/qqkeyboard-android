@@ -197,34 +197,48 @@ def is_valid_word(word: str, script: str, min_len: int) -> bool:
 # Main pipeline
 # ---------------------------------------------------------------------------
 
-def collect_words(input_dir: Path, min_len: int) -> Counter:
+def collect_words(input_dir: Path, min_len: int) -> tuple[Counter, Counter]:
+    """Return (word_counts, bigram_counts). Invalid tokens act as sentence boundaries."""
     counts: Counter = Counter()
+    bigram_counts: Counter = Counter()
     files = [
         p for p in input_dir.rglob('*')
         if p.is_file() and p.suffix.lower() in EXTRACTORS
     ]
     if not files:
         print(f"No supported files found in {input_dir}")
-        return counts
+        return counts, bigram_counts
 
     print(f"Found {len(files)} file(s) to process")
     for path in files:
         text = extract_text(path)
         if not text:
             continue
+        prev_word: str | None = None
+        prev_script: str | None = None
         for raw_token in tokenize(text):
             word = normalize_word(raw_token)
             script = detect_script(word)
-            if script is None:
-                continue
-            if not is_valid_word(word, script, min_len):
+            if script is None or not is_valid_word(word, script, min_len):
+                prev_word = None
+                prev_script = None
                 continue
             counts[(word, script)] += 1
+            if prev_word is not None and prev_script == script:
+                bigram_counts[(prev_word, word, script)] += 1
+            prev_word = word
+            prev_script = script
 
-    return counts
+    return counts, bigram_counts
 
 
-def write_db(counts: Counter, output_path: Path, min_freq: int) -> None:
+def write_db(
+    counts: Counter,
+    bigram_counts: Counter,
+    output_path: Path,
+    min_freq: int,
+    min_bigram_freq: int,
+) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if output_path.exists():
@@ -243,25 +257,45 @@ def write_db(counts: Counter, output_path: Path, min_freq: int) -> None:
     """)
     cur.execute('CREATE INDEX idx_seed_word ON seed_words(word, script)')
 
-    rows = [
+    word_rows = [
         (word, script, freq)
         for (word, script), freq in counts.items()
         if freq >= min_freq
     ]
-    rows.sort(key=lambda r: r[2], reverse=True)
+    word_rows.sort(key=lambda r: r[2], reverse=True)
+    cur.executemany('INSERT INTO seed_words (word, script, frequency) VALUES (?, ?, ?)', word_rows)
 
+    cur.execute("""
+        CREATE TABLE bigrams (
+            prefix    TEXT,
+            next_word TEXT,
+            script    TEXT,
+            frequency INTEGER DEFAULT 1,
+            PRIMARY KEY (prefix, next_word, script)
+        )
+    """)
+    cur.execute('CREATE INDEX idx_bigram_prefix ON bigrams(prefix, script)')
+
+    bigram_rows = [
+        (prefix, next_word, script, freq)
+        for (prefix, next_word, script), freq in bigram_counts.items()
+        if freq >= min_bigram_freq
+    ]
     cur.executemany(
-        'INSERT INTO seed_words (word, script, frequency) VALUES (?, ?, ?)',
-        rows
+        'INSERT INTO bigrams (prefix, next_word, script, frequency) VALUES (?, ?, ?, ?)',
+        bigram_rows,
     )
+
     conn.commit()
     conn.close()
 
-    latin_count = sum(1 for _, s, _ in rows if s == 'latin')
-    cyrillic_count = sum(1 for _, s, _ in rows if s == 'cyrillic')
-    print(f"\nWrote {len(rows)} words to {output_path}")
-    print(f"  Latin:    {latin_count}")
-    print(f"  Cyrillic: {cyrillic_count}")
+    latin_words = sum(1 for _, s, _ in word_rows if s == 'latin')
+    cyrillic_words = sum(1 for _, s, _ in word_rows if s == 'cyrillic')
+    latin_bigrams = sum(1 for _, _, s, _ in bigram_rows if s == 'latin')
+    cyrillic_bigrams = sum(1 for _, _, s, _ in bigram_rows if s == 'cyrillic')
+    print(f"\nWrote {len(word_rows)} words and {len(bigram_rows)} bigrams to {output_path}")
+    print(f"  Words   — Latin: {latin_words}, Cyrillic: {cyrillic_words}")
+    print(f"  Bigrams — Latin: {latin_bigrams}, Cyrillic: {cyrillic_bigrams}")
 
 
 # ---------------------------------------------------------------------------
@@ -275,6 +309,7 @@ def main():
     parser.add_argument('--input', default='texts', help='Directory of source text files')
     parser.add_argument('--output', default=str(default_output), help='Output seed.db path')
     parser.add_argument('--min-freq', type=int, default=3, help='Minimum word frequency')
+    parser.add_argument('--min-bigram-freq', type=int, default=2, help='Minimum bigram frequency')
     parser.add_argument('--min-len', type=int, default=3, help='Minimum word length')
     args = parser.parse_args()
 
@@ -285,17 +320,18 @@ def main():
         print(f"Input directory not found: {input_dir}")
         return
 
-    print(f"Input:    {input_dir.resolve()}")
-    print(f"Output:   {output_path.resolve()}")
-    print(f"Min freq: {args.min_freq}")
-    print(f"Min len:  {args.min_len}\n")
+    print(f"Input:          {input_dir.resolve()}")
+    print(f"Output:         {output_path.resolve()}")
+    print(f"Min word freq:  {args.min_freq}")
+    print(f"Min bigram freq:{args.min_bigram_freq}")
+    print(f"Min len:        {args.min_len}\n")
 
-    counts = collect_words(input_dir, args.min_len)
+    counts, bigram_counts = collect_words(input_dir, args.min_len)
     if not counts:
         print("No words collected -- check your input files.")
         return
 
-    write_db(counts, output_path, args.min_freq)
+    write_db(counts, bigram_counts, output_path, args.min_freq, args.min_bigram_freq)
 
 
 if __name__ == '__main__':
