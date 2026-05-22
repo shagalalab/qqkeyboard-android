@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 
 private val STRIP_HEIGHT = 40.dp
@@ -26,6 +27,7 @@ private val STRIP_HEIGHT = 40.dp
 fun SuggestionStrip(
     suggestions: List<String>,
     onSuggestionClick: (String) -> Unit,
+    shiftState: ShiftState = ShiftState.OFF,
     modifier: Modifier = Modifier,
 ) {
     val colors = LocalKeyboardColors.current
@@ -47,8 +49,13 @@ fun SuggestionStrip(
                         .background(colors.modifierBackground)
                 )
             }
+            val displayText = when (shiftState) {
+                ShiftState.CAPS_LOCK -> suggestion.uppercase()
+                ShiftState.ON -> suggestion.replaceFirstChar { it.uppercaseChar() }
+                ShiftState.OFF -> suggestion
+            }
             Text(
-                text = suggestion,
+                text = displayText,
                 modifier = Modifier
                     .weight(1f)
                     .clickable { onSuggestionClick(suggestion) }
