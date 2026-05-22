@@ -52,9 +52,9 @@ fun SuggestionStrip(
                 modifier = Modifier
                     .weight(1f)
                     .clickable { onSuggestionClick(suggestion) }
-                    .padding(horizontal = 8.dp, vertical = 10.dp),
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
                 color = colors.keyContent,
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

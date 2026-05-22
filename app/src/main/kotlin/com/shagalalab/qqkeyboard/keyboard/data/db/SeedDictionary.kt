@@ -37,6 +37,23 @@ class SeedDictionary(context: Context) {
         return result
     }
 
+    fun queryPrefixes(prefixes: List<String>, script: String, limit: Int = 10): List<Pair<String, Int>> {
+        val database = db ?: return emptyList()
+        if (prefixes.isEmpty()) return emptyList()
+        val result = mutableListOf<Pair<String, Int>>()
+        val placeholders = prefixes.joinToString(" OR ") { "word LIKE ?" }
+        val args = (prefixes.map { "$it%" } + listOf(script, limit.toString())).toTypedArray()
+        database.rawQuery(
+            "SELECT word, frequency FROM seed_words WHERE ($placeholders) AND script = ? ORDER BY frequency DESC LIMIT ?",
+            args
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result.add(cursor.getString(0) to cursor.getInt(1))
+            }
+        }
+        return result
+    }
+
     fun queryBigrams(lastWord: String, script: String, limit: Int = 10): List<Pair<String, Int>> {
         val database = db ?: return emptyList()
         val result = mutableListOf<Pair<String, Int>>()
