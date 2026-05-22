@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.shagalalab.qqkeyboard.keyboard.data.SuggestionRepository
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
@@ -19,11 +21,17 @@ import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardTheme
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class KeyboardViewModel : ViewModel() {
 
     private var preferences: KeyboardPreferences? = null
     private var feedbackManager: FeedbackManager? = null
+    private var repository: SuggestionRepository? = null
 
     var keyboardState by mutableStateOf(KeyboardState())
         private set
@@ -46,24 +54,31 @@ class KeyboardViewModel : ViewModel() {
     var keyBorderEnabled by mutableStateOf(true)
         private set
 
+    var suggestions by mutableStateOf<List<String>>(emptyList())
+        private set
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
     private var lastShiftTapTime: Long = 0L
+    private var suggestionJob: Job? = null
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
+        private const val SUGGESTION_DEBOUNCE_MS = 100L
         private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
+        private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
     }
 
     fun initialize(context: Context) {
         if (preferences == null) {
             preferences = KeyboardPreferences(context)
             feedbackManager = FeedbackManager(context)
-            // Initialize recent emojis state
             recentEmojis = preferences?.recentEmojis ?: emptyList()
+            viewModelScope.launch(Dispatchers.IO) {
+                repository = SuggestionRepository(context.applicationContext)
+            }
         }
-        // Reload per-session preferences (re-evaluated every time keyboard is shown)
         val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
         keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
         currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
@@ -74,6 +89,7 @@ class KeyboardViewModel : ViewModel() {
 
     fun setInputConnection(connection: InputConnection?) {
         inputConnection = connection
+        if (connection == null) suggestions = emptyList()
     }
 
     fun setEditorInfo(info: EditorInfo?) {
@@ -113,10 +129,8 @@ class KeyboardViewModel : ViewModel() {
                 "BACKSPACE" -> {
                     val selectedText = ic.getSelectedText(0)
                     if (selectedText != null && selectedText.isNotEmpty()) {
-                        // Delete selected text by replacing with empty string
                         ic.commitText("", 1)
                     } else {
-                        // Smart deletion - handles emojis and regular characters
                         val textBefore = ic.getTextBeforeCursor(20, 0)?.toString()
                         val deleteLength = EmojiUtils.getGraphemeClusterLength(textBefore)
                         if (deleteLength > 0) {
@@ -125,8 +139,10 @@ class KeyboardViewModel : ViewModel() {
                     }
                     feedbackManager?.playBackspaceFeedback()
                     updateShiftForCursor()
+                    updateSuggestions()
                 }
                 "ENTER" -> {
+                    learnCurrentWord()
                     editorInfo?.let { info ->
                         val imeAction = info.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION)
                         when (imeAction) {
@@ -136,7 +152,6 @@ class KeyboardViewModel : ViewModel() {
                             EditorInfo.IME_ACTION_NEXT,
                             EditorInfo.IME_ACTION_PREVIOUS,
                             EditorInfo.IME_ACTION_DONE -> {
-                                // Perform the IME action instead of inserting newline
                                 ic.performEditorAction(imeAction)
                             }
                             else -> {
@@ -149,17 +164,14 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playReturnFeedback()
+                    suggestions = emptyList()
                 }
                 "SPACE" -> {
-                    // Check for double-space to period conversion
+                    learnCurrentWord()
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
                     if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
-                        // Previous character is space - check if we should convert to period
-                        // Use larger context window for regex-based detection
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
 
-                        // Use regex to check if there's already a period followed by any number of spaces at the end
-                        // Pattern: period followed by one or more spaces at end of string
                         val periodSpacePattern = Regex("""\.\s+$""")
                         val exclamationSpacePattern = Regex("""!\s+$""")
                         val questionSpacePattern = Regex("""\?\s+$""")
@@ -181,17 +193,16 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playSpacebarFeedback()
+                    suggestions = emptyList()
                 }
                 "SHIFT" -> {
                     val currentTime = System.currentTimeMillis()
                     val timeSinceLast = currentTime - lastShiftTapTime
 
                     if (timeSinceLast <= DOUBLE_TAP_DELAY_MS && lastShiftTapTime != 0L) {
-                        // Double tap detected - activate caps lock
                         keyboardState = keyboardState.doubleTapShift()
-                        lastShiftTapTime = 0L // Reset to prevent triple-tap issues
+                        lastShiftTapTime = 0L
                     } else {
-                        // Single tap - normal toggle
                         toggleShift()
                         lastShiftTapTime = currentTime
                     }
@@ -200,14 +211,17 @@ class KeyboardViewModel : ViewModel() {
                 "LAYOUT_SWITCH" -> {
                     switchLanguage()
                     feedbackManager?.playKeyPressFeedback()
+                    updateSuggestions()
                 }
                 "123" -> {
                     switchToLayout(KeyboardLayout.NUMERIC)
                     feedbackManager?.playKeyPressFeedback()
+                    suggestions = emptyList()
                 }
                 "ABC" -> {
                     switchToLastLanguage()
                     feedbackManager?.playKeyPressFeedback()
+                    updateSuggestions()
                 }
                 "EMOJI" -> {
                     toggleEmoji()
@@ -216,6 +230,7 @@ class KeyboardViewModel : ViewModel() {
                 "€~\\" -> {
                     switchToLayout(KeyboardLayout.SYMBOLIC)
                     feedbackManager?.playKeyPressFeedback()
+                    suggestions = emptyList()
                 }
                 else -> {
                     val textToCommit = if (keyboardState.shouldShowUpperCase) {
@@ -229,15 +244,28 @@ class KeyboardViewModel : ViewModel() {
                     }
                     feedbackManager?.playKeyPressFeedback()
 
-                    // Track emoji usage for recent emojis
                     if (isEmoji(key)) {
                         addRecentEmoji(key)
                     }
 
                     keyboardState = keyboardState.resetShift()
                     updateShiftForCursor()
+                    updateSuggestions()
                 }
             }
+        }
+    }
+
+    fun onSuggestionSelected(suggestion: String) {
+        inputConnection?.let { ic ->
+            val currentWord = getCurrentWord()
+            if (currentWord.isNotEmpty()) {
+                ic.deleteSurroundingText(currentWord.length, 0)
+            }
+            ic.commitText("$suggestion ", 1)
+            feedbackManager?.playKeyPressFeedback()
+            suggestions = emptyList()
+            updateShiftForCursor()
         }
     }
 
@@ -261,13 +289,51 @@ class KeyboardViewModel : ViewModel() {
     }
 
     fun onBackspaceLongPress() {
-        // This method is called by QqKeyboard.kt but the actual repetitive
-        // deletion is handled by KeyButton.kt's LaunchedEffect mechanism
-        // We can use this for any setup if needed in the future
     }
 
     fun toggleEmoji() {
         keyboardState = keyboardState.toggleEmojiPopup()
+    }
+
+    private fun getCurrentWord(): String {
+        val text = inputConnection?.getTextBeforeCursor(100, 0)?.toString() ?: return ""
+        return text.split(WORD_SPLIT_REGEX).lastOrNull() ?: ""
+    }
+
+    private fun currentScript(): String? = when (keyboardState.layout) {
+        KeyboardLayout.LATIN -> "latin"
+        KeyboardLayout.CYRILLIC -> "cyrillic"
+        else -> null
+    }
+
+    private fun updateSuggestions() {
+        val script = currentScript() ?: run { suggestions = emptyList(); return }
+        val word = getCurrentWord()
+        if (word.isEmpty()) { suggestions = emptyList(); return }
+
+        suggestionJob?.cancel()
+        suggestionJob = viewModelScope.launch {
+            delay(SUGGESTION_DEBOUNCE_MS)
+            val results = withContext(Dispatchers.IO) {
+                repository?.getSuggestions(word, script) ?: emptyList()
+            }
+            suggestions = results
+        }
+    }
+
+    private fun learnCurrentWord() {
+        val script = currentScript() ?: return
+        val word = getCurrentWord()
+        if (word.length < 3) return
+
+        val inputVariation = editorInfo?.inputType?.and(InputType.TYPE_MASK_VARIATION) ?: 0
+        if (inputVariation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+            inputVariation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) return
+        if ((editorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository?.learnWord(word, script)
+        }
     }
 
     private fun toggleShift() {
@@ -277,12 +343,10 @@ class KeyboardViewModel : ViewModel() {
     private fun switchLanguage() {
         when (keyboardState.layout) {
             KeyboardLayout.LATIN, KeyboardLayout.CYRILLIC -> {
-                // Direct language switching for alphabetic layouts
                 keyboardState = keyboardState.switchLanguage()
                 preferences?.lastUsedLayout = keyboardState.layout
             }
             KeyboardLayout.NUMERIC, KeyboardLayout.SYMBOLIC -> {
-                // For numeric/symbolic modes, switch the underlying language preference
                 val currentLanguage = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
                 val newLanguage = when (currentLanguage) {
                     KeyboardLayout.LATIN -> KeyboardLayout.CYRILLIC
@@ -290,17 +354,14 @@ class KeyboardViewModel : ViewModel() {
                     else -> KeyboardLayout.CYRILLIC
                 }
                 preferences?.lastUsedLayout = newLanguage
-                // Stay in current input mode, just update the preference
             }
             KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> {
-                // No language switch in specialized input layouts
             }
         }
     }
 
     private fun switchToLayout(layout: KeyboardLayout) {
         keyboardState = keyboardState.switchToLayout(layout)
-        // Save preference only for language layouts
         if (layout == KeyboardLayout.LATIN || layout == KeyboardLayout.CYRILLIC) {
             preferences?.lastUsedLayout = layout
         }
@@ -312,9 +373,7 @@ class KeyboardViewModel : ViewModel() {
     }
 
     private fun addRecentEmoji(emoji: String) {
-        // Update SharedPreferences
         preferences?.addRecentEmoji(emoji)
-        // Update Compose state to trigger recomposition
         recentEmojis = preferences?.recentEmojis ?: emptyList()
     }
 
@@ -322,7 +381,6 @@ class KeyboardViewModel : ViewModel() {
         return when (keyboardState.layout) {
             KeyboardLayout.LATIN -> "ҚҚ"
             KeyboardLayout.CYRILLIC -> "QQ"
-            // For numeric/symbolic modes, show switch based on last language
             else -> {
                 val lastLanguage = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
                 when (lastLanguage) {
@@ -333,9 +391,6 @@ class KeyboardViewModel : ViewModel() {
         }
     }
 
-    // Uses Android's built-in getCursorCapsMode which reads the editor's autocap flags
-    // (CAP_SENTENCES, CAP_WORDS, CAP_CHARACTERS) and the actual cursor context together,
-    // correctly handling empty fields, after newline, and after sentence-ending punctuation.
     private fun updateShiftForCursor() {
         if (keyboardState.shiftState == ShiftState.CAPS_LOCK) return
         if (!(preferences?.autoCapEnabled ?: true)) {
@@ -353,24 +408,19 @@ class KeyboardViewModel : ViewModel() {
     private fun isEmoji(text: String): Boolean {
         if (text.isEmpty()) return false
 
-        // Use the EmojiUtils to check if this is an emoji
-        // We'll consider it an emoji if it's not a simple ASCII character
-        // and contains characters in the emoji Unicode ranges
         val codePoint = text.codePointAt(0)
 
         return when (codePoint) {
-            in 0x1F600..0x1F64F -> true // Emoticons
-            in 0x1F300..0x1F5FF -> true // Miscellaneous Symbols
-            in 0x1F680..0x1F6FF -> true // Transport and Map Symbols
-            in 0x2600..0x26FF -> true   // Miscellaneous Symbols
-            in 0x2700..0x27BF -> true   // Dingbats
-            in 0xFE00..0xFE0F -> true   // Variation Selectors
-            in 0x1F900..0x1F9FF -> true // Supplemental Symbols
-            in 0x1F1E6..0x1F1FF -> true // Regional Indicators (flags)
-            // Additional ranges for newer emojis
-            in 0x1FA70..0x1FAFF -> true // Symbols and Pictographs Extended-A
+            in 0x1F600..0x1F64F -> true
+            in 0x1F300..0x1F5FF -> true
+            in 0x1F680..0x1F6FF -> true
+            in 0x2600..0x26FF -> true
+            in 0x2700..0x27BF -> true
+            in 0xFE00..0xFE0F -> true
+            in 0x1F900..0x1F9FF -> true
+            in 0x1F1E6..0x1F1FF -> true
+            in 0x1FA70..0x1FAFF -> true
             else -> {
-                // Check if it's a multi-codepoint emoji by checking length vs display length
                 text.length > 1 && text.any { char ->
                     val cp = char.code
                     cp in 0x1F600..0x1F64F || cp in 0x1F300..0x1F5FF ||
