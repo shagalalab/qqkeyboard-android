@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.db", null, 1) {
+class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.db", null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -20,15 +20,57 @@ class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.d
             """
         )
         db.execSQL("CREATE INDEX idx_user_word ON user_words(word, script)")
+        db.execSQL(
+            """
+            CREATE TABLE user_bigrams (
+                prefix    TEXT,
+                next_word TEXT,
+                script    TEXT,
+                frequency INTEGER DEFAULT 1,
+                last_used INTEGER,
+                PRIMARY KEY (prefix, next_word, script)
+            )
+            """
+        )
+        db.execSQL("CREATE INDEX idx_user_bigram ON user_bigrams(prefix, script)")
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS user_bigrams (
+                    prefix    TEXT,
+                    next_word TEXT,
+                    script    TEXT,
+                    frequency INTEGER DEFAULT 1,
+                    last_used INTEGER,
+                    PRIMARY KEY (prefix, next_word, script)
+                )
+                """
+            )
+            db.execSQL("CREATE INDEX IF NOT EXISTS idx_user_bigram ON user_bigrams(prefix, script)")
+        }
+    }
 
     fun query(prefix: String, script: String, limit: Int = 10): List<Pair<String, Int>> {
         val result = mutableListOf<Pair<String, Int>>()
         readableDatabase.rawQuery(
             "SELECT word, frequency FROM user_words WHERE word LIKE ? AND script = ? ORDER BY frequency DESC LIMIT ?",
             arrayOf("$prefix%", script, limit.toString())
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result.add(cursor.getString(0) to cursor.getInt(1))
+            }
+        }
+        return result
+    }
+
+    fun queryBigrams(lastWord: String, script: String, limit: Int = 10): List<Pair<String, Int>> {
+        val result = mutableListOf<Pair<String, Int>>()
+        readableDatabase.rawQuery(
+            "SELECT next_word, frequency FROM user_bigrams WHERE prefix = ? AND script = ? ORDER BY frequency DESC LIMIT ?",
+            arrayOf(lastWord, script, limit.toString())
         ).use { cursor ->
             while (cursor.moveToNext()) {
                 result.add(cursor.getString(0) to cursor.getInt(1))
@@ -52,6 +94,26 @@ class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.d
             writableDatabase.execSQL(
                 "UPDATE user_words SET frequency = frequency + 1, last_used = ? WHERE word = ? AND script = ?",
                 arrayOf<Any>(now, word, script)
+            )
+        }
+    }
+
+    fun learnBigram(prefix: String, nextWord: String, script: String) {
+        val now = System.currentTimeMillis()
+        val cv = ContentValues().apply {
+            put("prefix", prefix)
+            put("next_word", nextWord)
+            put("script", script)
+            put("frequency", 1)
+            put("last_used", now)
+        }
+        val inserted = writableDatabase.insertWithOnConflict(
+            "user_bigrams", null, cv, SQLiteDatabase.CONFLICT_IGNORE
+        )
+        if (inserted == -1L) {
+            writableDatabase.execSQL(
+                "UPDATE user_bigrams SET frequency = frequency + 1, last_used = ? WHERE prefix = ? AND next_word = ? AND script = ?",
+                arrayOf<Any>(now, prefix, nextWord, script)
             )
         }
     }

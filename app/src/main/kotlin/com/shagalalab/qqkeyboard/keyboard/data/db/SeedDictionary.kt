@@ -36,4 +36,22 @@ class SeedDictionary(context: Context) {
         }
         return result
     }
+
+    fun queryBigrams(lastWord: String, script: String, limit: Int = 10): List<Pair<String, Int>> {
+        val database = db ?: return emptyList()
+        val result = mutableListOf<Pair<String, Int>>()
+        try {
+            database.rawQuery(
+                "SELECT next_word, frequency FROM bigrams WHERE prefix = ? AND script = ? ORDER BY frequency DESC LIMIT ?",
+                arrayOf(lastWord, script, limit.toString())
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    result.add(cursor.getString(0) to cursor.getInt(1))
+                }
+            }
+        } catch (_: Exception) {
+            // bigrams table absent in older seed.db — degrade gracefully
+        }
+        return result
+    }
 }

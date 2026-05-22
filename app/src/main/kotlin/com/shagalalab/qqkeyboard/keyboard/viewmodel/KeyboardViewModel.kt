@@ -62,6 +62,7 @@ class KeyboardViewModel : ViewModel() {
 
     private var lastShiftTapTime: Long = 0L
     private var suggestionJob: Job? = null
+    private var lastCommittedWord: String = ""
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
@@ -89,7 +90,10 @@ class KeyboardViewModel : ViewModel() {
 
     fun setInputConnection(connection: InputConnection?) {
         inputConnection = connection
-        if (connection == null) suggestions = emptyList()
+        if (connection == null) {
+            suggestions = emptyList()
+            lastCommittedWord = ""
+        }
     }
 
     fun setEditorInfo(info: EditorInfo?) {
@@ -121,6 +125,7 @@ class KeyboardViewModel : ViewModel() {
             }
         }
         updateShiftForCursor()
+        if (!isSuggestionsAllowed()) suggestions = emptyList()
     }
 
     fun onKeyPressed(key: String) {
@@ -164,9 +169,11 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playReturnFeedback()
+                    lastCommittedWord = ""
                     suggestions = emptyList()
                 }
                 "SPACE" -> {
+                    val committedWord = getCurrentWord()
                     learnCurrentWord()
                     val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
                     if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
@@ -193,7 +200,12 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playSpacebarFeedback()
-                    suggestions = emptyList()
+                    if (committedWord.isNotEmpty()) {
+                        lastCommittedWord = committedWord
+                        updateSuggestions()
+                    } else {
+                        suggestions = emptyList()
+                    }
                 }
                 "SHIFT" -> {
                     val currentTime = System.currentTimeMillis()
@@ -264,8 +276,19 @@ class KeyboardViewModel : ViewModel() {
             }
             ic.commitText("$suggestion ", 1)
             feedbackManager?.playKeyPressFeedback()
-            suggestions = emptyList()
+
+            val prev = lastCommittedWord
+            val script = currentScript()
+            if (prev.isNotEmpty() && script != null) {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository?.learnWord(suggestion, script)
+                    repository?.learnBigram(prev, suggestion, script)
+                }
+            }
+
+            lastCommittedWord = suggestion
             updateShiftForCursor()
+            updateSuggestions()
         }
     }
 
@@ -295,6 +318,16 @@ class KeyboardViewModel : ViewModel() {
         keyboardState = keyboardState.toggleEmojiPopup()
     }
 
+    private fun isSuggestionsAllowed(): Boolean {
+        val info = editorInfo ?: return true
+        val variation = info.inputType and InputType.TYPE_MASK_VARIATION
+        if (variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD) return false
+        if (info.imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return false
+        return true
+    }
+
     private fun getCurrentWord(): String {
         val text = inputConnection?.getTextBeforeCursor(100, 0)?.toString() ?: return ""
         return text.split(WORD_SPLIT_REGEX).lastOrNull() ?: ""
@@ -307,15 +340,22 @@ class KeyboardViewModel : ViewModel() {
     }
 
     private fun updateSuggestions() {
+        if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
         val word = getCurrentWord()
-        if (word.isEmpty()) { suggestions = emptyList(); return }
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {
-            delay(SUGGESTION_DEBOUNCE_MS)
-            val results = withContext(Dispatchers.IO) {
-                repository?.getSuggestions(word, script) ?: emptyList()
+            val results = if (word.isEmpty()) {
+                // No prefix being typed — show bigram predictions for last committed word
+                withContext(Dispatchers.IO) {
+                    repository?.getBigramPredictions(lastCommittedWord, script) ?: emptyList()
+                }
+            } else {
+                delay(SUGGESTION_DEBOUNCE_MS)
+                withContext(Dispatchers.IO) {
+                    repository?.getSuggestions(word, script) ?: emptyList()
+                }
             }
             suggestions = results
         }
@@ -325,14 +365,14 @@ class KeyboardViewModel : ViewModel() {
         val script = currentScript() ?: return
         val word = getCurrentWord()
         if (word.length < 3) return
+        if (!isSuggestionsAllowed()) return
 
-        val inputVariation = editorInfo?.inputType?.and(InputType.TYPE_MASK_VARIATION) ?: 0
-        if (inputVariation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-            inputVariation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) return
-        if ((editorInfo?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return
-
+        val prev = lastCommittedWord  // capture on main thread before launching coroutine
         viewModelScope.launch(Dispatchers.IO) {
             repository?.learnWord(word, script)
+            if (prev.isNotEmpty()) {
+                repository?.learnBigram(prev, word, script)
+            }
         }
     }
 
