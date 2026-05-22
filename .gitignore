@@ -10,3 +10,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/main/assets/seed.db
+/scripts/texts/
+/scripts/.venv
+/scripts/__pycache__
