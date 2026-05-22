@@ -7,6 +7,16 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.db", null, 2) {
 
+    companion object {
+        private const val HALF_LIFE_DAYS = 30.0
+    }
+
+    private fun decayedFrequency(frequency: Int, lastUsed: Long): Int {
+        val ageDays = (System.currentTimeMillis() - lastUsed) / 86_400_000.0
+        val decay = Math.pow(2.0, -ageDays / HALF_LIFE_DAYS)
+        return (frequency * decay).toInt()
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -56,11 +66,11 @@ class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.d
     fun query(prefix: String, script: String, limit: Int = 10): List<Pair<String, Int>> {
         val result = mutableListOf<Pair<String, Int>>()
         readableDatabase.rawQuery(
-            "SELECT word, frequency FROM user_words WHERE word LIKE ? AND script = ? ORDER BY frequency DESC LIMIT ?",
+            "SELECT word, frequency, last_used FROM user_words WHERE word LIKE ? AND script = ? ORDER BY frequency DESC LIMIT ?",
             arrayOf("$prefix%", script, limit.toString())
         ).use { cursor ->
             while (cursor.moveToNext()) {
-                result.add(cursor.getString(0) to cursor.getInt(1))
+                result.add(cursor.getString(0) to decayedFrequency(cursor.getInt(1), cursor.getLong(2)))
             }
         }
         return result
@@ -72,11 +82,11 @@ class UserDictionary(context: Context) : SQLiteOpenHelper(context, "user_words.d
         val placeholders = prefixes.joinToString(" OR ") { "word LIKE ?" }
         val args = (prefixes.map { "$it%" } + listOf(script, limit.toString())).toTypedArray()
         readableDatabase.rawQuery(
-            "SELECT word, frequency FROM user_words WHERE ($placeholders) AND script = ? ORDER BY frequency DESC LIMIT ?",
+            "SELECT word, frequency, last_used FROM user_words WHERE ($placeholders) AND script = ? ORDER BY frequency DESC LIMIT ?",
             args
         ).use { cursor ->
             while (cursor.moveToNext()) {
-                result.add(cursor.getString(0) to cursor.getInt(1))
+                result.add(cursor.getString(0) to decayedFrequency(cursor.getInt(1), cursor.getLong(2)))
             }
         }
         return result
