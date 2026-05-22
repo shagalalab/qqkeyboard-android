@@ -274,7 +274,7 @@ class KeyboardViewModel : ViewModel() {
             if (currentWord.isNotEmpty()) {
                 ic.deleteSurroundingText(currentWord.length, 0)
             }
-            ic.commitText("$suggestion ", 1)
+            ic.commitText("${applyCapitalization(currentWord, suggestion)} ", 1)
             feedbackManager?.playKeyPressFeedback()
 
             val prev = lastCommittedWord
@@ -326,6 +326,20 @@ class KeyboardViewModel : ViewModel() {
             variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD) return false
         if (info.imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return false
         return true
+    }
+
+    private fun applyCapitalization(typed: String, suggestion: String): String {
+        val letters = typed.filter { it.isLetter() }
+        return when {
+            letters.isEmpty() -> when {
+                keyboardState.shiftState == ShiftState.CAPS_LOCK -> suggestion.uppercase()
+                keyboardState.shouldShowUpperCase -> suggestion.replaceFirstChar { it.uppercaseChar() }
+                else -> suggestion
+            }
+            letters.length > 1 && letters.all { it.isUpperCase() } -> suggestion.uppercase()
+            letters.first().isUpperCase() -> suggestion.replaceFirstChar { it.uppercaseChar() }
+            else -> suggestion
+        }
     }
 
     private fun getCurrentWord(): String {
