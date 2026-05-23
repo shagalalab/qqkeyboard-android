@@ -57,6 +57,11 @@ class KeyboardViewModel : ViewModel() {
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
+    private var currentWordForSuggestions by mutableStateOf("")
+
+    val suggestionShiftState: ShiftState
+        get() = shiftStateForWord(currentWordForSuggestions)
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -274,19 +279,20 @@ class KeyboardViewModel : ViewModel() {
             if (currentWord.isNotEmpty()) {
                 ic.deleteSurroundingText(currentWord.length, 0)
             }
-            ic.commitText("${applyCapitalization(currentWord, suggestion)} ", 1)
+            ic.commitText("$suggestion ", 1)
             feedbackManager?.playKeyPressFeedback()
 
+            val suggestionLower = suggestion.lowercase()
             val prev = lastCommittedWord
             val script = currentScript()
             if (prev.isNotEmpty() && script != null) {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository?.learnWord(suggestion, script)
-                    repository?.learnBigram(prev, suggestion, script)
+                    repository?.learnWord(suggestionLower, script)
+                    repository?.learnBigram(prev, suggestionLower, script)
                 }
             }
 
-            lastCommittedWord = suggestion
+            lastCommittedWord = suggestionLower
             updateShiftForCursor()
             updateSuggestions()
         }
@@ -328,17 +334,13 @@ class KeyboardViewModel : ViewModel() {
         return true
     }
 
-    private fun applyCapitalization(typed: String, suggestion: String): String {
-        val letters = typed.filter { it.isLetter() }
+    private fun shiftStateForWord(word: String): ShiftState {
+        val letters = word.filter { it.isLetter() }
         return when {
-            letters.isEmpty() -> when {
-                keyboardState.shiftState == ShiftState.CAPS_LOCK -> suggestion.uppercase()
-                keyboardState.shouldShowUpperCase -> suggestion.replaceFirstChar { it.uppercaseChar() }
-                else -> suggestion
-            }
-            letters.length > 1 && letters.all { it.isUpperCase() } -> suggestion.uppercase()
-            letters.first().isUpperCase() -> suggestion.replaceFirstChar { it.uppercaseChar() }
-            else -> suggestion
+            letters.isEmpty() -> keyboardState.shiftState
+            letters.length > 1 && letters.all { it.isUpperCase() } -> ShiftState.CAPS_LOCK
+            letters.first().isUpperCase() -> ShiftState.ON
+            else -> ShiftState.OFF
         }
     }
 
@@ -357,6 +359,7 @@ class KeyboardViewModel : ViewModel() {
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
         val word = getCurrentWord()
+        currentWordForSuggestions = word
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {
