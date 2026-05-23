@@ -58,7 +58,7 @@ fun SuggestionStrip(
                 text = displayText,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onSuggestionClick(suggestion) }
+                    .clickable { onSuggestionClick(displayText) }
                     .padding(horizontal = 8.dp, vertical = 8.dp),
                 color = colors.keyContent,
                 fontSize = 16.sp,
