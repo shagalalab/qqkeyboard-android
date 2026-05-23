@@ -57,8 +57,10 @@ class KeyboardViewModel : ViewModel() {
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
-    var suggestionShiftState by mutableStateOf(ShiftState.OFF)
-        private set
+    private var currentWordForSuggestions by mutableStateOf("")
+
+    val suggestionShiftState: ShiftState
+        get() = shiftStateForWord(currentWordForSuggestions)
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -357,7 +359,7 @@ class KeyboardViewModel : ViewModel() {
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
         val word = getCurrentWord()
-        suggestionShiftState = shiftStateForWord(word)
+        currentWordForSuggestions = word
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {
