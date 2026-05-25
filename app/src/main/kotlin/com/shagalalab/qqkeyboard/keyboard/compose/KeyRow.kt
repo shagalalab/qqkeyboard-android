@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 
 @Composable
 fun KeyRow(
@@ -20,7 +21,7 @@ fun KeyRow(
     modifier: Modifier = Modifier,
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
-    isShiftActive: Boolean = false,
+    shiftState: ShiftState = ShiftState.OFF,
 ) {
     // Rows containing a space key fill the full width with weights (space expands to fill).
     // All other rows use fixed key widths and are centered, so shorter rows don't stretch keys.
@@ -48,7 +49,7 @@ fun KeyRow(
                         else -> null
                     }
                 } else null,
-                isShiftActive = isShiftActive,
+                shiftState = shiftState,
                 modifier = when {
                     hasSpaceKey -> Modifier.weight(keyData.widthRatio)
                     keyData.fillRight -> Modifier.weight(1f)

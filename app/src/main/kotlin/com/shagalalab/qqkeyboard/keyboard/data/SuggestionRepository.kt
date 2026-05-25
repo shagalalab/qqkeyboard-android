@@ -4,6 +4,7 @@ import android.content.Context
 import com.shagalalab.qqkeyboard.keyboard.data.db.SeedDictionary
 import com.shagalalab.qqkeyboard.keyboard.data.db.UserDictionary
 import com.shagalalab.qqkeyboard.keyboard.utils.FuzzyMatcher
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaLowercase
 
 class SuggestionRepository(context: Context) {
 
@@ -13,9 +14,10 @@ class SuggestionRepository(context: Context) {
     // Blocking — call from IO dispatcher
     fun getSuggestions(prefix: String, script: String, limit: Int = 5): List<String> {
         if (prefix.isEmpty()) return emptyList()
+        val lowerPrefix = prefix.kaaLowercase()
 
-        val seedExact = seed.query(prefix, script, 10)
-        val userExact = user.query(prefix, script, 10)
+        val seedExact = seed.query(lowerPrefix, script, 10)
+        val userExact = user.query(lowerPrefix, script, 10)
 
         val scores = mutableMapOf<String, Int>()
         seedExact.forEach { (word, freq) -> scores[word] = freq }
@@ -31,7 +33,7 @@ class SuggestionRepository(context: Context) {
         if (exactResults.size >= limit) return exactResults
 
         // Fuzzy fallback: transpositions + diacritic variants
-        val candidates = FuzzyMatcher.candidatePrefixes(prefix).toList()
+        val candidates = FuzzyMatcher.candidatePrefixes(lowerPrefix).toList()
         if (candidates.isEmpty()) return exactResults
 
         val seedFuzzy = seed.queryPrefixes(candidates, script, 10)

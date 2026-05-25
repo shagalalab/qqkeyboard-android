@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercaseChar
 
 private val STRIP_HEIGHT = 40.dp
 
@@ -39,8 +41,8 @@ fun SuggestionStrip(
     ) {
         suggestions.take(3).forEach { suggestion ->
             val displayText = when (shiftState) {
-                ShiftState.CAPS_LOCK -> suggestion.uppercase()
-                ShiftState.ON -> suggestion.replaceFirstChar { it.uppercaseChar() }
+                ShiftState.CAPS_LOCK -> suggestion.kaaUppercase()
+                ShiftState.ON -> suggestion.replaceFirstChar { it.kaaUppercaseChar() }
                 ShiftState.OFF -> suggestion
             }
             Text(
