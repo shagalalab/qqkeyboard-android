@@ -17,9 +17,9 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
-import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardTheme
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
+import com.shagalalab.qqkeyboard.keyboard.utils.kaaLowercase
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +42,7 @@ class KeyboardViewModel : ViewModel() {
     var currentImeAction by mutableStateOf<Int?>(null)
         private set
 
-    var currentTheme by mutableStateOf<KeyboardTheme>(KeyboardThemes.Light)
+    var currentTheme by mutableStateOf(KeyboardThemes.Light)
         private set
 
     var topRowMode by mutableStateOf(TopRowMode.EXTRA_LETTERS)
@@ -253,7 +253,7 @@ class KeyboardViewModel : ViewModel() {
                     val textToCommit = if (keyboardState.shouldShowUpperCase) {
                         key.kaaUppercase()
                     } else {
-                        key.lowercase()
+                        key.kaaLowercase()
                     }
                     ic.commitText(textToCommit, 1)
                     if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
@@ -282,7 +282,7 @@ class KeyboardViewModel : ViewModel() {
             ic.commitText("$suggestion ", 1)
             feedbackManager?.playKeyPressFeedback()
 
-            val suggestionLower = suggestion.lowercase()
+            val suggestionLower = suggestion.kaaLowercase()
             val prev = lastCommittedWord
             val script = currentScript()
             if (prev.isNotEmpty() && script != null) {
