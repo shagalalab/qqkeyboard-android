@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
+import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 
 @Composable
 fun KeyboardLayout(
@@ -18,7 +19,7 @@ fun KeyboardLayout(
     onKeyClick: (String) -> Unit,
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
-    isShiftActive: Boolean = false,
+    shiftState: ShiftState = ShiftState.OFF,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         // 4.dp = 2.dp left + 2.dp right from Column padding
@@ -37,7 +38,7 @@ fun KeyboardLayout(
                     onKeyClick = onKeyClick,
                     onKeyLongPress = onKeyLongPress,
                     onKeyRepeat = onKeyRepeat,
-                    isShiftActive = isShiftActive,
+                    shiftState = shiftState,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -104,7 +104,7 @@ fun QqKeyboard(
                             else -> viewModel.onKeyPressed(key)
                         }
                     },
-                    isShiftActive = keyboardState.shouldShowUpperCase,
+                    shiftState = keyboardState.shiftState,
                 )
 
                 if (keyboardState.isEmojiShown) {

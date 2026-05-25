@@ -38,8 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
+import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.theme.toDp
@@ -58,8 +60,9 @@ fun KeyButton(
     modifier: Modifier = Modifier,
     onKeyLongPress: (() -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
-    isShiftActive: Boolean = false
+    shiftState: ShiftState = ShiftState.OFF
 ) {
+    val isShiftActive = shiftState != ShiftState.OFF
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     var isLongPressing by remember { mutableStateOf(false) }
@@ -73,9 +76,17 @@ fun KeyButton(
     val (backgroundColor, contentColor) = when {
         keyData.code == "SPACER" -> Pair(Color.Transparent, Color.Transparent)
         isPressed -> Pair(colors.pressedBackground, colors.keyContent)
-        keyData.keyType == KeyType.MODIFIER && keyData.code == "SHIFT" && isShiftActive -> Pair(colors.shiftActiveBackground, colors.shiftActiveContent)
         keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Pair(colors.modifierBackground, colors.modifierContent)
         else -> Pair(colors.keyBackground, colors.keyContent)
+    }
+
+    val effectiveIconResId = when {
+        keyData.code == "SHIFT" -> when (shiftState) {
+            ShiftState.OFF -> R.drawable.shift_off
+            ShiftState.ON -> R.drawable.shift_on
+            ShiftState.CAPS_LOCK -> R.drawable.caps_on
+        }
+        else -> keyData.iconResId
     }
 
     // Handle repetitive long press for backspace — uses onKeyRepeat (no feedback)
@@ -141,9 +152,9 @@ fun KeyButton(
             contentAlignment = Alignment.Center
         ) {
             when {
-                keyData.iconResId != null -> {
+                effectiveIconResId != null -> {
                     Icon(
-                        painter = painterResource(keyData.iconResId),
+                        painter = painterResource(effectiveIconResId),
                         contentDescription = keyData.code,
                         tint = contentColor,
                         modifier = Modifier.size(24.dp)

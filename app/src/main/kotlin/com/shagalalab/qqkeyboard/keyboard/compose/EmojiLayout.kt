@@ -99,7 +99,7 @@ fun EmojiLayout(
                         modifier = Modifier
                             .size((CATEGORY_ICON_SIZE + 6).dp)
                             .background(
-                                color = if (isActive) colors.shiftActiveBackground else Color.Transparent,
+                                color = if (isActive) colors.modifierBackground else Color.Transparent,
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
@@ -107,7 +107,7 @@ fun EmojiLayout(
                         Icon(
                             painter = painterResource(categoryIconResId),
                             contentDescription = null,
-                            tint = if (isActive) colors.shiftActiveContent else colors.keyContent,
+                            tint = colors.keyContent,
                             modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
                         )
                     }
