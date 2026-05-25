@@ -13,7 +13,7 @@ enum class KeyType {
 
 data class KeyData(
     val code: String,
-    val displayText: String,
+    val displayText: String = "",
     val keyType: KeyType = KeyType.CHARACTER,
     val iconResId: Int? = null,
     val widthRatio: Float = 1f,
@@ -34,7 +34,6 @@ data class KeyData(
         // Modifier keys
         fun shift(widthRatio: Float = 1.5f) = KeyData(
             code = "SHIFT",
-            displayText = "",
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_arrow_big_up_dash,
             widthRatio = widthRatio
@@ -42,7 +41,6 @@ data class KeyData(
 
         fun backspace(fillRight: Boolean = false, widthRatio: Float = 1.5f) = KeyData(
             code = "BACKSPACE",
-            displayText = "",
             keyType = KeyType.ACTION,
             iconResId = R.drawable.ic_delete,
             widthRatio = widthRatio,
@@ -51,7 +49,6 @@ data class KeyData(
 
         fun enterDynamic(imeAction: Int? = null, widthRatio: Float = 1.5f) = KeyData(
             code = "ENTER",
-            displayText = "",
             keyType = KeyType.ACTION,
             iconResId = getReturnIconForImeAction(imeAction),
             widthRatio = widthRatio
@@ -71,17 +68,15 @@ data class KeyData(
 
         fun space() = KeyData(
             code = "SPACE",
-            displayText = "",
             keyType = KeyType.SPACE,
             iconResId = R.drawable.ic_space,
             widthRatio = 4f
         )
 
-        // Layout switch keys
-        fun layoutSwitch(displayText: String) = KeyData(
+        fun layoutSwitch(iconResId: Int) = KeyData(
             code = "LAYOUT_SWITCH",
-            displayText = displayText,
             keyType = KeyType.LAYOUT_SWITCH,
+            iconResId = iconResId,
             widthRatio = 1f
         )
 
@@ -97,14 +92,12 @@ data class KeyData(
 
         fun emojiSwitch() = KeyData(
             code = "EMOJI",
-            displayText = "",
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_smile
         )
 
         fun numpadSpace() = KeyData(
             code = "SPACE",
-            displayText = "",
             keyType = KeyType.MODIFIER,
             iconResId = R.drawable.ic_space,
             widthRatio = 1f
@@ -115,13 +108,6 @@ data class KeyData(
             displayText = digit,
             keyType = KeyType.CHARACTER,
             hintText = hint
-        )
-
-        fun spacer(widthRatio: Float = 1.5f) = KeyData(
-            code = "SPACER",
-            displayText = "",
-            keyType = KeyType.CHARACTER,
-            widthRatio = widthRatio
         )
     }
 }

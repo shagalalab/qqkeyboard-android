@@ -2,7 +2,6 @@ package com.shagalalab.qqkeyboard.keyboard.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -41,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
-import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.theme.toDp
@@ -71,34 +69,13 @@ fun KeyButton(
     val keyShape = RoundedCornerShape(6.dp)
     val colors = LocalKeyboardColors.current
     val keyHeight = LocalKeyboardHeight.current.toDp()
-    val borderEnabled = LocalKeyboardBorderEnabled.current
 
-    val (backgroundColor, borderColor, contentColor) = when {
-        keyData.code == "SPACER" -> Triple(
-            Color.Transparent,
-            Color.Transparent,
-            Color.Transparent
-        )
-        isPressed -> Triple(
-            colors.pressedBackground,
-            colors.pressedBorder,
-            colors.keyContent
-        )
-        keyData.keyType == KeyType.MODIFIER && keyData.code == "SHIFT" && isShiftActive -> Triple(
-            colors.shiftActiveBackground,
-            colors.shiftActiveBackground,
-            colors.shiftActiveContent
-        )
-        keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Triple(
-            colors.modifierBackground,
-            colors.modifierBorder,
-            colors.modifierContent
-        )
-        else -> Triple(
-            colors.keyBackground,
-            colors.keyBorder,
-            colors.keyContent
-        )
+    val (backgroundColor, contentColor) = when {
+        keyData.code == "SPACER" -> Pair(Color.Transparent, Color.Transparent)
+        isPressed -> Pair(colors.pressedBackground, colors.keyContent)
+        keyData.keyType == KeyType.MODIFIER && keyData.code == "SHIFT" && isShiftActive -> Pair(colors.shiftActiveBackground, colors.shiftActiveContent)
+        keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Pair(colors.modifierBackground, colors.modifierContent)
+        else -> Pair(colors.keyBackground, colors.keyContent)
     }
 
     // Handle repetitive long press for backspace — uses onKeyRepeat (no feedback)
@@ -158,10 +135,9 @@ fun KeyButton(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 1.dp)
+                .padding(horizontal = 2.dp)
                 .clip(keyShape)
-                .background(backgroundColor)
-                .let { m -> if (borderEnabled) m.border(1.dp, borderColor, keyShape) else m },
+                .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
             when {
@@ -170,7 +146,7 @@ fun KeyButton(
                         painter = painterResource(keyData.iconResId),
                         contentDescription = keyData.code,
                         tint = contentColor,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 keyData.hintText != null -> {
@@ -202,8 +178,8 @@ fun KeyButton(
                         },
                         color = contentColor,
                         fontSize = when (keyData.keyType) {
-                            KeyType.CHARACTER -> 22.sp
-                            KeyType.LAYOUT_SWITCH -> 16.sp
+                            KeyType.CHARACTER -> 26.sp
+                            KeyType.MODIFIER -> 16.sp
                             else -> 14.sp
                         },
                         fontWeight = when (keyData.keyType) {
@@ -248,7 +224,6 @@ fun KeyButton(
                     .height(keyHeight)
                     .shadow(6.dp, BUBBLE_SHAPE)
                     .background(colors.bubbleBackground, BUBBLE_SHAPE)
-                    .border(1.dp, colors.keyBorder, BUBBLE_SHAPE)
                     .padding(horizontal = 10.dp),
                 contentAlignment = Alignment.Center
             ) {

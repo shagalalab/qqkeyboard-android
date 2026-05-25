@@ -1,5 +1,6 @@
 package com.shagalalab.qqkeyboard.keyboard.data
 
+import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 
@@ -62,7 +63,7 @@ object KeyboardMappings {
             listOf(
                 KeyData.modeSwitch("123"),
                 KeyData.character(",", ","),
-                KeyData.layoutSwitch("ҚҚ"),
+                KeyData.layoutSwitch(R.drawable.layout_switch_to_cyr),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
                 KeyData.character(".", "."),
@@ -148,7 +149,7 @@ object KeyboardMappings {
             listOf(
                 KeyData.modeSwitch("123"),
                 KeyData.character(",", ","),
-                KeyData.layoutSwitch("QQ"),
+                KeyData.layoutSwitch(R.drawable.layout_switch_to_lat),
                 KeyData.space(),
                 KeyData.emojiSwitch(),
                 KeyData.character(".", "."),

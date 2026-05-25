@@ -56,8 +56,7 @@ class MainActivity : ComponentActivity() {
 
                     when (currentScreen) {
                         Screen.Settings -> SettingsScreen(
-                            onBackClick = { currentScreen = Screen.Main },
-                            modifier = Modifier.padding(innerPadding)
+                            onBackClick = { currentScreen = Screen.Main }
                         )
                         Screen.About -> AboutScreen(
                             onBackClick = { currentScreen = Screen.Main },

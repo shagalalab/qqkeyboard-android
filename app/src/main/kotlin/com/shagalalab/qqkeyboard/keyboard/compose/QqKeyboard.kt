@@ -36,83 +36,83 @@ fun QqKeyboard(
         LocalKeyboardHeight provides viewModel.keyboardHeight,
         LocalKeyboardBorderEnabled provides viewModel.keyBorderEnabled,
     ) {
-    val colors = LocalKeyboardColors.current
-    val keyHeight = LocalKeyboardHeight.current.toDp()
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(colors.keyboardBackground)
-    ) {
-        if ((keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown) {
-            SuggestionStrip(
-                suggestions = viewModel.suggestions,
-                onSuggestionClick = viewModel::onSuggestionSelected,
-                shiftState = viewModel.suggestionShiftState,
-            )
-        }
-
-        val topRowMode = viewModel.topRowMode
-        val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
-            KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
-            KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
-            KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
-            KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
-            KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
-            KeyboardLayout.NUMBER_PASSWORD -> KeyboardMappings.getNumberPasswordLayout(currentImeAction)
-            KeyboardLayout.PHONE -> KeyboardMappings.getPhoneLayout(currentImeAction)
-        }
-
-        val numRows = keyboardLayout.size
-        val maxKeysInRow = when (keyboardState.layout) {
-            KeyboardLayout.CYRILLIC -> 11
-            KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> 4
-            else -> 10
-        }
-
-        Box(
-            Modifier
+        val colors = LocalKeyboardColors.current
+        val keyHeight = LocalKeyboardHeight.current.toDp()
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .height(keyHeight * numRows + 2.dp * (numRows + 2))
-                .padding(2.dp)
+                .background(colors.keyboardBackground)
         ) {
-            val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
-                row.map { keyData ->
-                    when (keyData.code) {
-                        "LAYOUT_SWITCH" -> keyData.copy(
-                            displayText = viewModel.getLayoutSwitchButtonText()
-                        )
+            if ((keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown) {
+                SuggestionStrip(
+                    suggestions = viewModel.suggestions,
+                    onSuggestionClick = viewModel::onSuggestionSelected,
+                    shiftState = viewModel.suggestionShiftState,
+                )
+            }
 
-                        "123", "ABC", "€~\\" -> keyData.copy(
-                            displayText = keyData.code
-                        )
+            val topRowMode = viewModel.topRowMode
+            val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
+                KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
+                KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
+                KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
+                KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
+                KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
+                KeyboardLayout.NUMBER_PASSWORD -> KeyboardMappings.getNumberPasswordLayout(currentImeAction)
+                KeyboardLayout.PHONE -> KeyboardMappings.getPhoneLayout(currentImeAction)
+            }
 
-                        else -> keyData
+            val numRows = keyboardLayout.size
+            val maxKeysInRow = when (keyboardState.layout) {
+                KeyboardLayout.CYRILLIC -> 11
+                KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> 4
+                else -> 10
+            }
+
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(keyHeight * numRows + 2.dp * (numRows + 2))
+                    .padding(2.dp)
+            ) {
+                val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
+                    row.map { keyData ->
+                        when (keyData.code) {
+                            "LAYOUT_SWITCH" -> keyData.copy(
+                                displayText = viewModel.getLayoutSwitchButtonText()
+                            )
+
+                            "123", "ABC", "€~\\" -> keyData.copy(
+                                displayText = keyData.code
+                            )
+
+                            else -> keyData
+                        }
                     }
+                }
+
+                KeyboardLayout(
+                    rows = updatedLayout,
+                    maxKeysInRow = maxKeysInRow,
+                    modifier = Modifier.fillMaxWidth(),
+                    onKeyClick = { key -> viewModel.onKeyPressed(key) },
+                    onKeyRepeat = { viewModel.onBackspaceRepeat() },
+                    onKeyLongPress = { key ->
+                        when (key) {
+                            "SHIFT" -> viewModel.onShiftLongPress()
+                            "BACKSPACE" -> viewModel.onBackspaceLongPress()
+                            else -> viewModel.onKeyPressed(key)
+                        }
+                    },
+                    isShiftActive = keyboardState.shouldShowUpperCase,
+                )
+
+                if (keyboardState.isEmojiShown) {
+                    EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
                 }
             }
 
-            KeyboardLayout(
-                rows = updatedLayout,
-                maxKeysInRow = maxKeysInRow,
-                modifier = Modifier.fillMaxWidth(),
-                onKeyClick = { key -> viewModel.onKeyPressed(key) },
-                onKeyRepeat = { viewModel.onBackspaceRepeat() },
-                onKeyLongPress = { key ->
-                    when (key) {
-                        "SHIFT" -> viewModel.onShiftLongPress()
-                        "BACKSPACE" -> viewModel.onBackspaceLongPress()
-                        else -> viewModel.onKeyPressed(key)
-                    }
-                },
-                isShiftActive = keyboardState.shouldShowUpperCase,
-            )
-
-            if (keyboardState.isEmojiShown) {
-                EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
-            }
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
-
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
-    } // CompositionLocalProvider
 }

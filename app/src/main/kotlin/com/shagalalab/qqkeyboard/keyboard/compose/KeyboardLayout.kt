@@ -28,7 +28,7 @@ fun KeyboardLayout(
         val standardKeyWidth = (maxWidth - 4.dp) / maxKeysInRow
         Column(
             modifier = Modifier.fillMaxWidth().padding(2.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             rows.forEach { keyRow ->
                 KeyRow(

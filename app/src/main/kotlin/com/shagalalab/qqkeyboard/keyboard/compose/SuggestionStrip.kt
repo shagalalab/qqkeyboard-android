@@ -3,13 +3,10 @@ package com.shagalalab.qqkeyboard.keyboard.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,9 +23,9 @@ private val STRIP_HEIGHT = 40.dp
 @Composable
 fun SuggestionStrip(
     suggestions: List<String>,
+    modifier: Modifier = Modifier,
     onSuggestionClick: (String) -> Unit,
     shiftState: ShiftState = ShiftState.OFF,
-    modifier: Modifier = Modifier,
 ) {
     val colors = LocalKeyboardColors.current
 
@@ -40,15 +37,7 @@ fun SuggestionStrip(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        suggestions.take(3).forEachIndexed { index, suggestion ->
-            if (index > 0) {
-                Box(
-                    modifier = Modifier
-                        .width(1.dp)
-                        .fillMaxHeight(0.5f)
-                        .background(colors.modifierBackground)
-                )
-            }
+        suggestions.take(3).forEach { suggestion ->
             val displayText = when (shiftState) {
                 ShiftState.CAPS_LOCK -> suggestion.uppercase()
                 ShiftState.ON -> suggestion.replaceFirstChar { it.uppercaseChar() }
