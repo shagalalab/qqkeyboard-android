@@ -321,7 +321,11 @@ class KeyboardViewModel : ViewModel() {
     }
 
     fun toggleEmoji() {
+        val opening = !keyboardState.isEmojiShown
         keyboardState = keyboardState.toggleEmojiPopup()
+        if (opening) {
+            recentEmojis = preferences?.recentEmojis ?: emptyList()
+        }
     }
 
     private fun isSuggestionsAllowed(): Boolean {
@@ -431,7 +435,6 @@ class KeyboardViewModel : ViewModel() {
 
     private fun addRecentEmoji(emoji: String) {
         preferences?.addRecentEmoji(emoji)
-        recentEmojis = preferences?.recentEmojis ?: emptyList()
     }
 
     fun getLayoutSwitchButtonText(): String {
