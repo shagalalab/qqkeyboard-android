@@ -10,4 +10,57 @@
     <string name="subtype_cyrillic">Cyrillic (ҚҚ)</string>
     <string name="word_separators" translatable="false">.!?</string>
     <string name="no_recent_emojis">No recent emojis</string>
+
+    <!-- Common -->
+    <string name="cd_back">Back</string>
+    <string name="dialog_ok">OK</string>
+    <string name="settings_change">Change</string>
+
+    <!-- About Screen -->
+    <string name="title_about">About</string>
+    <string name="about_app_name">QqKeyboard</string>
+    <string name="about_version">Version %s</string>
+    <string name="about_description">A virtual keyboard for the Karakalpak language, supporting both Latin (QQ) and Cyrillic (ҚҚ) scripts. Built with Jetpack Compose.</string>
+    <string name="about_developer_title">Developer</string>
+    <string name="about_developer_name">Shagala Lab</string>
+    <string name="about_view_on_github">View on GitHub</string>
+    <string name="about_features_title">Features</string>
+    <string name="about_features_list">• Latin and Cyrillic Karakalpak layouts\n• Emoji panel with recent emoji tracking\n• Auto-capitalization after sentences\n• Double-space converts to period\n• Double-tap Shift for Caps Lock\n• Haptic and sound feedback</string>
+
+    <!-- Help Screen -->
+    <string name="title_help">Help</string>
+    <string name="help_setup_title">Setup</string>
+    <string name="help_step1_title">Step 1 — Enable the keyboard</string>
+    <string name="help_step1_description">Go to Android Settings → System → Language &amp; Input → On-screen keyboard, then enable QqKeyboard.</string>
+    <string name="help_open_input_method_settings">Open Input Method Settings</string>
+    <string name="help_step2_title">Step 2 — Set as default keyboard</string>
+    <string name="help_step2_description">Tap the keyboard icon in the navigation bar while typing, or use the button below.</string>
+    <string name="help_switch_default_keyboard">Switch Default Keyboard</string>
+    <string name="help_using_keyboard_title">Using the Keyboard</string>
+    <string name="help_using_keyboard_description">Switch layout — Tap the QQ / ҚҚ button in the bottom-left corner to toggle between Latin and Cyrillic scripts.\n\nShift — Tap once for one uppercase letter. Double-tap to enable Caps Lock. Tap again to turn Caps Lock off.\n\nNumbers &amp; symbols — Tap the 123 button. Tap ABC to return to letters.\n\nEmoji — Tap the smiley face button to open the emoji panel.\n\nDouble-space — Automatically inserts a period followed by a space, useful for ending sentences quickly.</string>
+    <string name="help_tips_title">Tips</string>
+    <string name="help_tips_description">• The keyboard remembers which layout (Latin or Cyrillic) you last used.\n\n• The first letter of a new sentence is automatically capitalized.\n\n• Hold Backspace to delete characters continuously.\n\n• Recently used emojis appear in the Recent tab of the emoji panel.</string>
+
+    <!-- Settings Screen -->
+    <string name="title_keyboard_settings">Keyboard Settings</string>
+    <string name="settings_auto_cap">Auto-capitalization</string>
+    <string name="settings_auto_space">Auto-space after punctuation</string>
+    <string name="settings_double_space_period">Double-space to period</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_keyboard_height">Keyboard height</string>
+    <string name="settings_height_short">Short</string>
+    <string name="settings_height_default">Default</string>
+    <string name="settings_key_border">Key border</string>
+    <string name="settings_top_row_layout">Top row layout</string>
+    <string name="settings_top_row_extra_letters">Extra letters</string>
+    <string name="settings_top_row_numbers">Numbers</string>
+    <string name="settings_top_row_extra_letters_desc">Extra letters (á, ǵ, ү, қ…)</string>
+    <string name="settings_top_row_numbers_desc">Numbers (1–9, 0) with long-press letters</string>
+    <string name="settings_key_press_sound">Key press sound</string>
+    <string name="settings_vibration">Vibration</string>
+    <string name="settings_vibration_intensity">Vibration intensity</string>
+    <string name="settings_vibration_light">Light</string>
+    <string name="settings_vibration_medium">Medium</string>
+    <string name="settings_vibration_strong">Strong</string>
+    <string name="dialog_title_select_theme">Select Theme</string>
 </resources>

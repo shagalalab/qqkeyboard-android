@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.BuildConfig
 import com.shagalalab.qqkeyboard.R
@@ -38,10 +39,10 @@ fun AboutScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text("About") },
+            title = { Text(stringResource(R.string.title_about)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
+                    Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = stringResource(R.string.cd_back))
                 }
             },
             windowInsets = WindowInsets(0)
@@ -56,16 +57,15 @@ fun AboutScreen(
         ) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("QqKeyboard", style = MaterialTheme.typography.headlineSmall)
+                    Text(stringResource(R.string.about_app_name), style = MaterialTheme.typography.headlineSmall)
                     Text(
-                        "Version ${BuildConfig.VERSION_NAME}",
+                        stringResource(R.string.about_version, BuildConfig.VERSION_NAME),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        "A virtual keyboard for the Karakalpak language, supporting both Latin (QQ) " +
-                            "and Cyrillic (ҚҚ) scripts. Built with Jetpack Compose.",
+                        stringResource(R.string.about_description),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -73,9 +73,9 @@ fun AboutScreen(
 
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("Developer", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.about_developer_title), style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text("Shagala Lab", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.about_developer_name), style = MaterialTheme.typography.bodyMedium)
                     TextButton(
                         onClick = {
                             context.startActivity(
@@ -84,21 +84,16 @@ fun AboutScreen(
                         },
                         modifier = Modifier.padding(0.dp)
                     ) {
-                        Text("View on GitHub")
+                        Text(stringResource(R.string.about_view_on_github))
                     }
                 }
             }
 
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Features", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.about_features_title), style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "• Latin and Cyrillic Karakalpak layouts\n" +
-                            "• Emoji panel with recent emoji tracking\n" +
-                            "• Auto-capitalization after sentences\n" +
-                            "• Double-space converts to period\n" +
-                            "• Double-tap Shift for Caps Lock\n" +
-                            "• Haptic and sound feedback",
+                        stringResource(R.string.about_features_list),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
@@ -64,10 +65,10 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Keyboard Settings") },
+                title = { Text(stringResource(R.string.title_keyboard_settings)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
+                        Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = stringResource(R.string.cd_back))
                     }
                 },
             )
@@ -97,7 +98,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Auto-capitalization")
+                    Text(stringResource(R.string.settings_auto_cap))
                 }
                 SegmentedListItem(
                     onClick = {
@@ -113,7 +114,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Auto-space after punctuation")
+                    Text(stringResource(R.string.settings_auto_space))
                 }
                 SegmentedListItem(
                     onClick = {
@@ -129,7 +130,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Double-space to period")
+                    Text(stringResource(R.string.settings_double_space_period))
                 }
             }
 
@@ -141,12 +142,12 @@ fun SettingsScreen(
                     supportingContent = { Text(selectedTheme) },
                     trailingContent = {
                         TextButton(onClick = { showThemeDialog = true }) {
-                            Text("Change")
+                            Text(stringResource(R.string.settings_change))
                         }
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Theme")
+                    Text(stringResource(R.string.settings_theme))
                 }
                 SegmentedListItem(
                     onClick = {},
@@ -154,19 +155,19 @@ fun SettingsScreen(
                     supportingContent = {
                         Text(
                             when (keyboardHeight) {
-                                KeyboardHeight.SHORT -> "Short"
-                                KeyboardHeight.DEFAULT -> "Default"
+                                KeyboardHeight.SHORT -> stringResource(R.string.settings_height_short)
+                                KeyboardHeight.DEFAULT -> stringResource(R.string.settings_height_default)
                             }
                         )
                     },
                     trailingContent = {
                         TextButton(onClick = { showHeightDialog = true }) {
-                            Text("Change")
+                            Text(stringResource(R.string.settings_change))
                         }
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Keyboard height")
+                    Text(stringResource(R.string.settings_keyboard_height))
                 }
                 SegmentedListItem(
                     onClick = {
@@ -182,7 +183,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Key border")
+                    Text(stringResource(R.string.settings_key_border))
                 }
                 SegmentedListItem(
                     onClick = {},
@@ -190,19 +191,19 @@ fun SettingsScreen(
                     supportingContent = {
                         Text(
                             when (topRowMode) {
-                                TopRowMode.EXTRA_LETTERS -> "Extra letters"
-                                TopRowMode.NUMBERS -> "Numbers"
+                                TopRowMode.EXTRA_LETTERS -> stringResource(R.string.settings_top_row_extra_letters)
+                                TopRowMode.NUMBERS -> stringResource(R.string.settings_top_row_numbers)
                             }
                         )
                     },
                     trailingContent = {
                         TextButton(onClick = { showTopRowDialog = true }) {
-                            Text("Change")
+                            Text(stringResource(R.string.settings_change))
                         }
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Top row layout")
+                    Text(stringResource(R.string.settings_top_row_layout))
                 }
             }
 
@@ -222,7 +223,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Key press sound")
+                    Text(stringResource(R.string.settings_key_press_sound))
                 }
                 SegmentedListItem(
                     onClick = {
@@ -238,7 +239,7 @@ fun SettingsScreen(
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("Vibration")
+                    Text(stringResource(R.string.settings_vibration))
                 }
                 SegmentedListItem(
                     onClick = {},
@@ -247,9 +248,9 @@ fun SettingsScreen(
                     supportingContent = {
                         Text(
                             text = when (vibrationStrength) {
-                                VibrationStrength.LIGHT -> "Light"
-                                VibrationStrength.MEDIUM -> "Medium"
-                                VibrationStrength.STRONG -> "Strong"
+                                VibrationStrength.LIGHT -> stringResource(R.string.settings_vibration_light)
+                                VibrationStrength.MEDIUM -> stringResource(R.string.settings_vibration_medium)
+                                VibrationStrength.STRONG -> stringResource(R.string.settings_vibration_strong)
                             },
                             color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurfaceVariant
                             else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
@@ -260,13 +261,13 @@ fun SettingsScreen(
                             onClick = { showVibrationStrengthDialog = true },
                             enabled = vibrationEnabled
                         ) {
-                            Text("Change")
+                            Text(stringResource(R.string.settings_change))
                         }
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(
-                        text = "Vibration intensity",
+                        text = stringResource(R.string.settings_vibration_intensity),
                         color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
                 }
@@ -277,12 +278,12 @@ fun SettingsScreen(
         if (showHeightDialog) {
             AlertDialog(
                 onDismissRequest = { showHeightDialog = false },
-                title = { Text("Keyboard height") },
+                title = { Text(stringResource(R.string.settings_keyboard_height)) },
                 text = {
                     Column {
                         listOf(
-                            KeyboardHeight.SHORT to "Short",
-                            KeyboardHeight.DEFAULT to "Default"
+                            KeyboardHeight.SHORT to stringResource(R.string.settings_height_short),
+                            KeyboardHeight.DEFAULT to stringResource(R.string.settings_height_default)
                         ).forEach { (height, label) ->
                             ListItem(
                                 headlineContent = { Text(label) },
@@ -298,7 +299,7 @@ fun SettingsScreen(
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = { showHeightDialog = false }) { Text("OK") }
+                    TextButton(onClick = { showHeightDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
                 }
             )
         }
@@ -308,13 +309,13 @@ fun SettingsScreen(
     if (showVibrationStrengthDialog) {
         AlertDialog(
             onDismissRequest = { showVibrationStrengthDialog = false },
-            title = { Text("Vibration intensity") },
+            title = { Text(stringResource(R.string.settings_vibration_intensity)) },
             text = {
                 Column {
                     listOf(
-                        VibrationStrength.LIGHT to "Light",
-                        VibrationStrength.MEDIUM to "Medium",
-                        VibrationStrength.STRONG to "Strong"
+                        VibrationStrength.LIGHT to stringResource(R.string.settings_vibration_light),
+                        VibrationStrength.MEDIUM to stringResource(R.string.settings_vibration_medium),
+                        VibrationStrength.STRONG to stringResource(R.string.settings_vibration_strong)
                     ).forEach { (strength, label) ->
                         ListItem(
                             headlineContent = { Text(label) },
@@ -330,7 +331,7 @@ fun SettingsScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showVibrationStrengthDialog = false }) { Text("OK") }
+                TextButton(onClick = { showVibrationStrengthDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
             }
         )
     }
@@ -339,12 +340,12 @@ fun SettingsScreen(
     if (showTopRowDialog) {
         AlertDialog(
             onDismissRequest = { showTopRowDialog = false },
-            title = { Text("Top row layout") },
+            title = { Text(stringResource(R.string.settings_top_row_layout)) },
             text = {
                 Column {
                     listOf(
-                        TopRowMode.EXTRA_LETTERS to "Extra letters (á, ǵ, ү, қ…)",
-                        TopRowMode.NUMBERS to "Numbers (1–9, 0) with long-press letters"
+                        TopRowMode.EXTRA_LETTERS to stringResource(R.string.settings_top_row_extra_letters_desc),
+                        TopRowMode.NUMBERS to stringResource(R.string.settings_top_row_numbers_desc)
                     ).forEach { (mode, label) ->
                         ListItem(
                             headlineContent = { Text(label) },
@@ -360,7 +361,7 @@ fun SettingsScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showTopRowDialog = false }) { Text("OK") }
+                TextButton(onClick = { showTopRowDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
             }
         )
     }
@@ -369,7 +370,7 @@ fun SettingsScreen(
     if (showThemeDialog) {
         AlertDialog(
             onDismissRequest = { showThemeDialog = false },
-            title = { Text("Select Theme") },
+            title = { Text(stringResource(R.string.dialog_title_select_theme)) },
             text = {
                 Column {
                     KeyboardThemes.getAllThemes().forEach { theme ->
@@ -391,7 +392,7 @@ fun SettingsScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showThemeDialog = false }) {
-                    Text("OK")
+                    Text(stringResource(R.string.dialog_ok))
                 }
             }
         )
