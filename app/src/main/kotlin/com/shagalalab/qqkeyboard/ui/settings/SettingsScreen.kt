@@ -1,25 +1,23 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,12 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
@@ -62,13 +57,14 @@ fun SettingsScreen(
     var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showHeightDialog by remember { mutableStateOf(false) }
+    var showVibrationStrengthDialog by remember { mutableStateOf(false) }
+    var showTopRowDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text("Keyboard Settings")
-                },
+                title = { Text("Keyboard Settings") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = "Back")
@@ -77,266 +73,296 @@ fun SettingsScreen(
             )
         },
     ) { contentPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(contentPadding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Input Settings
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            text = "Input",
-                            style = MaterialTheme.typography.titleMedium
+            Column(modifier = Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+                SegmentedListItem(
+                    onClick = {
+                        autoCapEnabled = !autoCapEnabled
+                        preferences.autoCapEnabled = autoCapEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(0, 3),
+                    trailingContent = {
+                        Switch(
+                            checked = autoCapEnabled,
+                            onCheckedChange = null
                         )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Auto-capitalization")
-                            Switch(
-                                checked = autoCapEnabled,
-                                onCheckedChange = {
-                                    autoCapEnabled = it
-                                    preferences.autoCapEnabled = it
-                                }
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Auto-space after punctuation")
-                            Switch(
-                                checked = autoSpaceAfterPunctuation,
-                                onCheckedChange = {
-                                    autoSpaceAfterPunctuation = it
-                                    preferences.autoSpaceAfterPunctuation = it
-                                }
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Double-space to period")
-                            Switch(
-                                checked = doubleSpacePeriodEnabled,
-                                onCheckedChange = {
-                                    doubleSpacePeriodEnabled = it
-                                    preferences.doubleSpacePeriodEnabled = it
-                                }
-                            )
-                        }
-                    }
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Auto-capitalization")
+                }
+                SegmentedListItem(
+                    onClick = {
+                        autoSpaceAfterPunctuation = !autoSpaceAfterPunctuation
+                        preferences.autoSpaceAfterPunctuation = autoSpaceAfterPunctuation
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(1, 3),
+                    trailingContent = {
+                        Switch(
+                            checked = autoSpaceAfterPunctuation,
+                            onCheckedChange = null
+                        )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Auto-space after punctuation")
+                }
+                SegmentedListItem(
+                    onClick = {
+                        doubleSpacePeriodEnabled = !doubleSpacePeriodEnabled
+                        preferences.doubleSpacePeriodEnabled = doubleSpacePeriodEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(2, 3),
+                    trailingContent = {
+                        Switch(
+                            checked = doubleSpacePeriodEnabled,
+                            onCheckedChange = null
+                        )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Double-space to period")
                 }
             }
 
             // Appearance Settings
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            text = "Appearance",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "Takes effect next time the keyboard opens.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text("Theme")
-                                Text(
-                                    text = selectedTheme,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            TextButton(onClick = { showThemeDialog = true }) {
-                                Text("Change")
-                            }
+            Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+                SegmentedListItem(
+                    onClick = {},
+                    shapes = ListItemDefaults.segmentedShapes(0, 4),
+                    supportingContent = { Text(selectedTheme) },
+                    trailingContent = {
+                        TextButton(onClick = { showThemeDialog = true }) {
+                            Text("Change")
                         }
-
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Theme")
+                }
+                SegmentedListItem(
+                    onClick = {},
+                    shapes = ListItemDefaults.segmentedShapes(1, 4),
+                    supportingContent = {
                         Text(
-                            text = "Keyboard height",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        listOf(
-                            KeyboardHeight.SHORT to "Short",
-                            KeyboardHeight.DEFAULT to "Default"
-                        ).forEach { (height, label) ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = keyboardHeight == height,
-                                    onClick = {
-                                        keyboardHeight = height
-                                        preferences.keyboardHeight = height
-                                    }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(label)
+                            when (keyboardHeight) {
+                                KeyboardHeight.SHORT -> "Short"
+                                KeyboardHeight.DEFAULT -> "Default"
                             }
+                        )
+                    },
+                    trailingContent = {
+                        TextButton(onClick = { showHeightDialog = true }) {
+                            Text("Change")
                         }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Key border")
-                            Switch(
-                                checked = keyBorderEnabled,
-                                onCheckedChange = {
-                                    keyBorderEnabled = it
-                                    preferences.keyBorderEnabled = it
-                                }
-                            )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Keyboard height")
+                }
+                SegmentedListItem(
+                    onClick = {
+                        keyBorderEnabled = !keyBorderEnabled
+                        preferences.keyBorderEnabled = keyBorderEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(2, 4),
+                    trailingContent = {
+                        Switch(
+                            checked = keyBorderEnabled,
+                            onCheckedChange = null
+                        )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Key border")
+                }
+                SegmentedListItem(
+                    onClick = {},
+                    shapes = ListItemDefaults.segmentedShapes(3, 4),
+                    supportingContent = {
+                        Text(
+                            when (topRowMode) {
+                                TopRowMode.EXTRA_LETTERS -> "Extra letters"
+                                TopRowMode.NUMBERS -> "Numbers"
+                            }
+                        )
+                    },
+                    trailingContent = {
+                        TextButton(onClick = { showTopRowDialog = true }) {
+                            Text("Change")
                         }
-                    }
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Top row layout")
                 }
             }
 
             // Sound & Feedback Settings
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            text = "Sound & Feedback",
-                            style = MaterialTheme.typography.titleMedium
+            Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
+                SegmentedListItem(
+                    onClick = {
+                        soundEnabled = !soundEnabled
+                        preferences.soundEnabled = soundEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(0, 3),
+                    trailingContent = {
+                        Switch(
+                            checked = soundEnabled,
+                            onCheckedChange = null
                         )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Key press sound")
-                            Switch(
-                                checked = soundEnabled,
-                                onCheckedChange = {
-                                    soundEnabled = it
-                                    preferences.soundEnabled = it
-                                }
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Vibration")
-                            Switch(
-                                checked = vibrationEnabled,
-                                onCheckedChange = {
-                                    vibrationEnabled = it
-                                    preferences.vibrationEnabled = it
-                                }
-                            )
-                        }
-
-                        Text(
-                            text = "Vibration intensity",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface
-                            else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        listOf(
-                            VibrationStrength.LIGHT to "Light",
-                            VibrationStrength.MEDIUM to "Medium",
-                            VibrationStrength.STRONG to "Strong"
-                        ).forEach { (strength, label) ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = vibrationStrength == strength,
-                                    enabled = vibrationEnabled,
-                                    onClick = {
-                                        vibrationStrength = strength
-                                        preferences.vibrationStrength = strength
-                                    }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = label,
-                                    color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface
-                                    else MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Key press sound")
                 }
-            }
-
-            // Top Row Layout
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            text = "Top Row Layout",
-                            style = MaterialTheme.typography.titleMedium
+                SegmentedListItem(
+                    onClick = {
+                        vibrationEnabled = !vibrationEnabled
+                        preferences.vibrationEnabled = vibrationEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(1, 3),
+                    trailingContent = {
+                        Switch(
+                            checked = vibrationEnabled,
+                            onCheckedChange = null
                         )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text("Vibration")
+                }
+                SegmentedListItem(
+                    onClick = {},
+                    shapes = ListItemDefaults.segmentedShapes(2, 3),
+                    enabled = vibrationEnabled,
+                    supportingContent = {
                         Text(
-                            text = "Takes effect next time the keyboard opens.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            text = when (vibrationStrength) {
+                                VibrationStrength.LIGHT -> "Light"
+                                VibrationStrength.MEDIUM -> "Medium"
+                                VibrationStrength.STRONG -> "Strong"
+                            },
+                            color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurfaceVariant
+                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
-                        listOf(
-                            TopRowMode.EXTRA_LETTERS to "Extra letters (á, ǵ, ү, қ…)",
-                            TopRowMode.NUMBERS to "Numbers (1–9, 0) with long-press letters"
-                        ).forEach { (mode, label) ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = topRowMode == mode,
-                                    onClick = {
-                                        topRowMode = mode
-                                        preferences.topRowMode = mode
-                                    }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(label)
-                            }
+                    },
+                    trailingContent = {
+                        TextButton(
+                            onClick = { showVibrationStrengthDialog = true },
+                            enabled = vibrationEnabled
+                        ) {
+                            Text("Change")
                         }
-                    }
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text(
+                        text = "Vibration intensity",
+                        color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
                 }
             }
         }
+
+        // Keyboard Height Dialog
+        if (showHeightDialog) {
+            AlertDialog(
+                onDismissRequest = { showHeightDialog = false },
+                title = { Text("Keyboard height") },
+                text = {
+                    Column {
+                        listOf(
+                            KeyboardHeight.SHORT to "Short",
+                            KeyboardHeight.DEFAULT to "Default"
+                        ).forEach { (height, label) ->
+                            ListItem(
+                                headlineContent = { Text(label) },
+                                leadingContent = {
+                                    RadioButton(selected = keyboardHeight == height, onClick = null)
+                                },
+                                modifier = Modifier.clickable {
+                                    keyboardHeight = height
+                                    preferences.keyboardHeight = height
+                                }
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showHeightDialog = false }) { Text("OK") }
+                }
+            )
+        }
+    }
+
+    // Vibration Strength Dialog
+    if (showVibrationStrengthDialog) {
+        AlertDialog(
+            onDismissRequest = { showVibrationStrengthDialog = false },
+            title = { Text("Vibration intensity") },
+            text = {
+                Column {
+                    listOf(
+                        VibrationStrength.LIGHT to "Light",
+                        VibrationStrength.MEDIUM to "Medium",
+                        VibrationStrength.STRONG to "Strong"
+                    ).forEach { (strength, label) ->
+                        ListItem(
+                            headlineContent = { Text(label) },
+                            leadingContent = {
+                                RadioButton(selected = vibrationStrength == strength, onClick = null)
+                            },
+                            modifier = Modifier.clickable {
+                                vibrationStrength = strength
+                                preferences.vibrationStrength = strength
+                            }
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showVibrationStrengthDialog = false }) { Text("OK") }
+            }
+        )
+    }
+
+    // Top Row Mode Dialog
+    if (showTopRowDialog) {
+        AlertDialog(
+            onDismissRequest = { showTopRowDialog = false },
+            title = { Text("Top row layout") },
+            text = {
+                Column {
+                    listOf(
+                        TopRowMode.EXTRA_LETTERS to "Extra letters (á, ǵ, ү, қ…)",
+                        TopRowMode.NUMBERS to "Numbers (1–9, 0) with long-press letters"
+                    ).forEach { (mode, label) ->
+                        ListItem(
+                            headlineContent = { Text(label) },
+                            leadingContent = {
+                                RadioButton(selected = topRowMode == mode, onClick = null)
+                            },
+                            modifier = Modifier.clickable {
+                                topRowMode = mode
+                                preferences.topRowMode = mode
+                            }
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showTopRowDialog = false }) { Text("OK") }
+            }
+        )
     }
 
     // Theme Selection Dialog
@@ -347,22 +373,19 @@ fun SettingsScreen(
             text = {
                 Column {
                     KeyboardThemes.getAllThemes().forEach { theme ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = selectedTheme == theme.name,
-                                onClick = {
-                                    selectedTheme = theme.name
-                                    preferences.selectedTheme = theme.name
-                                }
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(theme.name)
-                        }
+                        ListItem(
+                            headlineContent = { Text(theme.name) },
+                            leadingContent = {
+                                RadioButton(
+                                    selected = selectedTheme == theme.name,
+                                    onClick = null
+                                )
+                            },
+                            modifier = Modifier.clickable {
+                                selectedTheme = theme.name
+                                preferences.selectedTheme = theme.name
+                            }
+                        )
                     }
                 }
             },
@@ -372,55 +395,5 @@ fun SettingsScreen(
                 }
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ListItemVariants() {
-    LazyColumn(Modifier.background(Color.Black)) {
-        // Single-line ListItem
-        item {
-            ListItem(
-                headlineContent = { Text("Single line item") }
-            )
-        }
-
-        // Two-line ListItem
-        item {
-            ListItem(
-                headlineContent = { Text("Two line item") },
-                supportingContent = { Text("Supporting text") }
-            )
-        }
-
-        // Three-line ListItem
-        item {
-            ListItem(
-                headlineContent = { Text("Three line item") },
-                supportingContent = { Text("Supporting text that spans multiple lines") },
-                trailingContent = { Text("Trailing") }
-            )
-        }
-
-        item {
-            ListItem(
-                headlineContent = { Text("Settings") },
-                supportingContent = { Text("Customize your preferences") },
-                leadingContent = {
-                    Icon(
-                        painterResource(R.drawable.arrow_back_24px),
-                        contentDescription = "Settings",
-                        modifier = Modifier.size(40.dp)
-                    )
-                },
-                trailingContent = {
-                    Icon(
-                        painterResource(R.drawable.ic_arrow_right),
-                        contentDescription = "Navigate"
-                    )
-                }
-            )
-        }
     }
 }
