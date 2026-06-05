@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -32,7 +33,7 @@ fun QqKeyboard(
     val currentImeAction = viewModel.currentImeAction
 
     CompositionLocalProvider(
-        LocalKeyboardColors provides viewModel.currentTheme.colors,
+        LocalKeyboardColors provides viewModel.currentTheme.resolvedColors(isSystemInDarkTheme()),
         LocalKeyboardHeight provides viewModel.keyboardHeight,
         LocalKeyboardBorderEnabled provides viewModel.keyBorderEnabled,
     ) {

@@ -1,26 +1,21 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,30 +32,29 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
-import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onThemeSelectionClick: () -> Unit,
+    keyboardHeight: KeyboardHeight,
+    onKeyboardHeightClick: () -> Unit,
+    vibrationStrength: VibrationStrength,
+    onVibrationStrengthClick: () -> Unit,
+    topRowMode: TopRowMode,
+    onTopRowModeClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val preferences = remember { KeyboardPreferences(context) }
 
     var soundEnabled by remember { mutableStateOf(preferences.soundEnabled) }
     var vibrationEnabled by remember { mutableStateOf(preferences.vibrationEnabled) }
-    var vibrationStrength by remember { mutableStateOf(preferences.vibrationStrength) }
     var selectedTheme by remember { mutableStateOf(preferences.selectedTheme) }
-    var keyboardHeight by remember { mutableStateOf(preferences.keyboardHeight) }
     var keyBorderEnabled by remember { mutableStateOf(preferences.keyBorderEnabled) }
-    var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
     var autoCapEnabled by remember { mutableStateOf(preferences.autoCapEnabled) }
     var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
-    var showThemeDialog by remember { mutableStateOf(false) }
-    var showHeightDialog by remember { mutableStateOf(false) }
-    var showVibrationStrengthDialog by remember { mutableStateOf(false) }
-    var showTopRowDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -91,10 +85,7 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(0, 3),
                     trailingContent = {
-                        Switch(
-                            checked = autoCapEnabled,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = autoCapEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -107,10 +98,7 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(1, 3),
                     trailingContent = {
-                        Switch(
-                            checked = autoSpaceAfterPunctuation,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = autoSpaceAfterPunctuation, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -123,10 +111,7 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(2, 3),
                     trailingContent = {
-                        Switch(
-                            checked = doubleSpacePeriodEnabled,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = doubleSpacePeriodEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -137,20 +122,18 @@ fun SettingsScreen(
             // Appearance Settings
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
                 SegmentedListItem(
-                    onClick = {},
+                    onClick = onThemeSelectionClick,
                     shapes = ListItemDefaults.segmentedShapes(0, 4),
                     supportingContent = { Text(selectedTheme) },
                     trailingContent = {
-                        TextButton(onClick = { showThemeDialog = true }) {
-                            Text(stringResource(R.string.settings_change))
-                        }
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(stringResource(R.string.settings_theme))
                 }
                 SegmentedListItem(
-                    onClick = {},
+                    onClick = onKeyboardHeightClick,
                     shapes = ListItemDefaults.segmentedShapes(1, 4),
                     supportingContent = {
                         Text(
@@ -161,9 +144,7 @@ fun SettingsScreen(
                         )
                     },
                     trailingContent = {
-                        TextButton(onClick = { showHeightDialog = true }) {
-                            Text(stringResource(R.string.settings_change))
-                        }
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -176,17 +157,14 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(2, 4),
                     trailingContent = {
-                        Switch(
-                            checked = keyBorderEnabled,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = keyBorderEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(stringResource(R.string.settings_key_border))
                 }
                 SegmentedListItem(
-                    onClick = {},
+                    onClick = onTopRowModeClick,
                     shapes = ListItemDefaults.segmentedShapes(3, 4),
                     supportingContent = {
                         Text(
@@ -197,9 +175,7 @@ fun SettingsScreen(
                         )
                     },
                     trailingContent = {
-                        TextButton(onClick = { showTopRowDialog = true }) {
-                            Text(stringResource(R.string.settings_change))
-                        }
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -216,10 +192,7 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(0, 3),
                     trailingContent = {
-                        Switch(
-                            checked = soundEnabled,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = soundEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
@@ -232,17 +205,14 @@ fun SettingsScreen(
                     },
                     shapes = ListItemDefaults.segmentedShapes(1, 3),
                     trailingContent = {
-                        Switch(
-                            checked = vibrationEnabled,
-                            onCheckedChange = null
-                        )
+                        Switch(checked = vibrationEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(stringResource(R.string.settings_vibration))
                 }
                 SegmentedListItem(
-                    onClick = {},
+                    onClick = onVibrationStrengthClick,
                     shapes = ListItemDefaults.segmentedShapes(2, 3),
                     enabled = vibrationEnabled,
                     supportingContent = {
@@ -257,144 +227,17 @@ fun SettingsScreen(
                         )
                     },
                     trailingContent = {
-                        TextButton(
-                            onClick = { showVibrationStrengthDialog = true },
-                            enabled = vibrationEnabled
-                        ) {
-                            Text(stringResource(R.string.settings_change))
-                        }
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(
                         text = stringResource(R.string.settings_vibration_intensity),
-                        color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        color = if (vibrationEnabled) MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
                 }
             }
         }
-
-        // Keyboard Height Dialog
-        if (showHeightDialog) {
-            AlertDialog(
-                onDismissRequest = { showHeightDialog = false },
-                title = { Text(stringResource(R.string.settings_keyboard_height)) },
-                text = {
-                    Column {
-                        listOf(
-                            KeyboardHeight.SHORT to stringResource(R.string.settings_height_short),
-                            KeyboardHeight.DEFAULT to stringResource(R.string.settings_height_default)
-                        ).forEach { (height, label) ->
-                            ListItem(
-                                headlineContent = { Text(label) },
-                                leadingContent = {
-                                    RadioButton(selected = keyboardHeight == height, onClick = null)
-                                },
-                                modifier = Modifier.clickable {
-                                    keyboardHeight = height
-                                    preferences.keyboardHeight = height
-                                }
-                            )
-                        }
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = { showHeightDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
-                }
-            )
-        }
-    }
-
-    // Vibration Strength Dialog
-    if (showVibrationStrengthDialog) {
-        AlertDialog(
-            onDismissRequest = { showVibrationStrengthDialog = false },
-            title = { Text(stringResource(R.string.settings_vibration_intensity)) },
-            text = {
-                Column {
-                    listOf(
-                        VibrationStrength.LIGHT to stringResource(R.string.settings_vibration_light),
-                        VibrationStrength.MEDIUM to stringResource(R.string.settings_vibration_medium),
-                        VibrationStrength.STRONG to stringResource(R.string.settings_vibration_strong)
-                    ).forEach { (strength, label) ->
-                        ListItem(
-                            headlineContent = { Text(label) },
-                            leadingContent = {
-                                RadioButton(selected = vibrationStrength == strength, onClick = null)
-                            },
-                            modifier = Modifier.clickable {
-                                vibrationStrength = strength
-                                preferences.vibrationStrength = strength
-                            }
-                        )
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showVibrationStrengthDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
-            }
-        )
-    }
-
-    // Top Row Mode Dialog
-    if (showTopRowDialog) {
-        AlertDialog(
-            onDismissRequest = { showTopRowDialog = false },
-            title = { Text(stringResource(R.string.settings_top_row_layout)) },
-            text = {
-                Column {
-                    listOf(
-                        TopRowMode.EXTRA_LETTERS to stringResource(R.string.settings_top_row_extra_letters_desc),
-                        TopRowMode.NUMBERS to stringResource(R.string.settings_top_row_numbers_desc)
-                    ).forEach { (mode, label) ->
-                        ListItem(
-                            headlineContent = { Text(label) },
-                            leadingContent = {
-                                RadioButton(selected = topRowMode == mode, onClick = null)
-                            },
-                            modifier = Modifier.clickable {
-                                topRowMode = mode
-                                preferences.topRowMode = mode
-                            }
-                        )
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showTopRowDialog = false }) { Text(stringResource(R.string.dialog_ok)) }
-            }
-        )
-    }
-
-    // Theme Selection Dialog
-    if (showThemeDialog) {
-        AlertDialog(
-            onDismissRequest = { showThemeDialog = false },
-            title = { Text(stringResource(R.string.dialog_title_select_theme)) },
-            text = {
-                Column {
-                    KeyboardThemes.getAllThemes().forEach { theme ->
-                        ListItem(
-                            headlineContent = { Text(theme.name) },
-                            leadingContent = {
-                                RadioButton(
-                                    selected = selectedTheme == theme.name,
-                                    onClick = null
-                                )
-                            },
-                            modifier = Modifier.clickable {
-                                selectedTheme = theme.name
-                                preferences.selectedTheme = theme.name
-                            }
-                        )
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showThemeDialog = false }) {
-                    Text(stringResource(R.string.dialog_ok))
-                }
-            }
-        )
     }
 }

@@ -26,9 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,10 +39,9 @@ import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.ui.debug.KeyboardTestScreen
 import com.shagalalab.qqkeyboard.ui.settings.AboutScreen
 import com.shagalalab.qqkeyboard.ui.settings.HelpScreen
-import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
-private enum class Screen { Main, Settings, About, Help, TestKeyboard }
+private enum class Screen { Main, About, Help, TestKeyboard }
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -55,9 +54,6 @@ class MainActivity : ComponentActivity() {
                     var currentScreen by remember { mutableStateOf(Screen.Main) }
 
                     when (currentScreen) {
-                        Screen.Settings -> SettingsScreen(
-                            onBackClick = { currentScreen = Screen.Main }
-                        )
                         Screen.About -> AboutScreen(
                             onBackClick = { currentScreen = Screen.Main },
                             modifier = Modifier.padding(innerPadding)
@@ -71,7 +67,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         )
                         Screen.Main -> MainScreen(
-                            onSettingsClick = { currentScreen = Screen.Settings },
+                            onSettingsClick = { startActivity(Intent(this@MainActivity, SettingsActivity::class.java)) },
                             onAboutClick = { currentScreen = Screen.About },
                             onHelpClick = { currentScreen = Screen.Help },
                             onTestKeyboardClick = { currentScreen = Screen.TestKeyboard },

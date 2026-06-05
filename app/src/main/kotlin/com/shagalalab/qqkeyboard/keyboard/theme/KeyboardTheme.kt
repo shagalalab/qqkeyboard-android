@@ -12,14 +12,171 @@ data class KeyboardColors(
     val keyContent: Color,
     val modifierBackground: Color,
     val modifierContent: Color,
-    val pressedBackground: Color,
     val bubbleBackground: Color,
 )
 
-data class KeyboardTheme(
-    val name: String,
-    val colors: KeyboardColors,
-)
+enum class KeyboardThemes(val colors: KeyboardColors) {
+    Light(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFEBF0F3),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFC6CACC),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFEBF0F3),
+        )
+    ),
+    SystemAuto(colors = Light.colors),
+    Dark(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF1A1A1A),
+            keyBackground = Color(0xFF313233),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF252626),
+            modifierContent = Color(0xFFF7FCFF),
+            bubbleBackground = Color(0xFF3D3F40),
+        )
+    ),
+    Lavender(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFEEF0FF),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFDCE1FF),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFEEF0FF),
+        )
+    ),
+    Desert(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFF9EFE5),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFFADDBB),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFF9EFE5),
+        )
+    ),
+    Rose(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFFFE0EC),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFF5B8CC),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFFFE0EC),
+        )
+    ),
+    Mint(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFDDFAEB),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFA8DFBF),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFDDFAEB),
+        )
+    ),
+    Arctic(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFD9EEFF),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFA8D4F0),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFD9EEFF),
+        )
+    ),
+    Butter(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFFFFF8D6),
+            keyBackground = Color(0xFFFFFFFF),
+            keyContent = Color(0xFF000000),
+            modifierBackground = Color(0xFFF5DF8A),
+            modifierContent = Color(0xFF313233),
+            bubbleBackground = Color(0xFFFFF8D6),
+        )
+    ),
+    Sea(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF2A4077),
+            keyBackground = Color(0xFF435792),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF435792),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF2A4077),
+        )
+    ),
+    MidnightBlue(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF3C3D4F),
+            keyBackground = Color(0xFF5A5C6B),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF444B5B),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF3C3D4F),
+        )
+    ),
+    Forest(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF1E3A2A),
+            keyBackground = Color(0xFF2C4E3A),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF183020),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF1E3A2A),
+        )
+    ),
+    Mocha(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF2C1F1A),
+            keyBackground = Color(0xFF4A3028),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF221610),
+            modifierContent = Color(0xFFF7E8DF),
+            bubbleBackground = Color(0xFF2C1F1A),
+        )
+    ),
+    Purple(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF2A1F3D),
+            keyBackground = Color(0xFF3D2D5C),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF1F1530),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF2A1F3D),
+        )
+    ),
+    Burgundy(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF3D1A20),
+            keyBackground = Color(0xFF5C2830),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF2E1018),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF3D1A20),
+        )
+    ),
+    AMOLED(
+        colors = KeyboardColors(
+            keyboardBackground = Color(0xFF000000),
+            keyBackground = Color(0xFF1A1A1A),
+            keyContent = Color(0xFFFFFFFF),
+            modifierBackground = Color(0xFF111111),
+            modifierContent = Color(0xFFFFFFFF),
+            bubbleBackground = Color(0xFF000000),
+        )
+    );
+
+    fun resolvedColors(isDark: Boolean): KeyboardColors = when (this) {
+        SystemAuto -> if (isDark) Dark.colors else Light.colors
+        else -> colors
+    }
+
+    companion object {
+        fun getByName(name: String): KeyboardThemes = entries.firstOrNull { it.name == name } ?: Light
+    }
+}
 
 val LocalKeyboardColors = staticCompositionLocalOf { KeyboardThemes.Light.colors }
 val LocalKeyboardHeight = staticCompositionLocalOf { KeyboardHeight.DEFAULT }
@@ -28,66 +185,4 @@ val LocalKeyboardBorderEnabled = staticCompositionLocalOf { true }
 fun KeyboardHeight.toDp(): Dp = when (this) {
     KeyboardHeight.SHORT -> 40.dp
     KeyboardHeight.DEFAULT -> 48.dp
-}
-
-object KeyboardThemes {
-
-    val Light = KeyboardTheme(
-        name = "Light",
-        colors = KeyboardColors(
-            keyboardBackground = Color(0xFFEBF0F3),
-            keyBackground = Color(0xFFFFFFFF),
-            keyContent = Color(0xFF000000),
-            modifierBackground = Color(0xFFC4C9CC),
-            modifierContent = Color(0xBF000000),
-            pressedBackground = Color(0xFFEBF0F3),
-            bubbleBackground = Color(0xFFD1D6D9),
-        )
-    )
-
-    val Dark = KeyboardTheme(
-        name = "Dark",
-        colors = KeyboardColors(
-            keyboardBackground = Color(0xFF19191A),
-            keyBackground = Color(0xFF2E3133),
-            keyContent = Color(0xFFFFFFFF),
-            modifierBackground = Color(0xFF222426),
-            modifierContent = Color(0xBFFFFFFF),
-            pressedBackground = Color(0xFF19191A),
-            bubbleBackground = Color(0xFF2E3133),
-        )
-    )
-
-    val Amoled = KeyboardTheme(
-        name = "Amoled",
-        colors = KeyboardColors(
-            keyboardBackground = Color(0xFF000000),
-            keyBackground = Color(0xFF161616),
-            keyContent = Color(0xFFFFFFFF),
-            modifierBackground = Color(0xFF0A0A0A),
-            modifierContent = Color(0xFFAAAAAA),
-            pressedBackground = Color(0xFF0D47A1),
-            bubbleBackground = Color(0xFF222222),
-        )
-    )
-
-    val Ocean = KeyboardTheme(
-        name = "Ocean",
-        colors = KeyboardColors(
-            keyboardBackground = Color(0xFF0D2137),
-            keyBackground = Color(0xFF15304D),
-            keyContent = Color(0xFFCDE8FF),
-            modifierBackground = Color(0xFF0A1E30),
-            modifierContent = Color(0xFF8AB8D8),
-            pressedBackground = Color(0xFF005F9E),
-            bubbleBackground = Color(0xFF1D4A6E),
-        )
-    )
-
-    fun getByName(name: String): KeyboardTheme =
-        getAllThemes().firstOrNull { it.name == name } ?: Light
-
-    fun getDefaultTheme(): KeyboardTheme = Light
-
-    fun getAllThemes(): List<KeyboardTheme> = listOf(Light, Dark, Amoled, Ocean)
 }

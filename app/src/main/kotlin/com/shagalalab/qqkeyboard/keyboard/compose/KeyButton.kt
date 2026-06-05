@@ -75,7 +75,7 @@ fun KeyButton(
 
     val (backgroundColor, contentColor) = when {
         keyData.code == "SPACER" -> Pair(Color.Transparent, Color.Transparent)
-        isPressed -> Pair(colors.pressedBackground, colors.keyContent)
+        isPressed -> Pair(colors.keyboardBackground, colors.keyContent)
         keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Pair(colors.modifierBackground, colors.modifierContent)
         else -> Pair(colors.keyBackground, colors.keyContent)
     }
