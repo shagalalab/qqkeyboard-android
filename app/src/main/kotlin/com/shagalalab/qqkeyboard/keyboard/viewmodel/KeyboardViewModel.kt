@@ -72,10 +72,10 @@ class KeyboardViewModel : ViewModel() {
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
         private const val SUGGESTION_DEBOUNCE_MS = 100L
-        private val PUNCTUATION_AUTO_SPACE = setOf(“,”, “.”, “?”, “!”, “…”, “;”, “—“, “»”, “””, “)”)
-        private val WORD_SPLIT_REGEX = Regex(“””[\s.,!?;:()\[\]{}”'«»—–…]”””)
-        private val DEFAULT_SUGGESTIONS_LATIN = listOf(“Men”, “Sálem”, “Sen”)
-        private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf(“Мен”, “Сәлем”, “Сен”)
+        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
+        private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
+        private val DEFAULT_SUGGESTIONS_LATIN = listOf("Men", "Sálem", "Sen")
+        private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("Мен", "Сәлем", "Сен")
     }
 
     fun initialize(context: Context) {
@@ -132,7 +132,7 @@ class KeyboardViewModel : ViewModel() {
             }
         }
         updateShiftForCursor()
-        if (!isSuggestionsAllowed()) suggestions = emptyList()
+        if (!isSuggestionsAllowed()) suggestions = emptyList() else updateSuggestions()
     }
 
     fun onKeyPressed(key: String) {
