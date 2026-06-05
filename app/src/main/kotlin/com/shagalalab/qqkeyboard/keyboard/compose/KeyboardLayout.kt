@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 
 @Composable
 fun KeyboardLayout(
@@ -22,14 +22,10 @@ fun KeyboardLayout(
     shiftState: ShiftState = ShiftState.OFF,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-        // 4.dp = 2.dp left + 2.dp right from Column padding
-        // (maxKeysInRow - 1) * 2.dp = gaps between keys in the widest row
-        // Gaps between keys are now handled as inner visual padding in KeyButton (1dp each side),
-        // so no gap space is deducted here — touch areas tile flush across the full row width.
-        val standardKeyWidth = (maxWidth - 4.dp) / maxKeysInRow
+        val standardKeyWidth = (maxWidth - KeyboardDimensions.gridPadding * 2) / maxKeysInRow
         Column(
-            modifier = Modifier.fillMaxWidth().padding(2.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier.fillMaxWidth().padding(KeyboardDimensions.gridPadding),
+            verticalArrangement = Arrangement.spacedBy(KeyboardDimensions.rowGap)
         ) {
             rows.forEach { keyRow ->
                 KeyRow(

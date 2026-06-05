@@ -42,6 +42,7 @@ import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
@@ -149,7 +150,7 @@ fun KeyButton(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 2.dp)
+                .padding(horizontal = KeyboardDimensions.keyHorizontalPadding)
                 .clip(keyShape)
                 .background(backgroundColor),
             contentAlignment = Alignment.Center

@@ -14,10 +14,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
@@ -73,8 +73,8 @@ fun QqKeyboard(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(keyHeight * numRows + 4.dp * numRows + 4.dp)
-                    .padding(2.dp)
+                    .height(keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4)
+                    .padding(KeyboardDimensions.gridPadding)
             ) {
                 val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
                     row.map { keyData ->
