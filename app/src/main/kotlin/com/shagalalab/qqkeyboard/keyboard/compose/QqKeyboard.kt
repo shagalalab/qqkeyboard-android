@@ -73,7 +73,7 @@ fun QqKeyboard(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(keyHeight * numRows + 2.dp * (numRows + 2))
+                    .height(keyHeight * numRows + 4.dp * numRows + 4.dp)
                     .padding(2.dp)
             ) {
                 val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
