@@ -42,6 +42,7 @@ import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
+import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.theme.toDp
@@ -72,10 +73,12 @@ fun KeyButton(
     val keyShape = RoundedCornerShape(6.dp)
     val colors = LocalKeyboardColors.current
     val keyHeight = LocalKeyboardHeight.current.toDp()
+    val keyBackgroundEnabled = LocalKeyboardBorderEnabled.current
 
     val (backgroundColor, contentColor) = when {
         keyData.code == "SPACER" -> Pair(Color.Transparent, Color.Transparent)
-        isPressed -> Pair(colors.keyboardBackground, colors.keyContent)
+        isPressed -> Pair(if (keyBackgroundEnabled) colors.keyboardBackground else colors.keyBackground, colors.keyContent)
+        !keyBackgroundEnabled -> Pair(Color.Transparent, colors.keyContent)
         keyData.keyType == KeyType.MODIFIER || keyData.keyType == KeyType.ACTION -> Pair(colors.modifierBackground, colors.modifierContent)
         else -> Pair(colors.keyBackground, colors.keyContent)
     }

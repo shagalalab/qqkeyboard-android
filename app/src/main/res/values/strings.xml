@@ -50,7 +50,7 @@
     <string name="settings_keyboard_height">Keyboard height</string>
     <string name="settings_height_short">Short</string>
     <string name="settings_height_default">Default</string>
-    <string name="settings_key_border">Key border</string>
+    <string name="settings_key_border">Key background</string>
     <string name="settings_top_row_layout">Top row layout</string>
     <string name="settings_top_row_extra_letters">Extra letters</string>
     <string name="settings_top_row_numbers">Numbers</string>
