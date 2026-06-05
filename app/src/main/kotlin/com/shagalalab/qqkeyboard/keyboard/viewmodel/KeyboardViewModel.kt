@@ -74,8 +74,8 @@ class KeyboardViewModel : ViewModel() {
         private const val SUGGESTION_DEBOUNCE_MS = 100L
         private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
         private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
-        private val DEFAULT_SUGGESTIONS_LATIN = listOf("Men", "Sálem", "Sen")
-        private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("Мен", "Сәлем", "Сен")
+        private val DEFAULT_SUGGESTIONS_LATIN = listOf("men", "sálem", "sen")
+        private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("мен", "сәлем", "сен")
     }
 
     fun initialize(context: Context) {
