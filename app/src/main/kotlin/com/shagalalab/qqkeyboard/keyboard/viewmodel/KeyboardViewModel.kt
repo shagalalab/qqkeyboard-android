@@ -72,8 +72,10 @@ class KeyboardViewModel : ViewModel() {
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
         private const val SUGGESTION_DEBOUNCE_MS = 100L
-        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
-        private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
+        private val PUNCTUATION_AUTO_SPACE = setOf(“,”, “.”, “?”, “!”, “…”, “;”, “—“, “»”, “””, “)”)
+        private val WORD_SPLIT_REGEX = Regex(“””[\s.,!?;:()\[\]{}”'«»—–…]”””)
+        private val DEFAULT_SUGGESTIONS_LATIN = listOf(“Men”, “Sálem”, “Sen”)
+        private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf(“Мен”, “Сәлем”, “Сен”)
     }
 
     fun initialize(context: Context) {
@@ -369,8 +371,11 @@ class KeyboardViewModel : ViewModel() {
         suggestionJob = viewModelScope.launch {
             val results = if (word.isEmpty()) {
                 // No prefix being typed — show bigram predictions for last committed word
-                withContext(Dispatchers.IO) {
+                val bigrams = withContext(Dispatchers.IO) {
                     repository?.getBigramPredictions(lastCommittedWord, script) ?: emptyList()
+                }
+                bigrams.ifEmpty {
+                    if (script == "latin") DEFAULT_SUGGESTIONS_LATIN else DEFAULT_SUGGESTIONS_CYRILLIC
                 }
             } else {
                 delay(SUGGESTION_DEBOUNCE_MS)
