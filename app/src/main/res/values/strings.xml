@@ -45,6 +45,7 @@
     <string name="title_keyboard_settings">Keyboard Settings</string>
     <string name="settings_auto_cap">Auto-capitalization</string>
     <string name="settings_auto_space">Auto-space after punctuation</string>
+    <string name="settings_auto_remove_space">Auto-remove space before punctuation</string>
     <string name="settings_double_space_period">Double-space to period</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_keyboard_height">Keyboard height</string>

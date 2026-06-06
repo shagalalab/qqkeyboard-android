@@ -257,6 +257,11 @@ class KeyboardViewModel : ViewModel() {
                     } else {
                         key.kaaLowercase()
                     }
+                    if ((preferences?.autoRemoveSpaceBeforePunctuation ?: true) && textToCommit in PUNCTUATION_AUTO_SPACE) {
+                        if (ic.getTextBeforeCursor(1, 0)?.toString() == " ") {
+                            ic.deleteSurroundingText(1, 0)
+                        }
+                    }
                     ic.commitText(textToCommit, 1)
                     if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
                         ic.commitText(" ", 1)

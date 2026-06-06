@@ -54,6 +54,7 @@ fun SettingsScreen(
     var keyBorderEnabled by remember { mutableStateOf(preferences.keyBorderEnabled) }
     var autoCapEnabled by remember { mutableStateOf(preferences.autoCapEnabled) }
     var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
+    var autoRemoveSpaceBeforePunctuation by remember { mutableStateOf(preferences.autoRemoveSpaceBeforePunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
 
     Scaffold(
@@ -83,7 +84,7 @@ fun SettingsScreen(
                         autoCapEnabled = !autoCapEnabled
                         preferences.autoCapEnabled = autoCapEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(0, 3),
+                    shapes = ListItemDefaults.segmentedShapes(0, 4),
                     trailingContent = {
                         Switch(checked = autoCapEnabled, onCheckedChange = null)
                     },
@@ -96,7 +97,7 @@ fun SettingsScreen(
                         autoSpaceAfterPunctuation = !autoSpaceAfterPunctuation
                         preferences.autoSpaceAfterPunctuation = autoSpaceAfterPunctuation
                     },
-                    shapes = ListItemDefaults.segmentedShapes(1, 3),
+                    shapes = ListItemDefaults.segmentedShapes(1, 4),
                     trailingContent = {
                         Switch(checked = autoSpaceAfterPunctuation, onCheckedChange = null)
                     },
@@ -106,10 +107,23 @@ fun SettingsScreen(
                 }
                 SegmentedListItem(
                     onClick = {
+                        autoRemoveSpaceBeforePunctuation = !autoRemoveSpaceBeforePunctuation
+                        preferences.autoRemoveSpaceBeforePunctuation = autoRemoveSpaceBeforePunctuation
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(2, 4),
+                    trailingContent = {
+                        Switch(checked = autoRemoveSpaceBeforePunctuation, onCheckedChange = null)
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text(stringResource(R.string.settings_auto_remove_space))
+                }
+                SegmentedListItem(
+                    onClick = {
                         doubleSpacePeriodEnabled = !doubleSpacePeriodEnabled
                         preferences.doubleSpacePeriodEnabled = doubleSpacePeriodEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(2, 3),
+                    shapes = ListItemDefaults.segmentedShapes(3, 4),
                     trailingContent = {
                         Switch(checked = doubleSpacePeriodEnabled, onCheckedChange = null)
                     },

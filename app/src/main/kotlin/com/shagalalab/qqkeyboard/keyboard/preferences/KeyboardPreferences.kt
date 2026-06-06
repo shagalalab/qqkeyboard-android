@@ -75,6 +75,10 @@ class KeyboardPreferences(context: Context) {
         get() = prefs.getBoolean(KEY_AUTO_SPACE_PUNCTUATION, false)
         set(value) { prefs.edit { putBoolean(KEY_AUTO_SPACE_PUNCTUATION, value) } }
 
+    var autoRemoveSpaceBeforePunctuation: Boolean
+        get() = prefs.getBoolean(KEY_AUTO_REMOVE_SPACE_PUNCTUATION, true)
+        set(value) { prefs.edit { putBoolean(KEY_AUTO_REMOVE_SPACE_PUNCTUATION, value) } }
+
     var doubleSpacePeriodEnabled: Boolean
         get() = prefs.getBoolean(KEY_DOUBLE_SPACE_PERIOD, true)
         set(value) { prefs.edit { putBoolean(KEY_DOUBLE_SPACE_PERIOD, value) } }
@@ -142,6 +146,7 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_RECENT_EMOJIS = "recent_emojis"
         private const val KEY_AUTO_CAP = "auto_cap_enabled"
         private const val KEY_AUTO_SPACE_PUNCTUATION = "auto_space_punctuation"
+        private const val KEY_AUTO_REMOVE_SPACE_PUNCTUATION = "auto_remove_space_punctuation"
         private const val KEY_DOUBLE_SPACE_PERIOD = "double_space_period"
         private const val KEY_KEYBOARD_HEIGHT = "keyboard_height"
         private const val KEY_KEY_BORDER = "key_border_enabled"
