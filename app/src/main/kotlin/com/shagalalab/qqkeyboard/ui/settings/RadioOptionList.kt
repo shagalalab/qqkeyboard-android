@@ -1,8 +1,7 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -18,8 +17,8 @@ fun <T> RadioOptionList(
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
-        items(options) { option ->
+    Column(modifier = modifier) {
+        options.forEach { option ->
             ListItem(
                 headlineContent = { Text(option.label) },
                 supportingContent = option.description?.let { desc -> { Text(desc) } },

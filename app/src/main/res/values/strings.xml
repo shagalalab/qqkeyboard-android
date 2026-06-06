@@ -48,6 +48,7 @@
     <string name="settings_double_space_period">Double-space to period</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_keyboard_height">Keyboard height</string>
+    <string name="settings_preview">Preview</string>
     <string name="settings_height_short">Short</string>
     <string name="settings_height_default">Default</string>
     <string name="settings_key_border">Key background</string>
