@@ -1,15 +1,10 @@
 package com.shagalalab.qqkeyboard.ui.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -18,22 +13,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.shagalalab.qqkeyboard.R
-
-data class SelectionOption<T>(val value: T, val label: String, val description: String? = null)
+import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> OptionSelectionScreen(
-    title: String,
-    options: List<SelectionOption<T>>,
-    selectedValue: T,
-    onSelect: (T) -> Unit,
+fun TopRowModeScreen(
+    selectedValue: TopRowMode,
+    onSelect: (TopRowMode) -> Unit,
     onBackClick: () -> Unit,
 ) {
+    val options = listOf(
+        SelectionOption(
+            value = TopRowMode.EXTRA_LETTERS,
+            label = stringResource(R.string.settings_top_row_extra_letters),
+            description = stringResource(R.string.settings_top_row_extra_letters_desc),
+        ),
+        SelectionOption(
+            value = TopRowMode.NUMBERS,
+            label = stringResource(R.string.settings_top_row_numbers),
+            description = stringResource(R.string.settings_top_row_numbers_desc),
+        ),
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title) },
+                title = { Text(stringResource(R.string.settings_top_row_layout)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -45,21 +50,11 @@ fun <T> OptionSelectionScreen(
             )
         },
     ) { contentPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
-            items(options) { option ->
-                ListItem(
-                    headlineContent = { Text(option.label) },
-                    supportingContent = option.description?.let { desc -> { Text(desc) } },
-                    leadingContent = {
-                        RadioButton(selected = selectedValue == option.value, onClick = null)
-                    },
-                    modifier = Modifier.clickable { onSelect(option.value) }
-                )
-            }
-        }
+        RadioOptionList(
+            options = options,
+            selectedValue = selectedValue,
+            onSelect = onSelect,
+            modifier = Modifier.fillMaxSize().padding(contentPadding),
+        )
     }
 }
