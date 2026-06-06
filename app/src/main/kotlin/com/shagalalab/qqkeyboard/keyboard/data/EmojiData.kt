@@ -467,16 +467,15 @@ object EmojiData {
 
     fun getEmojisWithCategories(recentEmojis: List<String>): Map<Int, List<String>> {
         return linkedMapOf(
-            R.drawable.ic_clock_3 to recentEmojis,
-            R.drawable.ic_smile to emojiCategoryEmotions,
-            R.drawable.ic_person_standing to emojiCategoryPeople,
-            R.drawable.ic_cat to emojiCategoryAnimalsNature,
-            R.drawable.ic_coffee to emojiCategoryFoodDrink,
-            R.drawable.ic_plane to emojiCategoryTravelPlaces,
-            R.drawable.ic_drum to emojiCategoryActivity,
-            R.drawable.ic_shirt to emojiCategoryObjects,
-            R.drawable.ic_shapes to emojiCategorySymbols,
-            R.drawable.ic_flag to emojiCategoryFlags,
+            R.drawable.category_recent to recentEmojis,
+            R.drawable.category_smiley to emojiCategoryEmotions,
+            R.drawable.category_people to emojiCategoryPeople,
+            R.drawable.category_nature to emojiCategoryAnimalsNature,
+            R.drawable.category_food to emojiCategoryFoodDrink,
+            R.drawable.category_travel to emojiCategoryTravelPlaces,
+            R.drawable.category_activity to emojiCategoryActivity,
+            R.drawable.category_objects to emojiCategoryObjects+emojiCategorySymbols,
+            R.drawable.category_flags to emojiCategoryFlags,
         )
     }
 }

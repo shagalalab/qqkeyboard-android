@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,11 +37,11 @@ import com.shagalalab.qqkeyboard.keyboard.data.EmojiData
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import kotlinx.coroutines.launch
 
-const val COLLECTION_GRID_COLS_SIZE = 10
-private const val EMOJI_KEY_SIZE = 40
+const val COLLECTION_GRID_COLS_SIZE = 9
+private const val EMOJI_KEY_HEIGHT = 48
 private const val EMOJI_FONT_SIZE = 28
 private const val CATEGORY_ICON_SIZE = 24
-private const val CATEGORY_PADDING = 6
+private const val CATEGORY_VERTICAL_PADDING = 8
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -63,55 +62,52 @@ fun EmojiLayout(
     ) {
         // Category navigation row
         Row(
-            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).horizontalScroll(rememberScrollState()),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Close button
-            Box(
-                modifier = Modifier
-                    .clickable { onCloseEmojiLayout() }
-                    .padding(CATEGORY_PADDING.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.arrow_circle_left_24px),
-                    contentDescription = null,
-                    tint = colors.keyContent,
-                    modifier = Modifier.size((CATEGORY_ICON_SIZE + 8).dp)
-                )
-            }
-
             // Category icons
             categories.forEachIndexed { index, categoryIconResId ->
-                val isActive = pagerState.currentPage == index
+                val isActive = pagerState.targetPage == index
 
                 Box(
                     modifier = Modifier
-                        .clickable {
+                        .clickable(indication = null, interactionSource = null) {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(index)
                             }
                         }
-                        .padding(CATEGORY_PADDING.dp),
+                        .padding(vertical = CATEGORY_VERTICAL_PADDING.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Box(
-                        modifier = Modifier
-                            .size((CATEGORY_ICON_SIZE + 6).dp)
-                            .background(
-                                color = if (isActive) colors.modifierBackground else Color.Transparent,
-                                shape = CircleShape
-                            ),
+                        modifier = Modifier.size((CATEGORY_ICON_SIZE + 4).dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(categoryIconResId),
                             contentDescription = null,
-                            tint = colors.keyContent,
+                            tint = colors.keyContent.copy(alpha = if (isActive) 1f else 0.3f),
                             modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
                         )
                     }
                 }
+            }
+
+            // Close button
+            Box(
+                modifier = Modifier
+                    .background(colors.modifierBackground, CircleShape)
+                    .clickable { onCloseEmojiLayout() }
+                    .padding(4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.close_24px),
+                    contentDescription = null,
+                    tint = colors.keyContent,
+                    modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
+                )
             }
         }
 
@@ -126,7 +122,7 @@ fun EmojiLayout(
             EmojiCategoryPage(
                 emojis = emojis,
                 onKeyClick = onKeyClick,
-                isRecentCategory = categoryIcon == R.drawable.ic_clock_3
+                isRecentCategory = categoryIcon == R.drawable.category_recent
             )
         }
     }
@@ -162,7 +158,7 @@ private fun EmojiCategoryPage(
             ) { emoji ->
                 Box(
                     modifier = Modifier
-                        .height(EMOJI_KEY_SIZE.dp)
+                        .height(EMOJI_KEY_HEIGHT.dp)
                         .clickable(interactionSource = null, indication = null) { onKeyClick(emoji) },
                     contentAlignment = Alignment.Center,
                 ) {
