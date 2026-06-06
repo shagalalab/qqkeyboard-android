@@ -229,7 +229,7 @@ fun SettingsScreen(
                     trailingContent = {
                         Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
                     },
-                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer, disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer)
                 ) {
                     Text(
                         text = stringResource(R.string.settings_vibration_intensity),
