@@ -14,6 +14,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
@@ -44,14 +45,6 @@ fun QqKeyboard(
                 .fillMaxWidth()
                 .background(colors.keyboardBackground)
         ) {
-            if ((keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown) {
-                SuggestionStrip(
-                    suggestions = viewModel.suggestions,
-                    onSuggestionClick = viewModel::onSuggestionSelected,
-                    shiftState = viewModel.suggestionShiftState,
-                )
-            }
-
             val topRowMode = viewModel.topRowMode
             val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
                 KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
@@ -70,43 +63,63 @@ fun QqKeyboard(
                 else -> 10
             }
 
+            val showSuggestionStrip = (keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown
+            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4
+            val totalHeight = keyAreaHeight + if (showSuggestionStrip || keyboardState.isEmojiShown) KeyboardDimensions.suggestionStripHeight else 0.dp
+
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4)
-                    .padding(KeyboardDimensions.gridPadding)
+                    .height(totalHeight)
             ) {
-                val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
-                    row.map { keyData ->
-                        when (keyData.code) {
-                            "LAYOUT_SWITCH" -> keyData.copy(
-                                displayText = viewModel.getLayoutSwitchButtonText()
-                            )
+                Column(Modifier.fillMaxWidth()) {
+                    if (showSuggestionStrip) {
+                        SuggestionStrip(
+                            suggestions = viewModel.suggestions,
+                            onSuggestionClick = viewModel::onSuggestionSelected,
+                            shiftState = viewModel.suggestionShiftState,
+                        )
+                    }
 
-                            "123", "ABC", "€~\\" -> keyData.copy(
-                                displayText = keyData.code
-                            )
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(keyAreaHeight)
+                            .padding(KeyboardDimensions.gridPadding)
+                    ) {
+                        val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
+                            row.map { keyData ->
+                                when (keyData.code) {
+                                    "LAYOUT_SWITCH" -> keyData.copy(
+                                        displayText = viewModel.getLayoutSwitchButtonText()
+                                    )
 
-                            else -> keyData
+                                    "123", "ABC", "€~\\" -> keyData.copy(
+                                        displayText = keyData.code
+                                    )
+
+                                    else -> keyData
+                                }
+                            }
                         }
+
+                        KeyboardLayout(
+                            rows = updatedLayout,
+                            maxKeysInRow = maxKeysInRow,
+                            modifier = Modifier.fillMaxWidth(),
+                            onKeyClick = { key -> viewModel.onKeyPressed(key) },
+                            onKeyRepeat = { viewModel.onBackspaceRepeat() },
+                            onKeyLongPress = { key ->
+                                when (key) {
+                                    "SHIFT" -> viewModel.onShiftLongPress()
+                                    "BACKSPACE" -> viewModel.onBackspaceLongPress()
+                                    else -> viewModel.onKeyPressed(key)
+                                }
+                            },
+                            shiftState = keyboardState.shiftState,
+                        )
                     }
                 }
-
-                KeyboardLayout(
-                    rows = updatedLayout,
-                    maxKeysInRow = maxKeysInRow,
-                    modifier = Modifier.fillMaxWidth(),
-                    onKeyClick = { key -> viewModel.onKeyPressed(key) },
-                    onKeyRepeat = { viewModel.onBackspaceRepeat() },
-                    onKeyLongPress = { key ->
-                        when (key) {
-                            "SHIFT" -> viewModel.onShiftLongPress()
-                            "BACKSPACE" -> viewModel.onBackspaceLongPress()
-                            else -> viewModel.onKeyPressed(key)
-                        }
-                    },
-                    shiftState = keyboardState.shiftState,
-                )
 
                 if (keyboardState.isEmojiShown) {
                     EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)

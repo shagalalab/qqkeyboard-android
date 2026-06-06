@@ -102,7 +102,7 @@ enum class KeyboardThemes(val colors: KeyboardColors) {
             keyboardBackground = Color(0xFF2A4077),
             keyBackground = Color(0xFF435792),
             keyContent = Color(0xFFFFFFFF),
-            modifierBackground = Color(0xFF435792),
+            modifierBackground = Color(0xFF354B88),
             modifierContent = Color(0xFFFFFFFF),
             bubbleBackground = Color(0xFF2A4077),
         )

@@ -16,11 +16,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercaseChar
-
-private val STRIP_HEIGHT = 40.dp
 
 @Composable
 fun SuggestionStrip(
@@ -34,7 +33,7 @@ fun SuggestionStrip(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(STRIP_HEIGHT)
+            .height(KeyboardDimensions.suggestionStripHeight)
             .background(colors.keyboardBackground),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
@@ -52,7 +51,7 @@ fun SuggestionStrip(
                     .clickable { onSuggestionClick(displayText) }
                     .padding(horizontal = 8.dp, vertical = 8.dp),
                 color = colors.keyContent,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
