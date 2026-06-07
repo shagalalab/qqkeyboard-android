@@ -1,6 +1,7 @@
 package com.shagalalab.qqkeyboard.keyboard.model
 
 import android.view.inputmethod.EditorInfo
+import androidx.compose.runtime.Immutable
 import com.shagalalab.qqkeyboard.R
 
 enum class KeyType {
@@ -11,6 +12,7 @@ enum class KeyType {
     LAYOUT_SWITCH
 }
 
+@Immutable
 data class KeyData(
     val code: String,
     val displayText: String = "",
