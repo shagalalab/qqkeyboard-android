@@ -54,6 +54,9 @@ class KeyboardViewModel : ViewModel() {
     var keyBorderEnabled by mutableStateOf(true)
         private set
 
+    var suggestionStripEnabled by mutableStateOf(true)
+        private set
+
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
@@ -93,6 +96,7 @@ class KeyboardViewModel : ViewModel() {
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
         keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
         keyBorderEnabled = preferences?.keyBorderEnabled ?: true
+        suggestionStripEnabled = preferences?.suggestionStripEnabled ?: true
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -235,7 +239,6 @@ class KeyboardViewModel : ViewModel() {
                 "123" -> {
                     switchToLayout(KeyboardLayout.NUMERIC)
                     feedbackManager?.playKeyPressFeedback()
-                    suggestions = emptyList()
                 }
                 "ABC" -> {
                     switchToLastLanguage()
@@ -249,7 +252,6 @@ class KeyboardViewModel : ViewModel() {
                 "€~\\" -> {
                     switchToLayout(KeyboardLayout.SYMBOLIC)
                     feedbackManager?.playKeyPressFeedback()
-                    suggestions = emptyList()
                 }
                 else -> {
                     val textToCommit = if (keyboardState.shouldShowUpperCase) {
@@ -336,6 +338,7 @@ class KeyboardViewModel : ViewModel() {
     }
 
     private fun isSuggestionsAllowed(): Boolean {
+        if (!suggestionStripEnabled) return false
         val info = editorInfo ?: return true
         val variation = info.inputType and InputType.TYPE_MASK_VARIATION
         if (variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
