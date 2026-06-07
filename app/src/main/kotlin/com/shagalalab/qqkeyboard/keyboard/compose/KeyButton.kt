@@ -53,6 +53,7 @@ import kotlinx.coroutines.delay
 private const val REPEAT_INTERVAL_DELAY_MS = 50L
 private const val BUBBLE_DISMISS_MS = 500L
 private val BUBBLE_SHAPE = RoundedCornerShape(8.dp)
+private val KEY_SHAPE = RoundedCornerShape(6.dp)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -71,7 +72,6 @@ fun KeyButton(
     var showBubble by remember { mutableStateOf(false) }
     var bubbleLabel by remember { mutableStateOf("") }
 
-    val keyShape = RoundedCornerShape(6.dp)
     val colors = LocalKeyboardColors.current
     val keyHeight = LocalKeyboardHeight.current.toDp()
     val keyBackgroundEnabled = LocalKeyboardBorderEnabled.current
@@ -151,7 +151,7 @@ fun KeyButton(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = KeyboardDimensions.keyHorizontalPadding)
-                .clip(keyShape)
+                .clip(KEY_SHAPE)
                 .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {

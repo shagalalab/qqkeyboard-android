@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +51,8 @@ fun EmojiLayout(
     onCloseEmojiLayout: () -> Unit,
     recentEmojis: List<String> = emptyList()
 ) {
-    val categories = EmojiData.getEmojisWithCategories(recentEmojis).keys.toList()
+    val emojiMap = remember(recentEmojis) { EmojiData.getEmojisWithCategories(recentEmojis) }
+    val categories = remember(emojiMap) { emojiMap.keys.toList() }
     val pagerState = rememberPagerState(pageCount = { categories.size })
     val coroutineScope = rememberCoroutineScope()
     val colors = LocalKeyboardColors.current
@@ -117,7 +119,7 @@ fun EmojiLayout(
             modifier = Modifier.fillMaxSize()
         ) { page ->
             val categoryIcon = categories[page]
-            val emojis = EmojiData.getEmojisWithCategories(recentEmojis)[categoryIcon] ?: emptyList()
+            val emojis = emojiMap[categoryIcon] ?: emptyList()
 
             EmojiCategoryPage(
                 emojis = emojis,

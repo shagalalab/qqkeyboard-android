@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
@@ -47,17 +48,29 @@ fun QqKeyboard(
                 .background(colors.keyboardBackground)
         ) {
             val topRowMode = viewModel.topRowMode
-            val keyboardLayout: List<List<KeyData>> = when (keyboardState.layout) {
-                KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
-                KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
-                KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
-                KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
-                KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
-                KeyboardLayout.NUMBER_PASSWORD -> KeyboardMappings.getNumberPasswordLayout(currentImeAction)
-                KeyboardLayout.PHONE -> KeyboardMappings.getPhoneLayout(currentImeAction)
+            val switchButtonText = viewModel.getLayoutSwitchButtonText()
+            val updatedLayout = remember(keyboardState.layout, topRowMode, currentImeAction, switchButtonText) {
+                val baseLayout = when (keyboardState.layout) {
+                    KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
+                    KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
+                    KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
+                    KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
+                    KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
+                    KeyboardLayout.NUMBER_PASSWORD -> KeyboardMappings.getNumberPasswordLayout(currentImeAction)
+                    KeyboardLayout.PHONE -> KeyboardMappings.getPhoneLayout(currentImeAction)
+                }
+                baseLayout.map { row ->
+                    row.map { keyData ->
+                        when (keyData.code) {
+                            "LAYOUT_SWITCH" -> keyData.copy(displayText = switchButtonText)
+                            "123", "ABC", "€~\\" -> keyData.copy(displayText = keyData.code)
+                            else -> keyData
+                        }
+                    }
+                }
             }
 
-            val numRows = keyboardLayout.size
+            val numRows = updatedLayout.size
             val maxKeysInRow = when (keyboardState.layout) {
                 KeyboardLayout.CYRILLIC -> 11
                 KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE -> 4
@@ -88,22 +101,6 @@ fun QqKeyboard(
                             .height(keyAreaHeight)
                             .padding(KeyboardDimensions.gridPadding)
                     ) {
-                        val updatedLayout: List<List<KeyData>> = keyboardLayout.map { row ->
-                            row.map { keyData ->
-                                when (keyData.code) {
-                                    "LAYOUT_SWITCH" -> keyData.copy(
-                                        displayText = viewModel.getLayoutSwitchButtonText()
-                                    )
-
-                                    "123", "ABC", "€~\\" -> keyData.copy(
-                                        displayText = keyData.code
-                                    )
-
-                                    else -> keyData
-                                }
-                            }
-                        }
-
                         KeyboardLayout(
                             rows = updatedLayout,
                             maxKeysInRow = maxKeysInRow,
