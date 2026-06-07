@@ -77,9 +77,9 @@ fun QqKeyboard(
                 else -> 10
             }
 
-            val showSuggestionStrip = (keyboardState.layout == KeyboardLayout.LATIN || keyboardState.layout == KeyboardLayout.CYRILLIC) && !keyboardState.isEmojiShown
+            val showSuggestionStrip = viewModel.suggestionStripEnabled && !keyboardState.isEmojiShown
             val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4
-            val totalHeight = keyAreaHeight + if (showSuggestionStrip || keyboardState.isEmojiShown) KeyboardDimensions.suggestionStripHeight else 0.dp
+            val totalHeight = keyAreaHeight + if (viewModel.suggestionStripEnabled) KeyboardDimensions.suggestionStripHeight else 0.dp
 
             Box(
                 Modifier

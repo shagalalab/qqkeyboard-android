@@ -56,6 +56,7 @@ fun SettingsScreen(
     var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
     var autoRemoveSpaceBeforePunctuation by remember { mutableStateOf(preferences.autoRemoveSpaceBeforePunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
+    var suggestionStripEnabled by remember { mutableStateOf(preferences.suggestionStripEnabled) }
 
     Scaffold(
         topBar = {
@@ -137,7 +138,7 @@ fun SettingsScreen(
             Column(verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
                 SegmentedListItem(
                     onClick = onThemeSelectionClick,
-                    shapes = ListItemDefaults.segmentedShapes(0, 4),
+                    shapes = ListItemDefaults.segmentedShapes(0, 5),
                     supportingContent = { Text(selectedTheme) },
                     trailingContent = {
                         Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
@@ -147,8 +148,21 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_theme))
                 }
                 SegmentedListItem(
+                    onClick = {
+                        suggestionStripEnabled = !suggestionStripEnabled
+                        preferences.suggestionStripEnabled = suggestionStripEnabled
+                    },
+                    shapes = ListItemDefaults.segmentedShapes(1, 5),
+                    trailingContent = {
+                        Switch(checked = suggestionStripEnabled, onCheckedChange = null)
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text(stringResource(R.string.settings_suggestion_strip))
+                }
+                SegmentedListItem(
                     onClick = onKeyboardHeightClick,
-                    shapes = ListItemDefaults.segmentedShapes(1, 4),
+                    shapes = ListItemDefaults.segmentedShapes(2, 5),
                     supportingContent = {
                         Text(
                             when (keyboardHeight) {
@@ -169,7 +183,7 @@ fun SettingsScreen(
                         keyBorderEnabled = !keyBorderEnabled
                         preferences.keyBorderEnabled = keyBorderEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(2, 4),
+                    shapes = ListItemDefaults.segmentedShapes(3, 5),
                     trailingContent = {
                         Switch(checked = keyBorderEnabled, onCheckedChange = null)
                     },
@@ -179,7 +193,7 @@ fun SettingsScreen(
                 }
                 SegmentedListItem(
                     onClick = onTopRowModeClick,
-                    shapes = ListItemDefaults.segmentedShapes(3, 4),
+                    shapes = ListItemDefaults.segmentedShapes(4, 5),
                     supportingContent = {
                         Text(
                             when (topRowMode) {
