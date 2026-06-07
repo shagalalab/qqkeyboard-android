@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -62,58 +64,13 @@ fun EmojiLayout(
             .fillMaxSize()
             .background(colors.keyboardBackground)
     ) {
-        // Category navigation row
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).horizontalScroll(rememberScrollState()),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Category icons
-            categories.forEachIndexed { index, categoryIconResId ->
-                val isActive = pagerState.targetPage == index
+        CategoryNavigationRow(
+            categories = categories,
+            pagerState = pagerState,
+            onCategoryClick = { index -> coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+            onClose = onCloseEmojiLayout,
+        )
 
-                Box(
-                    modifier = Modifier
-                        .clickable(indication = null, interactionSource = null) {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        }
-                        .padding(vertical = CATEGORY_VERTICAL_PADDING.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Box(
-                        modifier = Modifier.size((CATEGORY_ICON_SIZE + 4).dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(categoryIconResId),
-                            contentDescription = null,
-                            tint = colors.keyContent.copy(alpha = if (isActive) 1f else 0.3f),
-                            modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
-                        )
-                    }
-                }
-            }
-
-            // Close button
-            Box(
-                modifier = Modifier
-                    .background(colors.modifierBackground, CircleShape)
-                    .clickable { onCloseEmojiLayout() }
-                    .padding(4.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.close_24px),
-                    contentDescription = null,
-                    tint = colors.keyContent,
-                    modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
-                )
-            }
-        }
-
-        // Horizontal pager for emoji categories
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
@@ -125,6 +82,80 @@ fun EmojiLayout(
                 emojis = emojis,
                 onKeyClick = onKeyClick,
                 isRecentCategory = categoryIcon == R.drawable.category_recent
+            )
+        }
+    }
+}
+
+// Isolated into its own composable so that pagerState.targetPage reads — which fire on every
+// scroll frame — only recompose the row, not EmojiLayout and the HorizontalPager below it.
+@Composable
+private fun CategoryNavigationRow(
+    categories: List<Int>,
+    pagerState: PagerState,
+    onCategoryClick: (Int) -> Unit,
+    onClose: () -> Unit,
+) {
+    val colors = LocalKeyboardColors.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .horizontalScroll(rememberScrollState()),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        categories.forEachIndexed { index, categoryIconResId ->
+            // pagerState.targetPage is read here — CategoryNavigationRow is the recompose scope,
+            // so only this row reruns per frame, not EmojiLayout.
+            CategoryIcon(
+                iconResId = categoryIconResId,
+                isActive = pagerState.targetPage == index,
+                iconColor = colors.keyContent,
+                onClick = { onCategoryClick(index) },
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .background(colors.modifierBackground, CircleShape)
+                .clickable { onClose() }
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.close_24px),
+                contentDescription = null,
+                tint = colors.keyContent,
+                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
+            )
+        }
+    }
+}
+
+// Extracted so icons whose isActive hasn't changed can skip recomposition while the row reruns.
+@Composable
+private fun CategoryIcon(
+    iconResId: Int,
+    isActive: Boolean,
+    iconColor: Color,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .clickable(indication = null, interactionSource = null, onClick = onClick)
+            .padding(vertical = CATEGORY_VERTICAL_PADDING.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier.size((CATEGORY_ICON_SIZE + 4).dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(iconResId),
+                contentDescription = null,
+                tint = iconColor.copy(alpha = if (isActive) 1f else 0.3f),
+                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
             )
         }
     }
