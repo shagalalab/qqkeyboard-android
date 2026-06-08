@@ -75,7 +75,8 @@ class KeyboardViewModel : ViewModel() {
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
         private const val SUGGESTION_DEBOUNCE_MS = 100L
-        private val PUNCTUATION_AUTO_SPACE = setOf(",", ".", "?", "!", "…", ";", "—", "»", "”", ")")
+        private val PUNCTUATION_BEFORE_SPACE = setOf(",", ".", "?", "!", "…", ";", ":", "»", "”", ")")
+        private val PUNCTUATION_AUTO_SPACE = PUNCTUATION_BEFORE_SPACE + setOf("—")
         private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
         private val DEFAULT_SUGGESTIONS_LATIN = listOf("men", "sálem", "sen")
         private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("мен", "сәлем", "сен")
@@ -259,7 +260,7 @@ class KeyboardViewModel : ViewModel() {
                     } else {
                         key.kaaLowercase()
                     }
-                    if ((preferences?.autoRemoveSpaceBeforePunctuation ?: true) && textToCommit in PUNCTUATION_AUTO_SPACE) {
+                    if ((preferences?.autoRemoveSpaceBeforePunctuation ?: true) && textToCommit in PUNCTUATION_BEFORE_SPACE) {
                         if (ic.getTextBeforeCursor(1, 0)?.toString() == " ") {
                             ic.deleteSurroundingText(1, 0)
                         }
