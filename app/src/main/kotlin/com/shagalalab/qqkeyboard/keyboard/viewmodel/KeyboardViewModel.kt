@@ -57,6 +57,9 @@ class KeyboardViewModel : ViewModel() {
     var suggestionStripEnabled by mutableStateOf(true)
         private set
 
+    var isPasswordField by mutableStateOf(false)
+        private set
+
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
@@ -113,9 +116,15 @@ class KeyboardViewModel : ViewModel() {
         val newImeAction = info?.let { it.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION) }
         currentImeAction = newImeAction
 
-        if (info != null) {
+        if (info == null) {
+            isPasswordField = false
+        } else {
             val inputClass = info.inputType and InputType.TYPE_MASK_CLASS
             val inputVariation = info.inputType and InputType.TYPE_MASK_VARIATION
+            isPasswordField = inputVariation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+                inputVariation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
+                inputVariation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD ||
+                inputVariation == InputType.TYPE_NUMBER_VARIATION_PASSWORD
             val specialLayout = when (inputClass) {
                 InputType.TYPE_CLASS_PHONE -> KeyboardLayout.PHONE
                 InputType.TYPE_CLASS_NUMBER -> when (inputVariation) {
