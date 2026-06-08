@@ -60,6 +60,9 @@ class KeyboardViewModel : ViewModel() {
     var isPasswordField by mutableStateOf(false)
         private set
 
+    var bottomRowCommaKey by mutableStateOf(",")
+        private set
+
     var suggestions by mutableStateOf<List<String>>(emptyList())
         private set
 
@@ -118,6 +121,7 @@ class KeyboardViewModel : ViewModel() {
 
         if (info == null) {
             isPasswordField = false
+            bottomRowCommaKey = ","
         } else {
             val inputClass = info.inputType and InputType.TYPE_MASK_CLASS
             val inputVariation = info.inputType and InputType.TYPE_MASK_VARIATION
@@ -125,6 +129,12 @@ class KeyboardViewModel : ViewModel() {
                 inputVariation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
                 inputVariation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD ||
                 inputVariation == InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            bottomRowCommaKey = when (inputVariation) {
+                InputType.TYPE_TEXT_VARIATION_URI -> "/"
+                InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
+                InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS -> "@"
+                else -> ","
+            }
             val specialLayout = when (inputClass) {
                 InputType.TYPE_CLASS_PHONE -> KeyboardLayout.PHONE
                 InputType.TYPE_CLASS_NUMBER -> when (inputVariation) {

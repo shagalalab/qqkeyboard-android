@@ -52,7 +52,8 @@ fun QqKeyboard(
         ) {
             val topRowMode = viewModel.topRowMode
             val switchButtonText = viewModel.getLayoutSwitchButtonText()
-            val updatedLayout = remember(keyboardState.layout, topRowMode, currentImeAction, switchButtonText) {
+            val bottomRowCommaKey = viewModel.bottomRowCommaKey
+            val updatedLayout = remember(keyboardState.layout, topRowMode, currentImeAction, switchButtonText, bottomRowCommaKey) {
                 val baseLayout = when (keyboardState.layout) {
                     KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
                     KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
@@ -67,6 +68,7 @@ fun QqKeyboard(
                         when (keyData.code) {
                             "LAYOUT_SWITCH" -> keyData.copy(displayText = switchButtonText)
                             "123", "ABC", "€~\\" -> keyData.copy(displayText = keyData.code)
+                            "," -> keyData.copy(code = bottomRowCommaKey, displayText = bottomRowCommaKey)
                             else -> keyData
                         }
                     }
