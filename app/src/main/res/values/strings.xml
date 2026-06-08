@@ -25,7 +25,7 @@
     <string name="about_developer_name">Shagala Lab</string>
     <string name="about_view_on_github">View on GitHub</string>
     <string name="about_features_title">Features</string>
-    <string name="about_features_list">• Latin and Cyrillic Karakalpak layouts\n• Emoji panel with recent emoji tracking\n• Auto-capitalization after sentences\n• Double-space converts to period\n• Double-tap Shift for Caps Lock\n• Haptic and sound feedback</string>
+    <string name="about_features_list">• Latin and Cyrillic Karakalpak layouts\n• Word suggestions with personal learning\n• Emoji panel with recent emoji tracking\n• Auto-capitalization after sentences\n• Double-space converts to period\n• Double-tap Shift for Caps Lock\n• Haptic and sound feedback</string>
 
     <!-- Help Screen -->
     <string name="title_help">Help</string>
@@ -37,9 +37,18 @@
     <string name="help_step2_description">Tap the keyboard icon in the navigation bar while typing, or use the button below.</string>
     <string name="help_switch_default_keyboard">Switch Default Keyboard</string>
     <string name="help_using_keyboard_title">Using the Keyboard</string>
-    <string name="help_using_keyboard_description">Switch layout — Tap the QQ / ҚҚ button in the bottom-left corner to toggle between Latin and Cyrillic scripts.\n\nShift — Tap once for one uppercase letter. Double-tap to enable Caps Lock. Tap again to turn Caps Lock off.\n\nNumbers &amp; symbols — Tap the 123 button. Tap ABC to return to letters.\n\nEmoji — Tap the smiley face button to open the emoji panel.\n\nDouble-space — Automatically inserts a period followed by a space, useful for ending sentences quickly.</string>
+    <string name="help_using_keyboard_description">Switch layout — Tap the QQ / ҚҚ button in the bottom-left corner to toggle between Latin and Cyrillic scripts.\n\nShift — Tap once for one uppercase letter. Double-tap or long-press to enable Caps Lock. Tap again to turn Caps Lock off.\n\nNumbers &amp; symbols — Tap the 123 button to switch to numbers and symbols. Tap ABC to return to letters.\n\nEmoji — Tap the smiley face button to open the emoji panel.\n\nSuggestions — Word suggestions appear in the strip above the keyboard as you type. Tap a suggestion to insert it.\n\nDouble-space — When enabled, double-tapping Space inserts a period and space to end a sentence quickly.</string>
     <string name="help_tips_title">Tips</string>
-    <string name="help_tips_description">• The keyboard remembers which layout (Latin or Cyrillic) you last used.\n\n• The first letter of a new sentence is automatically capitalized.\n\n• Hold Backspace to delete characters continuously.\n\n• Recently used emojis appear in the Recent tab of the emoji panel.</string>
+    <string name="help_tips_description">• The keyboard remembers which layout (Latin or Cyrillic) you last used.\n\n• When Auto-capitalization is enabled, the first letter of a new sentence is automatically capitalized.\n\n• Hold Backspace to delete characters continuously.\n\n• Recently used emojis appear in the Recent tab of the emoji panel.\n\n• The suggestion strip learns from your word choices over time to improve future suggestions.</string>
+
+    <!-- Help Screen — Settings section -->
+    <string name="help_settings_title">Settings</string>
+    <string name="help_settings_input_title">Input</string>
+    <string name="help_settings_input_description">Auto-capitalization — Automatically capitalizes the first letter after sentence-ending punctuation (., !, ?).\n\nAuto-space after punctuation — Adds a space automatically after you type certain punctuation marks.\n\nAuto-remove space before punctuation — Removes any trailing space when you type punctuation, so there is no unwanted space before it.\n\nDouble-space to period — Double-tapping Space converts the double space into a period and space, making it easy to end sentences.</string>
+    <string name="help_settings_appearance_title">Appearance</string>
+    <string name="help_settings_appearance_description">Theme — Choose the keyboard color theme.\n\nSuggestions — Shows a word suggestion strip above the keyboard. Tap a suggestion to insert it instantly. Not shown for password fields.\n\nKeyboard height — Choose between Default and Short key rows.\n\nKey background — Show or hide individual key backgrounds.\n\nTop row layout — Choose whether the top row shows extra language-specific letters (e.g. á, ǵ, ú, ń) or numbers (1–9, 0) with long-press for the corresponding letters.</string>
+    <string name="help_settings_feedback_title">Sound &amp; Feedback</string>
+    <string name="help_settings_feedback_description">Key press sound — Plays a click sound on each key press.\n\nVibration — Vibrates on each key press.\n\nVibration intensity — Adjusts the vibration strength: Light, Medium, or Strong. Only available when Vibration is enabled.</string>
 
     <!-- Settings Screen -->
     <string name="title_keyboard_settings">Keyboard Settings</string>

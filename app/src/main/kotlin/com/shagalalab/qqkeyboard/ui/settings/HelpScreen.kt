@@ -5,8 +5,8 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -94,6 +94,21 @@ fun HelpScreen(
                         stringResource(R.string.help_using_keyboard_description),
                         style = MaterialTheme.typography.bodyMedium
                     )
+                }
+            }
+
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.help_settings_title), style = MaterialTheme.typography.titleMedium)
+
+                    Text(stringResource(R.string.help_settings_input_title), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.help_settings_input_description), style = MaterialTheme.typography.bodyMedium)
+
+                    Text(stringResource(R.string.help_settings_appearance_title), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.help_settings_appearance_description), style = MaterialTheme.typography.bodyMedium)
+
+                    Text(stringResource(R.string.help_settings_feedback_title), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.help_settings_feedback_description), style = MaterialTheme.typography.bodyMedium)
                 }
             }
 
