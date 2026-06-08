@@ -65,7 +65,6 @@ object KeyboardMappings {
                 KeyData.character(",", ","),
                 KeyData.layoutSwitch(R.drawable.layout_switch_to_cyr),
                 KeyData.space(),
-                KeyData.emojiSwitch(),
                 KeyData.character(".", "."),
                 KeyData.enterDynamic(imeAction)
             )
@@ -151,7 +150,6 @@ object KeyboardMappings {
                 KeyData.character(",", ","),
                 KeyData.layoutSwitch(R.drawable.layout_switch_to_lat),
                 KeyData.space(),
-                KeyData.emojiSwitch(),
                 KeyData.character(".", "."),
                 KeyData.enterDynamic(imeAction),
             )

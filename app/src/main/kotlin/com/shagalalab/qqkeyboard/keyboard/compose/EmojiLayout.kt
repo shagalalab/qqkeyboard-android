@@ -20,7 +20,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,7 +49,6 @@ private const val CATEGORY_VERTICAL_PADDING = 8
 @Composable
 fun EmojiLayout(
     onKeyClick: (String) -> Unit,
-    onCloseEmojiLayout: () -> Unit,
     recentEmojis: List<String> = emptyList()
 ) {
     val emojiMap = remember(recentEmojis) { EmojiData.getEmojisWithCategories(recentEmojis) }
@@ -68,7 +66,6 @@ fun EmojiLayout(
             categories = categories,
             pagerState = pagerState,
             onCategoryClick = { index -> coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-            onClose = onCloseEmojiLayout,
         )
 
         HorizontalPager(
@@ -94,7 +91,6 @@ private fun CategoryNavigationRow(
     categories: List<Int>,
     pagerState: PagerState,
     onCategoryClick: (Int) -> Unit,
-    onClose: () -> Unit,
 ) {
     val colors = LocalKeyboardColors.current
     Row(
@@ -113,21 +109,6 @@ private fun CategoryNavigationRow(
                 isActive = pagerState.targetPage == index,
                 iconColor = colors.keyContent,
                 onClick = { onCategoryClick(index) },
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .background(colors.modifierBackground, CircleShape)
-                .clickable { onClose() }
-                .padding(4.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.close_24px),
-                contentDescription = null,
-                tint = colors.keyContent,
-                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
             )
         }
     }
