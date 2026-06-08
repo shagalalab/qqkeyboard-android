@@ -135,6 +135,12 @@ class KeyboardViewModel : ViewModel() {
                 InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS -> "@"
                 else -> ","
             }
+            if (inputVariation == InputType.TYPE_TEXT_VARIATION_URI ||
+                inputVariation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS ||
+                inputVariation == InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
+            ) {
+                keyboardState = keyboardState.switchToLayout(KeyboardLayout.LATIN)
+            }
             val specialLayout = when (inputClass) {
                 InputType.TYPE_CLASS_PHONE -> KeyboardLayout.PHONE
                 InputType.TYPE_CLASS_NUMBER -> when (inputVariation) {
