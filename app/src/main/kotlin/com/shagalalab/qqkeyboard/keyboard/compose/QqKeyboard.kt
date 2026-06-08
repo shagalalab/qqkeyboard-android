@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -20,6 +21,7 @@ import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardFontFamily
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardHeight
@@ -38,6 +40,7 @@ fun QqKeyboard(
         LocalKeyboardColors provides viewModel.currentTheme.resolvedColors(isSystemInDarkTheme()),
         LocalKeyboardHeight provides viewModel.keyboardHeight,
         LocalKeyboardBorderEnabled provides viewModel.keyBorderEnabled,
+        LocalTextStyle provides LocalTextStyle.current.copy(fontFamily = KeyboardFontFamily),
     ) {
         val colors = LocalKeyboardColors.current
         val keyHeight = LocalKeyboardHeight.current.toDp()
