@@ -58,6 +58,7 @@
     <string name="settings_double_space_period">Double-space to period</string>
     <string name="settings_suggestion_strip">Suggestions</string>
     <string name="settings_theme">Theme</string>
+    <string name="settings_select_theme">Select Theme</string>
     <string name="settings_keyboard_height">Keyboard height</string>
     <string name="settings_preview">Preview</string>
     <string name="settings_height_short">Short</string>
@@ -74,5 +75,4 @@
     <string name="settings_vibration_light">Light</string>
     <string name="settings_vibration_medium">Medium</string>
     <string name="settings_vibration_strong">Strong</string>
-    <string name="dialog_title_select_theme">Select Theme</string>
 </resources>

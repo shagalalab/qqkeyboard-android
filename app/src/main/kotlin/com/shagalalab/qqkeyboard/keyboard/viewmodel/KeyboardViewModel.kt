@@ -42,7 +42,7 @@ class KeyboardViewModel : ViewModel() {
     var currentImeAction by mutableStateOf<Int?>(null)
         private set
 
-    var currentTheme by mutableStateOf(KeyboardThemes.Light)
+    var currentTheme by mutableStateOf(KeyboardThemes.SystemAuto)
         private set
 
     var topRowMode by mutableStateOf(TopRowMode.EXTRA_LETTERS)

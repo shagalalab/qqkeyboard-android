@@ -54,7 +54,7 @@ fun ThemeSelectionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.dialog_title_select_theme)) },
+                title = { Text(stringResource(R.string.settings_select_theme)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(painterResource(R.drawable.arrow_back_24px), contentDescription = stringResource(R.string.cd_back))
