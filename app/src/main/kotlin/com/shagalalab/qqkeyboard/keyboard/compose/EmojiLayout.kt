@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.data.EmojiData
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
@@ -49,6 +50,7 @@ private const val CATEGORY_VERTICAL_PADDING = 8
 @Composable
 fun EmojiLayout(
     onKeyClick: (String) -> Unit,
+    onCloseEmojiLayout: () -> Unit,
     recentEmojis: List<String> = emptyList()
 ) {
     val emojiMap = remember(recentEmojis) { EmojiData.getEmojisWithCategories(recentEmojis) }
@@ -66,6 +68,7 @@ fun EmojiLayout(
             categories = categories,
             pagerState = pagerState,
             onCategoryClick = { index -> coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+            onClose = onCloseEmojiLayout,
         )
 
         HorizontalPager(
@@ -91,24 +94,43 @@ private fun CategoryNavigationRow(
     categories: List<Int>,
     pagerState: PagerState,
     onCategoryClick: (Int) -> Unit,
+    onClose: () -> Unit,
 ) {
     val colors = LocalKeyboardColors.current
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .horizontalScroll(rememberScrollState()),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        categories.forEachIndexed { index, categoryIconResId ->
-            // pagerState.targetPage is read here — CategoryNavigationRow is the recompose scope,
-            // so only this row reruns per frame, not EmojiLayout.
-            CategoryIcon(
-                iconResId = categoryIconResId,
-                isActive = pagerState.targetPage == index,
-                iconColor = colors.keyContent,
-                onClick = { onCategoryClick(index) },
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+                .horizontalScroll(rememberScrollState()),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            categories.forEachIndexed { index, categoryIconResId ->
+                // pagerState.targetPage is read here — CategoryNavigationRow is the recompose scope,
+                // so only this row reruns per frame, not EmojiLayout.
+                CategoryIcon(
+                    iconResId = categoryIconResId,
+                    isActive = pagerState.targetPage == index,
+                    iconColor = colors.keyContent,
+                    onClick = { onCategoryClick(index) },
+                )
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .size(KeyboardDimensions.suggestionStripHeight)
+                .clickable { onClose() },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.close_24px),
+                contentDescription = null,
+                tint = colors.keyContent,
+                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp),
             )
         }
     }

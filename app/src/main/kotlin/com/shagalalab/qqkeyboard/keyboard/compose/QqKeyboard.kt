@@ -78,46 +78,49 @@ fun QqKeyboard(
             }
 
             val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4
-
-            SuggestionStrip(
-                suggestions = viewModel.suggestions,
-                isEmojiShown = keyboardState.isEmojiShown,
-                showSuggestions = viewModel.suggestionStripEnabled,
-                onSuggestionClick = viewModel::onSuggestionSelected,
-                onEmojiToggle = viewModel::toggleEmoji,
-                shiftState = viewModel.suggestionShiftState,
-            )
+            val totalHeight = keyAreaHeight + KeyboardDimensions.suggestionStripHeight
 
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(keyAreaHeight)
+                    .height(totalHeight)
             ) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(keyAreaHeight)
-                        .padding(KeyboardDimensions.gridPadding)
-                ) {
-                    KeyboardLayout(
-                        rows = updatedLayout,
-                        maxKeysInRow = maxKeysInRow,
-                        modifier = Modifier.fillMaxWidth(),
-                        onKeyClick = { key -> viewModel.onKeyPressed(key) },
-                        onKeyRepeat = { viewModel.onBackspaceRepeat() },
-                        onKeyLongPress = { key ->
-                            when (key) {
-                                "SHIFT" -> viewModel.onShiftLongPress()
-                                "BACKSPACE" -> viewModel.onBackspaceLongPress()
-                                else -> viewModel.onKeyPressed(key)
-                            }
-                        },
-                        shiftState = keyboardState.shiftState,
+                Column(Modifier.fillMaxWidth()) {
+                    SuggestionStrip(
+                        suggestions = viewModel.suggestions,
+                        isEmojiShown = keyboardState.isEmojiShown,
+                        showSuggestions = viewModel.suggestionStripEnabled,
+                        onSuggestionClick = viewModel::onSuggestionSelected,
+                        onEmojiToggle = viewModel::toggleEmoji,
+                        shiftState = viewModel.suggestionShiftState,
                     )
+
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(keyAreaHeight)
+                            .padding(KeyboardDimensions.gridPadding)
+                    ) {
+                        KeyboardLayout(
+                            rows = updatedLayout,
+                            maxKeysInRow = maxKeysInRow,
+                            modifier = Modifier.fillMaxWidth(),
+                            onKeyClick = { key -> viewModel.onKeyPressed(key) },
+                            onKeyRepeat = { viewModel.onBackspaceRepeat() },
+                            onKeyLongPress = { key ->
+                                when (key) {
+                                    "SHIFT" -> viewModel.onShiftLongPress()
+                                    "BACKSPACE" -> viewModel.onBackspaceLongPress()
+                                    else -> viewModel.onKeyPressed(key)
+                                }
+                            },
+                            shiftState = keyboardState.shiftState,
+                        )
+                    }
                 }
 
                 if (keyboardState.isEmojiShown) {
-                    EmojiLayout(viewModel::onKeyPressed, viewModel.recentEmojis)
+                    EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
                 }
             }
 
