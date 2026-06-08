@@ -19,7 +19,7 @@ data class KeyData(
     val keyType: KeyType = KeyType.CHARACTER,
     val iconResId: Int? = null,
     val widthRatio: Float = 1f,
-    val fillRight: Boolean = false,
+    val fillSpace: Boolean = false,
     val longPressCode: String? = null,
     val alternativeChars: List<String> = emptyList(),
     val hintText: String? = null,
@@ -46,7 +46,7 @@ data class KeyData(
             keyType = KeyType.ACTION,
             iconResId = R.drawable.ic_delete,
             widthRatio = widthRatio,
-            fillRight = fillRight
+            fillSpace = fillRight
         )
 
         fun enterDynamic(imeAction: Int? = null, widthRatio: Float = 1.5f) = KeyData(
@@ -82,20 +82,15 @@ data class KeyData(
             widthRatio = 1f
         )
 
-        fun modeSwitch(displayText: String) = KeyData(
+        fun modeSwitch(displayText: String, fillLeft: Boolean = false) = KeyData(
             code = when (displayText) {
                 "123", "ABC", "€~\\" -> displayText
                 else -> "MODE_SWITCH"
             },
             displayText = displayText,
             keyType = KeyType.MODIFIER,
-            widthRatio = 1.5f
-        )
-
-        fun emojiSwitch() = KeyData(
-            code = "EMOJI",
-            keyType = KeyType.MODIFIER,
-            iconResId = R.drawable.ic_smile
+            widthRatio = 1.5f,
+            fillSpace = fillLeft
         )
 
         fun numpadSpace() = KeyData(

@@ -52,7 +52,7 @@ fun KeyRow(
                 shiftState = shiftState,
                 modifier = when {
                     hasSpaceKey -> Modifier.weight(keyData.widthRatio)
-                    keyData.fillRight -> Modifier.weight(1f)
+                    keyData.fillSpace -> Modifier.weight(1f)
                     else -> Modifier.width(standardKeyWidth * keyData.widthRatio)
                 }
             )

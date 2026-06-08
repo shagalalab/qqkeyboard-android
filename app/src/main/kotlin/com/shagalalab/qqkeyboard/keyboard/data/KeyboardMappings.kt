@@ -200,7 +200,7 @@ object KeyboardMappings {
             ),
             // Punctuation and special
             listOf(
-                KeyData.modeSwitch("€~\\"),
+                KeyData.modeSwitch("€~\\", fillLeft = true),
                 KeyData.character("'"),
                 KeyData.character("\""),
                 KeyData.character(":"),
@@ -226,13 +226,13 @@ object KeyboardMappings {
                 KeyData.character("1"),
                 KeyData.character("2"),
                 KeyData.character("3"),
-                KeyData.character("-").copy(fillRight = true)
+                KeyData.character("-").copy(fillSpace = true)
             ),
             listOf(
                 KeyData.character("4"),
                 KeyData.character("5"),
                 KeyData.character("6"),
-                KeyData.numpadSpace().copy(fillRight = true)
+                KeyData.numpadSpace().copy(fillSpace = true)
             ),
             listOf(
                 KeyData.character("7"),
@@ -244,7 +244,7 @@ object KeyboardMappings {
                 KeyData.character(","),
                 KeyData.character("0"),
                 KeyData.character("."),
-                KeyData.enterDynamic(imeAction).copy(fillRight = true)
+                KeyData.enterDynamic(imeAction).copy(fillSpace = true)
             )
         )
     }
@@ -280,13 +280,13 @@ object KeyboardMappings {
                 KeyData.character("1"),
                 KeyData.phoneDigit("2", "ABC"),
                 KeyData.phoneDigit("3", "DEF"),
-                KeyData.character("-").copy(fillRight = true)
+                KeyData.character("-").copy(fillSpace = true)
             ),
             listOf(
                 KeyData.phoneDigit("4", "GHI"),
                 KeyData.phoneDigit("5", "JKL"),
                 KeyData.phoneDigit("6", "MNO"),
-                KeyData.numpadSpace().copy(fillRight = true)
+                KeyData.numpadSpace().copy(fillSpace = true)
             ),
             listOf(
                 KeyData.phoneDigit("7", "PQRS"),
@@ -298,7 +298,7 @@ object KeyboardMappings {
                 KeyData.character("*"),
                 KeyData.character("0"),
                 KeyData.character("."),
-                KeyData.enterDynamic(imeAction).copy(fillRight = true)
+                KeyData.enterDynamic(imeAction).copy(fillSpace = true)
             )
         )
     }
@@ -339,7 +339,7 @@ object KeyboardMappings {
                 KeyData.character("±"),
             ),
             listOf(
-                KeyData.modeSwitch("123"),
+                KeyData.modeSwitch("123", fillLeft = true),
                 KeyData.character("~"),
                 KeyData.character("\\"),
                 KeyData.character("¦"),

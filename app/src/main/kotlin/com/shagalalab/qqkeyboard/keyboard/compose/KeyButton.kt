@@ -194,11 +194,11 @@ fun KeyButton(
                         color = contentColor,
                         fontSize = when (keyData.keyType) {
                             KeyType.CHARACTER -> 26.sp
-                            KeyType.MODIFIER -> 16.sp
+                            KeyType.MODIFIER -> 18.sp
                             else -> 14.sp
                         },
                         fontWeight = when (keyData.keyType) {
-                            KeyType.MODIFIER, KeyType.ACTION -> FontWeight.Medium
+                            KeyType.MODIFIER, KeyType.ACTION -> FontWeight.SemiBold
                             else -> FontWeight.Normal
                         },
                         textAlign = TextAlign.Center,
