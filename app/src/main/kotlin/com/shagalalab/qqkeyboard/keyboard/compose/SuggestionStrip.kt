@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ fun SuggestionStrip(
         modifier = modifier
             .fillMaxWidth()
             .height(KeyboardDimensions.suggestionStripHeight)
+            .padding(horizontal = 8.dp)
             .background(colors.keyboardBackground),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -75,15 +77,16 @@ fun SuggestionStrip(
 
         Box(
             modifier = Modifier
-                .size(KeyboardDimensions.suggestionStripHeight)
-                .clickable { onEmojiToggle() },
+                .background(colors.modifierBackground, CircleShape)
+                .clickable { onEmojiToggle() }
+                .padding(4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(if (isEmojiShown) R.drawable.close_24px else R.drawable.ic_smile),
+                painter = painterResource(R.drawable.ic_smile),
                 contentDescription = null,
                 tint = colors.keyContent,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(24.dp),
             )
         }
     }
