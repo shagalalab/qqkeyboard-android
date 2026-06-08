@@ -12,7 +12,6 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 
 val KeyboardFontFamily = FontFamily(
     Font(R.font.roboto_regular, FontWeight.Normal),
-    Font(R.font.roboto_medium, FontWeight.Medium),
 )
 
 data class KeyboardColors(
