@@ -104,7 +104,7 @@ private fun KeyHeightPreview(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(KeyboardDimensions.gridPadding),
+                        .padding(KeyboardDimensions.gridHorizontalPadding),
                 ) {
                     PREVIEW_KEYS.forEach { key ->
                         KeyButton(

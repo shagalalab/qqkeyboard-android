@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
-import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
@@ -82,7 +81,7 @@ fun QqKeyboard(
             val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
                 KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
             )
-            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridPadding * 4
+            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridHorizontalPadding * 4
             val totalHeight = keyAreaHeight + if (isSpecialLayout) 0.dp else KeyboardDimensions.suggestionStripHeight
 
             Box(
@@ -106,7 +105,7 @@ fun QqKeyboard(
                         Modifier
                             .fillMaxWidth()
                             .height(keyAreaHeight)
-                            .padding(KeyboardDimensions.gridPadding)
+                            .padding(KeyboardDimensions.gridHorizontalPadding)
                     ) {
                         KeyboardLayout(
                             rows = updatedLayout,

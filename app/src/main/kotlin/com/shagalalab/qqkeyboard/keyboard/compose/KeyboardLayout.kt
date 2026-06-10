@@ -22,9 +22,9 @@ fun KeyboardLayout(
     shiftState: ShiftState = ShiftState.OFF,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-        val standardKeyWidth = (maxWidth - KeyboardDimensions.gridPadding * 2) / maxKeysInRow
+        val standardKeyWidth = (maxWidth - KeyboardDimensions.gridHorizontalPadding * 2) / maxKeysInRow
         Column(
-            modifier = Modifier.fillMaxWidth().padding(KeyboardDimensions.gridPadding),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = KeyboardDimensions.gridHorizontalPadding, vertical = KeyboardDimensions.gridVerticalPadding),
             verticalArrangement = Arrangement.spacedBy(KeyboardDimensions.rowGap)
         ) {
             rows.forEach { keyRow ->
