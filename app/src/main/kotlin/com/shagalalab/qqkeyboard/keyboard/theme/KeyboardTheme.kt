@@ -2,17 +2,9 @@ package com.shagalalab.qqkeyboard.keyboard.theme
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
-
-val KeyboardFontFamily = FontFamily(
-    Font(R.font.roboto_regular, FontWeight.Normal),
-)
 
 data class KeyboardColors(
     val keyboardBackground: Color,
