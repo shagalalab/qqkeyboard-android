@@ -34,7 +34,6 @@ fun SuggestionStrip(
     onSuggestionClick: (String) -> Unit,
     onEmojiToggle: () -> Unit,
     modifier: Modifier = Modifier,
-    showSuggestions: Boolean = true,
     shiftState: ShiftState = ShiftState.OFF,
 ) {
     val colors = LocalKeyboardColors.current
@@ -52,7 +51,7 @@ fun SuggestionStrip(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (showSuggestions && !isEmojiShown) {
+            if (!isEmojiShown) {
                 suggestions.take(3).forEach { suggestion ->
                     val displayText = when (shiftState) {
                         ShiftState.CAPS_LOCK -> suggestion.kaaUppercase()

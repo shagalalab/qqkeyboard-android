@@ -21,6 +21,7 @@ import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import com.shagalalab.qqkeyboard.keyboard.utils.EmojiUtils
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaLowercase
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -52,9 +53,6 @@ class KeyboardViewModel : ViewModel() {
         private set
 
     var keyBorderEnabled by mutableStateOf(true)
-        private set
-
-    var suggestionStripEnabled by mutableStateOf(true)
         private set
 
     var isPasswordField by mutableStateOf(false)
@@ -103,7 +101,6 @@ class KeyboardViewModel : ViewModel() {
         topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
         keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
         keyBorderEnabled = preferences?.keyBorderEnabled ?: true
-        suggestionStripEnabled = preferences?.suggestionStripEnabled ?: true
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -364,7 +361,6 @@ class KeyboardViewModel : ViewModel() {
     }
 
     private fun isSuggestionsAllowed(): Boolean {
-        if (!suggestionStripEnabled) return false
         val info = editorInfo ?: return true
         val variation = info.inputType and InputType.TYPE_MASK_VARIATION
         if (variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
@@ -412,7 +408,7 @@ class KeyboardViewModel : ViewModel() {
                     if (script == "latin") DEFAULT_SUGGESTIONS_LATIN else DEFAULT_SUGGESTIONS_CYRILLIC
                 }
             } else {
-                delay(SUGGESTION_DEBOUNCE_MS)
+                delay(SUGGESTION_DEBOUNCE_MS.milliseconds)
                 withContext(Dispatchers.IO) {
                     repository?.getSuggestions(word, script) ?: emptyList()
                 }

@@ -94,7 +94,6 @@ fun QqKeyboard(
                         SuggestionStrip(
                             suggestions = viewModel.suggestions,
                             isEmojiShown = keyboardState.isEmojiShown,
-                            showSuggestions = viewModel.suggestionStripEnabled,
                             onSuggestionClick = viewModel::onSuggestionSelected,
                             onEmojiToggle = viewModel::toggleEmoji,
                             shiftState = viewModel.suggestionShiftState,

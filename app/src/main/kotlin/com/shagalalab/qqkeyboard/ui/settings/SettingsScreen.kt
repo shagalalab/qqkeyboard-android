@@ -56,7 +56,6 @@ fun SettingsScreen(
     var autoSpaceAfterPunctuation by remember { mutableStateOf(preferences.autoSpaceAfterPunctuation) }
     var autoRemoveSpaceBeforePunctuation by remember { mutableStateOf(preferences.autoRemoveSpaceBeforePunctuation) }
     var doubleSpacePeriodEnabled by remember { mutableStateOf(preferences.doubleSpacePeriodEnabled) }
-    var suggestionStripEnabled by remember { mutableStateOf(preferences.suggestionStripEnabled) }
 
     Scaffold(
         topBar = {
@@ -146,19 +145,6 @@ fun SettingsScreen(
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(stringResource(R.string.settings_theme))
-                }
-                SegmentedListItem(
-                    onClick = {
-                        suggestionStripEnabled = !suggestionStripEnabled
-                        preferences.suggestionStripEnabled = suggestionStripEnabled
-                    },
-                    shapes = ListItemDefaults.segmentedShapes(1, 5),
-                    trailingContent = {
-                        Switch(checked = suggestionStripEnabled, onCheckedChange = null)
-                    },
-                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-                ) {
-                    Text(stringResource(R.string.settings_suggestion_strip))
                 }
                 SegmentedListItem(
                     onClick = onKeyboardHeightClick,
