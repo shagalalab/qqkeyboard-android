@@ -8,10 +8,10 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.shagalalab.qqkeyboard2"
+        applicationId = "com.shagalalab.qqkeyboard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
+        versionCode = 19
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
