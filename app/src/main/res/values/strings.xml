@@ -1,77 +1,74 @@
 <resources>
-    <string name="app_name">QqKeyboard2</string>
+    <string name="app_name">QqKeyboard</string>
     <string name="enable_keyboard">Klaviaturanı qosıw</string>
-    <string name="change_default_keyboard">Tiykarǵı klaviaturanı ózgertiw</string>
-    <string name="keyboard_settings">Klaviatura sazlamaları</string>
+    <string name="change_default_keyboard">Tiykarǵı klaviaturanı almastırıw</string>
+    <string name="keyboard_settings">Sazlawlar</string>
     <string name="about_keyboard">Klaviatura haqqında</string>
     <string name="help">Járdem</string>
-    <string name="test_keyboard_here">Bul jerde klaviaturanı sınap kórseńiz boladı</string>
-    <string name="subtype_latin">Latin (QQ)</string>
-    <string name="subtype_cyrillic">Cyrillic (ҚҚ)</string>
-    <string name="word_separators" translatable="false">.!?</string>
-    <string name="no_recent_emojis">No recent emojis</string>
+    <string name="test_keyboard_here">Klaviaturanı usı jerde sınap kóriń</string>
+    <string name="subtype_latin">Latın</string>
+    <string name="subtype_cyrillic">Kirill</string>
+    <string name="no_recent_emojis">Aqırǵı emodziler joq</string>
 
     <!-- Common -->
-    <string name="cd_back">Back</string>
-    <string name="dialog_ok">OK</string>
-    <string name="settings_change">Change</string>
+    <string name="cd_back">Artqa</string>
 
     <!-- About Screen -->
-    <string name="title_about">About</string>
-    <string name="about_app_name">QqKeyboard</string>
-    <string name="about_version">Version %s</string>
-    <string name="about_description">A virtual keyboard for the Karakalpak language, supporting both Latin (QQ) and Cyrillic (ҚҚ) scripts. Built with Jetpack Compose.</string>
-    <string name="about_developer_title">Developer</string>
-    <string name="about_developer_name">Shagala Lab</string>
-    <string name="about_view_on_github">View on GitHub</string>
-    <string name="about_features_title">Features</string>
-    <string name="about_features_list">• Latin and Cyrillic Karakalpak layouts\n• Word suggestions with personal learning\n• Emoji panel with recent emoji tracking\n• Auto-capitalization after sentences\n• Double-space converts to period\n• Double-tap Shift for Caps Lock\n• Haptic and sound feedback</string>
+    <string name="title_about">QqKeyboard haqqında</string>
+    <string name="about_description">Qaraqalpaq tilindegi tekstlerdi jazıwǵa arnalǵan, latın hám kirill jazıwların qollap-quwatlaytuǵın ashıq derekli virtual klaviatura.</string>
+    <string name="about_developer_title">Islep shıqqanlar</string>
+    <string name="about_developer_name">Baǵdarlamalastıw — Shaǵala Lab</string>
+    <string name="about_designer_name">Dizayn — Timur Daniyarov</string>
+    <string name="about_source_code" translatable="false">https://github.com/shagalalab/qqkeyboard-android</string>
+    <string name="about_features_title">Klaviatura imkaniyatları</string>
+    <string name="about_features_list">• latın hám kirill jazıwları qollap-quwatlanadı\n• paydalanıwshıdan kelip shıǵıp sózlerdi boljaw\n• sońǵı paydalanılǵan emodzilerdi eslep qalıwshı emodzi paneli\n• jańa gáp basında avtomat túrde bas háripke ótiw\n• qos probel kiritilgende, noqatqa aylandırıp, gápti juwmaqlaw \n• vibraciya hám ses</string>
 
     <!-- Help Screen -->
-    <string name="title_help">Help</string>
-    <string name="help_setup_title">Setup</string>
-    <string name="help_step1_title">Step 1 — Enable the keyboard</string>
-    <string name="help_step1_description">Go to Android Settings → System → Language &amp; Input → On-screen keyboard, then enable QqKeyboard.</string>
-    <string name="help_open_input_method_settings">Open Input Method Settings</string>
-    <string name="help_step2_title">Step 2 — Set as default keyboard</string>
-    <string name="help_step2_description">Tap the keyboard icon in the navigation bar while typing, or use the button below.</string>
-    <string name="help_switch_default_keyboard">Switch Default Keyboard</string>
-    <string name="help_using_keyboard_title">Using the Keyboard</string>
-    <string name="help_using_keyboard_description">Switch layout — Tap the QQ / ҚҚ button in the bottom-left corner to toggle between Latin and Cyrillic scripts.\n\nShift — Tap once for one uppercase letter. Double-tap or long-press to enable Caps Lock. Tap again to turn Caps Lock off.\n\nNumbers &amp; symbols — Tap the 123 button to switch to numbers and symbols. Tap ABC to return to letters.\n\nEmoji — Tap the smiley face button to open the emoji panel.\n\nSuggestions — Word suggestions appear in the strip above the keyboard as you type. Tap a suggestion to insert it.\n\nDouble-space — When enabled, double-tapping Space inserts a period and space to end a sentence quickly.</string>
-    <string name="help_tips_title">Tips</string>
-    <string name="help_tips_description">• The keyboard remembers which layout (Latin or Cyrillic) you last used.\n\n• When Auto-capitalization is enabled, the first letter of a new sentence is automatically capitalized.\n\n• Hold Backspace to delete characters continuously.\n\n• Recently used emojis appear in the Recent tab of the emoji panel.\n\n• The suggestion strip learns from your word choices over time to improve future suggestions.</string>
+    <string name="title_help">Járdem</string>
+    <string name="help_setup_title">Sazlaw</string>
+    <string name="help_step1_title">1-basqısh — Klaviaturanı qosıń</string>
+    <string name="help_step1_description">Android qurılmańızdaǵı Sazlawlar → Sistema → Til hám kiritiw → Virtual klaviatura bólimine ótiń hám QqKeyboard’tı qosıń.</string>
+    <string name="help_open_input_method_settings">Kiritiw usılları bólimi</string>
+    <string name="help_step2_title">2-basqısh — Tiykarǵı klaviaturanı almastırıń</string>
+    <string name="help_step2_description">Tekst kiriter waqıtta navigaciya panelindegi klaviatura (yaki globus) ikonkasın basıń yamasa tómendegi túymeden paydalanıń.</string>
+    <string name="help_switch_default_keyboard">Tiykarǵı klaviaturanı almastırıw</string>
+    <string name="help_using_keyboard_title">Klaviaturadan paydalanıw</string>
+    <string name="help_using_keyboard_description">Jazıw túrin ózgertiw — latındı kirilge yaki, kerisinshe, kirildi latınǵa almastırıw ushın, tómengi shep múyeshtegi ҚQ / QҚ klavishin basıń.\n\nShift — bas háripke ótiw ushın bir ret; Caps Lock’tı qosıw ushın izbe-iz eki ret basıladı yaki basıp uslap turıladı. Caps Lock’tı óshiriw ushın jáne bir ret basılıwı kerek.\n\nCifrlar hám belgiler — bul panelge ótiw ushın 123 klavishi basılıwı kerek; artqa, háriplerge qaytıw ushın bolsa ABC basıladı.\n\nEmodzi — bul panelge ótiw ushın joqarǵı oń múyeshtegi emodzi ikonkasına basıń.\n\nUsınıslar paneli — klaviaturanıń joqarǵı bóliminde, jazıw barısında programma tárepinen boljanılǵan sózler usınıs etilip barılatuǵın qatar. Usınıs etilgen sózdi kiritiw ushın onıń ústine basıń.\n\nQos probel — bul funkciya qosılǵan jaǵdayda, probel eki ret basılǵan waqıtta, gápti juwmaqlaw ushın noqat qoyıladı.</string>
+    <string name="help_tips_title">Paydalı keńesler</string>
+    <string name="help_tips_description">• Klaviatura aqırǵı márte qaysı jazıw túrin (latın yaki kirill) paydalanǵanıńızdı eslep qaladı.\n\n• Avtomatikalıq bas hárip funkciyası qosılǵanda, taza gáptiń birinshi háribi bas háripke ózgeredi.\n\n• Kiritilgen belgilerdi úzliksiz óshiriw ushın Backspace klavishin basıp uslap turıw talap etiledi.\n\n• Sońǵı paydalanılǵan emodziler Emodzi paneliniń «Sońǵı paydalanılǵanlar» betinde kórinedi.\n\n• Usınıslar paneli siz tańlap atırǵan sózlerge qaray otırıp waqıttıń ótiwi menen óziniń boljawların jaqsılap baradı.</string>
 
     <!-- Help Screen — Settings section -->
-    <string name="help_settings_title">Settings</string>
-    <string name="help_settings_input_title">Input</string>
-    <string name="help_settings_input_description">Auto-capitalization — Automatically capitalizes the first letter after sentence-ending punctuation (., !, ?).\n\nAuto-space after punctuation — Adds a space automatically after you type certain punctuation marks.\n\nAuto-remove space before punctuation — Removes any trailing space when you type punctuation, so there is no unwanted space before it.\n\nDouble-space to period — Double-tapping Space converts the double space into a period and space, making it easy to end sentences.</string>
-    <string name="help_settings_appearance_title">Appearance</string>
-    <string name="help_settings_appearance_description">Theme — Choose the keyboard color theme.\n\nSuggestions — Shows a word suggestion strip above the keyboard. Tap a suggestion to insert it instantly. Not shown for password fields.\n\nKeyboard height — Choose between Default and Short key rows.\n\nKey background — Show or hide individual key backgrounds.\n\nTop row layout — Choose whether the top row shows extra language-specific letters (e.g. á, ǵ, ú, ń) or numbers (1–9, 0) with long-press for the corresponding letters.</string>
-    <string name="help_settings_feedback_title">Sound &amp; Feedback</string>
-    <string name="help_settings_feedback_description">Key press sound — Plays a click sound on each key press.\n\nVibration — Vibrates on each key press.\n\nVibration intensity — Adjusts the vibration strength: Light, Medium, or Strong. Only available when Vibration is enabled.</string>
+    <string name="help_settings_title">Sazlawlar</string>
+    <string name="help_settings_input_title">Kiritiw</string>
+    <string name="help_settings_input_description">Avtomatikalıq bas hárip — gáp aqırındaǵı irkilis belgileri (., !, ?) qoyılǵannan keyin, avtomat túrde bas háripke ótedi.\n\nIrkilis belgilerinen keyin avtomatikalıq probel — belgili bir irkilis belgilerinen keyin avtomat túrde probel qaldıradı.\n\nIrkilis belgileri aldındaǵı probeldi avtomat túrde óshiriw — artıqsha boslıq payda bolmawı ushın, irkilis belgileri aldındaǵı probeldi avtomat túrde óshiredi.\n\nQos probel noqatqa aylanadı — probel izbe-iz eki ret basılǵanda, ol noqat hám probelge aylanadı. Bul gáplerdi tez hám qolay juwmaqlawǵa járdem beredi.</string>
+    <string name="help_settings_appearance_title">Sırtqı kórinis</string>
+    <string name="help_settings_appearance_description">Tema — klaviaturanıń reń temasın tańlaw.\n\nKlaviatura biyikligi — klaviatura ólshemin standart yaki pás etip sazlań.\n\nKlavish fonı — klavishler fonın kórsetiw yaki jasırıp qoyıw ushın qollanıladı.\n\nJoqarǵı qatar — bul orında arnawlı háripler (á, ǵ, ú, ń, ı, ó) yaki cifrlar (1–9, 0) turıwın belgileń. Cifrlar qatarı tańlanǵanda, arnawlı háripler uzaq basıp turıw arqalı shaqırıladı.</string>
+    <string name="help_settings_feedback_title">Ses hám vibraciya</string>
+    <string name="help_settings_feedback_description">Klavish sesi — klavish basılǵanda, shertilgen ses shıǵaradı.\n\nVibraciya — klavish basılǵanda, vibraciya menen juwap qaytaradı.\n\nVibraciya kúshi — vibraciya kúshin tómen, ortasha yaki kúshli etip sazlaydı. Bul punkt tek vibraciya qosılıp turǵanda ǵana qollanıladı.</string>
 
     <!-- Settings Screen -->
-    <string name="title_keyboard_settings">Keyboard Settings</string>
-    <string name="settings_auto_cap">Auto-capitalization</string>
-    <string name="settings_auto_space">Auto-space after punctuation</string>
-    <string name="settings_auto_remove_space">Auto-remove space before punctuation</string>
-    <string name="settings_double_space_period">Double-space to period</string>
-    <string name="settings_theme">Theme</string>
-    <string name="settings_select_theme">Select Theme</string>
-    <string name="settings_keyboard_height">Keyboard height</string>
-    <string name="settings_preview">Preview</string>
-    <string name="settings_height_short">Short</string>
-    <string name="settings_height_default">Default</string>
-    <string name="settings_key_border">Key background</string>
-    <string name="settings_top_row_layout">Top row layout</string>
-    <string name="settings_top_row_extra_letters">Extra letters</string>
-    <string name="settings_top_row_numbers">Numbers</string>
-    <string name="settings_top_row_extra_letters_desc">Extra letters (á, ǵ, ү, қ…)</string>
-    <string name="settings_top_row_numbers_desc">Numbers (1–9, 0) with long-press letters</string>
-    <string name="settings_key_press_sound">Key press sound</string>
-    <string name="settings_vibration">Vibration</string>
-    <string name="settings_vibration_intensity">Vibration intensity</string>
-    <string name="settings_vibration_light">Light</string>
-    <string name="settings_vibration_medium">Medium</string>
-    <string name="settings_vibration_strong">Strong</string>
+    <string name="title_keyboard_settings">Klaviatura sazlawları</string>
+    <string name="settings_auto_cap">Avtomatikalıq bas hárip</string>
+    <string name="settings_auto_space">Irkilis belgilerinen keyin avtomatikalıq probel</string>
+    <string name="settings_auto_remove_space">Irkilis belgileri aldındaǵı probeldi avtomat túrde óshiriw</string>
+    <string name="settings_double_space_period">Qos probel noqatqa aylanadı</string>
+    <string name="settings_suggestion_strip">Sózlerdi usınıs etiw</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_select_theme">Temanı tańlaw</string>
+    <string name="settings_keyboard_height">Klaviatura biyikligi</string>
+    <string name="settings_preview">Aldın ala kóriw</string>
+    <string name="settings_height_short">Pás</string>
+    <string name="settings_height_default">Standart</string>
+    <string name="settings_key_border">Klavish fonı</string>
+    <string name="settings_top_row_layout">Joqarǵı qatar</string>
+    <string name="settings_top_row_extra_letters">Arnawlı háripler qatarı</string>
+    <string name="settings_top_row_numbers">Cifrlar qatarı</string>
+    <string name="settings_top_row_extra_letters_desc">á, ǵ, ú, ń, ı, ó</string>
+    <string name="settings_top_row_numbers_desc">1, 2, 3…</string>
+    <string name="settings_key_press_sound">Klavish sesi</string>
+    <string name="settings_vibration">Vibraciya</string>
+    <string name="settings_vibration_intensity">Vibraciya kúshi</string>
+    <string name="settings_vibration_light">Tómen</string>
+    <string name="settings_vibration_medium">Ortasha</string>
+    <string name="settings_vibration_strong">Kúshli</string>
 </resources>

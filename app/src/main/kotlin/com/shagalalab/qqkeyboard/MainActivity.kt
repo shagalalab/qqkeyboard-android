@@ -21,14 +21,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -108,21 +109,21 @@ fun MainScreen(
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
                 context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
             }) {
-                Text(text = stringResource(R.string.enable_keyboard))
+                Text(text = stringResource(R.string.enable_keyboard), style = MaterialTheme.typography.titleMedium)
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
                 (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showInputMethodPicker()
             }) {
-                Text(text = stringResource(R.string.change_default_keyboard))
+                Text(text = stringResource(R.string.change_default_keyboard), style = MaterialTheme.typography.titleMedium)
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = onSettingsClick) {
-                Text(text = stringResource(R.string.keyboard_settings))
+                Text(text = stringResource(R.string.keyboard_settings), style = MaterialTheme.typography.titleMedium)
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = onAboutClick) {
-                Text(text = stringResource(R.string.about_keyboard))
+                Text(text = stringResource(R.string.about_keyboard), style = MaterialTheme.typography.titleMedium)
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = onHelpClick) {
-                Text(text = stringResource(R.string.help))
+                Text(text = stringResource(R.string.help), style = MaterialTheme.typography.titleMedium)
             }
 
             OutlinedTextField(
@@ -138,7 +139,7 @@ fun MainScreen(
 
             if (BuildConfig.DEBUG) {
                 Button(modifier = Modifier.fillMaxWidth(), onClick = onTestKeyboardClick) {
-                    Text("Test keyboard")
+                    Text(text = "Test keyboard", style = MaterialTheme.typography.titleMedium)
                 }
             }
         }

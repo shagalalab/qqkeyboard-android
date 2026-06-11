@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,26 +55,26 @@ fun HelpScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.help_setup_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_setup_title), style = MaterialTheme.typography.titleLarge)
 
-                    Text(stringResource(R.string.help_step1_title), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.help_step1_title), style = MaterialTheme.typography.titleMedium)
                     Text(
                         stringResource(R.string.help_step1_description),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     Button(
                         onClick = { context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.help_open_input_method_settings))
+                        Text(text = stringResource(R.string.help_open_input_method_settings), style = MaterialTheme.typography.titleMedium)
                     }
 
-                    Text(stringResource(R.string.help_step2_title), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.help_step2_title), style = MaterialTheme.typography.titleMedium)
                     Text(
                         stringResource(R.string.help_step2_description),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     Button(
                         onClick = {
@@ -82,42 +83,42 @@ fun HelpScreen(
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.help_switch_default_keyboard))
+                        Text(text = stringResource(R.string.help_switch_default_keyboard), style = MaterialTheme.typography.titleMedium)
                     }
                 }
             }
 
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.help_using_keyboard_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_using_keyboard_title), style = MaterialTheme.typography.titleLarge)
                     Text(
                         stringResource(R.string.help_using_keyboard_description),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
 
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.help_settings_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_settings_title), style = MaterialTheme.typography.titleLarge)
 
-                    Text(stringResource(R.string.help_settings_input_title), style = MaterialTheme.typography.titleSmall)
-                    Text(stringResource(R.string.help_settings_input_description), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.help_settings_input_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_settings_input_description), style = MaterialTheme.typography.bodyLarge)
 
-                    Text(stringResource(R.string.help_settings_appearance_title), style = MaterialTheme.typography.titleSmall)
-                    Text(stringResource(R.string.help_settings_appearance_description), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.help_settings_appearance_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_settings_appearance_description), style = MaterialTheme.typography.bodyLarge)
 
-                    Text(stringResource(R.string.help_settings_feedback_title), style = MaterialTheme.typography.titleSmall)
-                    Text(stringResource(R.string.help_settings_feedback_description), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.help_settings_feedback_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_settings_feedback_description), style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.help_tips_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.help_tips_title), style = MaterialTheme.typography.titleLarge)
                     Text(
                         stringResource(R.string.help_tips_description),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }

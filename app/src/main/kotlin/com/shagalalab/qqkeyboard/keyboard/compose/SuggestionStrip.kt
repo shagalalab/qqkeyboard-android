@@ -27,6 +27,8 @@ import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercase
 import com.shagalalab.qqkeyboard.keyboard.utils.kaaUppercaseChar
 
+private const val MAX_SUGGESTIONS_TO_SHOW = 3
+
 @Composable
 fun SuggestionStrip(
     suggestions: List<String>,
@@ -52,7 +54,7 @@ fun SuggestionStrip(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (!isEmojiShown) {
-                suggestions.take(3).forEach { suggestion ->
+                suggestions.take(MAX_SUGGESTIONS_TO_SHOW).forEach { suggestion ->
                     val displayText = when (shiftState) {
                         ShiftState.CAPS_LOCK -> suggestion.kaaUppercase()
                         ShiftState.ON -> suggestion.replaceFirstChar { it.kaaUppercaseChar() }
