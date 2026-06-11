@@ -14,6 +14,10 @@ class KeyboardPreferences(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    init {
+        migrateFromLegacyIfNeeded(context)
+    }
+
     var lastUsedLayout: KeyboardLayout
         get() {
             val layoutName = prefs.getString(KEY_LAST_LAYOUT, KeyboardLayout.LATIN.name)
@@ -136,6 +140,42 @@ class KeyboardPreferences(context: Context) {
         recentEmojis = currentList
     }
 
+    private fun migrateFromLegacyIfNeeded(context: Context) {
+        if (prefs.getBoolean(KEY_MIGRATION_V1_DONE, false)) return
+
+        val legacy = context.getSharedPreferences("${context.packageName}_preferences", Context.MODE_PRIVATE)
+
+        // Only migrate if the old app wrote any data
+        if (legacy.contains(LEGACY_SOUND_KEY) || legacy.contains(LEGACY_LAYOUT_KEY)) {
+            prefs.edit {
+                putBoolean(KEY_SOUND_ENABLED, legacy.getBoolean(LEGACY_SOUND_KEY, true))
+                putBoolean(KEY_VIBRATION_ENABLED, legacy.getBoolean(LEGACY_VIBRATION_KEY, true))
+
+                val legacyLayout = legacy.getString(LEGACY_LAYOUT_KEY, LEGACY_LAYOUT_LATIN)
+                val layout = if (legacyLayout == LEGACY_LAYOUT_CYRILLIC) KeyboardLayout.CYRILLIC else KeyboardLayout.LATIN
+                putString(KEY_LAST_LAYOUT, layout.name)
+
+                val legacyRow = legacy.getString(LEGACY_FIRST_ROW_KEY, LEGACY_ROW_NUMBERS)
+                val topRow = if (legacyRow == LEGACY_ROW_LETTERS) TopRowMode.EXTRA_LETTERS else TopRowMode.NUMBERS
+                putString(KEY_TOP_ROW_MODE, topRow.name)
+
+                val legacyTheme = legacy.getString(LEGACY_THEME_KEY, LEGACY_THEME_LIGHT)
+                val theme = if (legacyTheme == LEGACY_THEME_DARK) "Dark" else "Light"
+                putString(KEY_SELECTED_THEME, theme)
+
+                val legacyVibrationMs = legacy.getInt(LEGACY_VIBRATION_LEVEL_KEY, 20)
+                val strength = when {
+                    legacyVibrationMs <= 20 -> VibrationStrength.LIGHT
+                    legacyVibrationMs <= 35 -> VibrationStrength.MEDIUM
+                    else -> VibrationStrength.STRONG
+                }
+                putString(KEY_VIBRATION_STRENGTH, strength.name)
+            }
+        }
+
+        prefs.edit { putBoolean(KEY_MIGRATION_V1_DONE, true) }
+    }
+
     companion object {
         private const val PREFS_NAME = "qq_keyboard_prefs"
         private const val KEY_LAST_LAYOUT = "last_used_layout"
@@ -151,6 +191,21 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_KEYBOARD_HEIGHT = "keyboard_height"
         private const val KEY_KEY_BORDER = "key_border_enabled"
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
+        private const val KEY_MIGRATION_V1_DONE = "migration_v1_done"
         private const val MAX_RECENT_EMOJIS = COLLECTION_GRID_COLS_SIZE * 5
+
+        // Legacy keys from old app (PreferenceManager.getDefaultSharedPreferences)
+        private const val LEGACY_SOUND_KEY = "pref_keypress_sound_key"
+        private const val LEGACY_VIBRATION_KEY = "pref_keypress_vibration_key"
+        private const val LEGACY_VIBRATION_LEVEL_KEY = "pref_keypress_vibration_strength_level"
+        private const val LEGACY_THEME_KEY = "pref_keypress_theme"
+        private const val LEGACY_THEME_LIGHT = "theme_light"
+        private const val LEGACY_THEME_DARK = "theme_dark"
+        private const val LEGACY_LAYOUT_KEY = "pref_keypress_default_layout"
+        private const val LEGACY_LAYOUT_LATIN = "layout_latin"
+        private const val LEGACY_LAYOUT_CYRILLIC = "layout_cyrillic"
+        private const val LEGACY_FIRST_ROW_KEY = "pref_keypress_first_row_appearance"
+        private const val LEGACY_ROW_NUMBERS = "row_numbers"
+        private const val LEGACY_ROW_LETTERS = "row_additional_letters"
     }
 }
