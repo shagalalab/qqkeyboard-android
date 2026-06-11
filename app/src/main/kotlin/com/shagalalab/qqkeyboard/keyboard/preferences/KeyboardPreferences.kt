@@ -8,6 +8,7 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import org.json.JSONArray
 
 class KeyboardPreferences(context: Context) {
@@ -53,7 +54,7 @@ class KeyboardPreferences(context: Context) {
         }
 
     var selectedTheme: String
-        get() = prefs.getString(KEY_SELECTED_THEME, "Light") ?: "Light"
+        get() = prefs.getString(KEY_SELECTED_THEME, KeyboardThemes.SystemAuto.name) ?: KeyboardThemes.SystemAuto.name
         set(value) {
             prefs.edit { putString(KEY_SELECTED_THEME, value) }
         }
@@ -160,7 +161,7 @@ class KeyboardPreferences(context: Context) {
                 putString(KEY_TOP_ROW_MODE, topRow.name)
 
                 val legacyTheme = legacy.getString(LEGACY_THEME_KEY, LEGACY_THEME_LIGHT)
-                val theme = if (legacyTheme == LEGACY_THEME_DARK) "Dark" else "Light"
+                val theme = if (legacyTheme == LEGACY_THEME_DARK) KeyboardThemes.Dark.name else KeyboardThemes.SystemAuto.name
                 putString(KEY_SELECTED_THEME, theme)
 
                 val legacyVibrationMs = legacy.getInt(LEGACY_VIBRATION_LEVEL_KEY, 20)
