@@ -75,6 +75,7 @@ class KeyboardViewModel : ViewModel() {
     private var lastShiftTapTime: Long = 0L
     private var suggestionJob: Job? = null
     private var lastCommittedWord: String = ""
+    private var lastCommittedChar: String = ""
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
@@ -84,23 +85,29 @@ class KeyboardViewModel : ViewModel() {
         private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
         private val DEFAULT_SUGGESTIONS_LATIN = listOf("men", "sálem", "sen")
         private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("мен", "сәлем", "сен")
+        private val PERIOD_SPACE_PATTERN = Regex("""\.\s+$""")
+        private val EXCLAMATION_SPACE_PATTERN = Regex("""!\s+$""")
+        private val QUESTION_SPACE_PATTERN = Regex("""\?\s+$""")
     }
 
     fun initialize(context: Context) {
         if (preferences == null) {
-            preferences = KeyboardPreferences(context)
-            feedbackManager = FeedbackManager(context)
-            recentEmojis = preferences?.recentEmojis ?: emptyList()
+            val prefs = KeyboardPreferences(context)
+            preferences = prefs
+            feedbackManager = FeedbackManager(context, prefs)
+            recentEmojis = prefs.recentEmojis
             viewModelScope.launch(Dispatchers.IO) {
                 repository = SuggestionRepository(context.applicationContext)
             }
         }
-        val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
+        val prefs = preferences!!
+        feedbackManager?.refreshSettings(prefs)
+        val lastLayout = prefs.lastUsedLayout
         keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
-        currentTheme = KeyboardThemes.getByName(preferences?.selectedTheme ?: "Light")
-        topRowMode = preferences?.topRowMode ?: TopRowMode.EXTRA_LETTERS
-        keyboardHeight = preferences?.keyboardHeight ?: KeyboardHeight.DEFAULT
-        keyBorderEnabled = preferences?.keyBorderEnabled ?: true
+        currentTheme = KeyboardThemes.getByName(prefs.selectedTheme)
+        topRowMode = prefs.topRowMode
+        keyboardHeight = prefs.keyboardHeight
+        keyBorderEnabled = prefs.keyBorderEnabled
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -108,6 +115,7 @@ class KeyboardViewModel : ViewModel() {
         if (connection == null) {
             suggestions = emptyList()
             lastCommittedWord = ""
+            lastCommittedChar = ""
         }
     }
 
@@ -177,11 +185,12 @@ class KeyboardViewModel : ViewModel() {
                         }
                     }
                     feedbackManager?.playBackspaceFeedback()
+                    lastCommittedChar = ""
                     updateShiftForCursor()
                     updateSuggestions()
                 }
                 "ENTER" -> {
-                    learnCurrentWord()
+                    learnCurrentWord(getCurrentWord())
                     editorInfo?.let { info ->
                         val imeAction = info.imeOptions and (EditorInfo.IME_MASK_ACTION or EditorInfo.IME_FLAG_NO_ENTER_ACTION)
                         when (imeAction) {
@@ -204,28 +213,25 @@ class KeyboardViewModel : ViewModel() {
                     }
                     feedbackManager?.playReturnFeedback()
                     lastCommittedWord = ""
+                    lastCommittedChar = "\n"
                     suggestions = emptyList()
                 }
                 "SPACE" -> {
                     val committedWord = getCurrentWord()
-                    learnCurrentWord()
-                    val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
-                    if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
+                    learnCurrentWord(committedWord)
+                    if ((preferences?.doubleSpacePeriodEnabled ?: true) && lastCommittedChar == " ") {
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
-
-                        val periodSpacePattern = Regex("""\.\s+$""")
-                        val exclamationSpacePattern = Regex("""!\s+$""")
-                        val questionSpacePattern = Regex("""\?\s+$""")
-
                         when {
-                            periodSpacePattern.containsMatchIn(contextBefore) ||
-                            exclamationSpacePattern.containsMatchIn(contextBefore) ||
-                            questionSpacePattern.containsMatchIn(contextBefore) -> {
+                            PERIOD_SPACE_PATTERN.containsMatchIn(contextBefore) ||
+                            EXCLAMATION_SPACE_PATTERN.containsMatchIn(contextBefore) ||
+                            QUESTION_SPACE_PATTERN.containsMatchIn(contextBefore) -> {
                                 ic.commitText(" ", 1)
                             }
                             else -> {
+                                ic.beginBatchEdit()
                                 ic.deleteSurroundingText(1, 0)
                                 ic.commitText(". ", 1)
+                                ic.endBatchEdit()
                             }
                         }
                         updateShiftForCursor()
@@ -234,6 +240,7 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playSpacebarFeedback()
+                    lastCommittedChar = " "
                     if (committedWord.isNotEmpty()) {
                         lastCommittedWord = committedWord
                         updateSuggestions()
@@ -282,15 +289,20 @@ class KeyboardViewModel : ViewModel() {
                     } else {
                         key.kaaLowercase()
                     }
-                    if ((preferences?.autoRemoveSpaceBeforePunctuation ?: true) && textToCommit in PUNCTUATION_BEFORE_SPACE) {
-                        if (ic.getTextBeforeCursor(1, 0)?.toString() == " ") {
-                            ic.deleteSurroundingText(1, 0)
-                        }
+                    val removeSpace = (preferences?.autoRemoveSpaceBeforePunctuation ?: true) &&
+                        textToCommit in PUNCTUATION_BEFORE_SPACE && lastCommittedChar == " "
+                    val addSpace = (preferences?.autoSpaceAfterPunctuation ?: false) &&
+                        textToCommit in PUNCTUATION_AUTO_SPACE
+                    if (removeSpace || addSpace) {
+                        ic.beginBatchEdit()
+                        if (removeSpace) ic.deleteSurroundingText(1, 0)
+                        ic.commitText(textToCommit, 1)
+                        if (addSpace) ic.commitText(" ", 1)
+                        ic.endBatchEdit()
+                    } else {
+                        ic.commitText(textToCommit, 1)
                     }
-                    ic.commitText(textToCommit, 1)
-                    if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
-                        ic.commitText(" ", 1)
-                    }
+                    lastCommittedChar = if (addSpace) " " else textToCommit
                     feedbackManager?.playKeyPressFeedback()
 
                     if (isEmoji(key)) {
@@ -308,10 +320,13 @@ class KeyboardViewModel : ViewModel() {
     fun onSuggestionSelected(suggestion: String) {
         inputConnection?.let { ic ->
             val currentWord = getCurrentWord()
+            ic.beginBatchEdit()
             if (currentWord.isNotEmpty()) {
                 ic.deleteSurroundingText(currentWord.length, 0)
             }
             ic.commitText("$suggestion ", 1)
+            ic.endBatchEdit()
+            lastCommittedChar = " "
             feedbackManager?.playKeyPressFeedback()
 
             val suggestionLower = suggestion.kaaLowercase()
@@ -394,11 +409,11 @@ class KeyboardViewModel : ViewModel() {
     private fun updateSuggestions() {
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
-        val word = getCurrentWord()
-        currentWordForSuggestions = word
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {
+            val word = getCurrentWord()
+            currentWordForSuggestions = word
             val results = if (word.isEmpty()) {
                 // No prefix being typed — show bigram predictions for last committed word
                 val bigrams = withContext(Dispatchers.IO) {
@@ -417,10 +432,9 @@ class KeyboardViewModel : ViewModel() {
         }
     }
 
-    private fun learnCurrentWord() {
-        val script = currentScript() ?: return
-        val word = getCurrentWord()
+    private fun learnCurrentWord(word: String) {
         if (word.length < 3) return
+        val script = currentScript() ?: return
         if (!isSuggestionsAllowed()) return
 
         val prev = lastCommittedWord  // capture on main thread before launching coroutine
@@ -492,11 +506,13 @@ class KeyboardViewModel : ViewModel() {
             keyboardState = keyboardState.resetShift()
             return
         }
-        val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
-        keyboardState = if (capsMode != 0) {
-            keyboardState.enableAutoCapitalization()
-        } else {
-            keyboardState.resetShift()
+        viewModelScope.launch {
+            val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
+            keyboardState = if (capsMode != 0) {
+                keyboardState.enableAutoCapitalization()
+            } else {
+                keyboardState.resetShift()
+            }
         }
     }
 

@@ -8,9 +8,8 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 
-class FeedbackManager(private val context: Context) {
+class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) {
 
-    private val preferences = KeyboardPreferences(context)
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -19,16 +18,27 @@ class FeedbackManager(private val context: Context) {
         @Suppress("DEPRECATION")
         context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
+    private val hasVibrator = vibrator.hasVibrator()
+
+    private var soundEnabled = prefs.soundEnabled
+    private var vibrationEnabled = prefs.vibrationEnabled
+    private var vibrationStrength = prefs.vibrationStrength
+
+    fun refreshSettings(prefs: KeyboardPreferences) {
+        soundEnabled = prefs.soundEnabled
+        vibrationEnabled = prefs.vibrationEnabled
+        vibrationStrength = prefs.vibrationStrength
+    }
 
     fun playKeyPressSound() {
-        if (preferences.soundEnabled) {
+        if (soundEnabled) {
             audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD)
         }
     }
 
     fun playKeyPressVibration() {
-        if (preferences.vibrationEnabled && vibrator.hasVibrator()) {
-            val strength = preferences.vibrationStrength
+        if (vibrationEnabled && hasVibrator) {
+            val strength = vibrationStrength
             vibrator.vibrate(
                 VibrationEffect.createOneShot(strength.durationMs, strength.amplitude)
             )
@@ -41,14 +51,14 @@ class FeedbackManager(private val context: Context) {
     }
 
     fun playBackspaceSound() {
-        if (preferences.soundEnabled) {
+        if (soundEnabled) {
             audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE)
         }
     }
 
     fun playBackspaceVibration() {
-        if (preferences.vibrationEnabled && vibrator.hasVibrator()) {
-            val strength = preferences.vibrationStrength
+        if (vibrationEnabled && hasVibrator) {
+            val strength = vibrationStrength
             vibrator.vibrate(
                 VibrationEffect.createOneShot(strength.durationMs + 10L, strength.amplitude)
             )
@@ -61,7 +71,7 @@ class FeedbackManager(private val context: Context) {
     }
 
     fun playSpacebarSound() {
-        if (preferences.soundEnabled) {
+        if (soundEnabled) {
             audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR)
         }
     }
@@ -72,7 +82,7 @@ class FeedbackManager(private val context: Context) {
     }
 
     fun playReturnSound() {
-        if (preferences.soundEnabled) {
+        if (soundEnabled) {
             audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN)
         }
     }
@@ -81,6 +91,4 @@ class FeedbackManager(private val context: Context) {
         playReturnSound()
         playKeyPressVibration()
     }
-
-
 }
