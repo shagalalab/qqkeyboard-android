@@ -75,6 +75,7 @@ class KeyboardViewModel : ViewModel() {
     private var lastShiftTapTime: Long = 0L
     private var suggestionJob: Job? = null
     private var lastCommittedWord: String = ""
+    private var lastCommittedChar: String = ""
 
     companion object {
         private const val DOUBLE_TAP_DELAY_MS = 300L
@@ -108,6 +109,7 @@ class KeyboardViewModel : ViewModel() {
         if (connection == null) {
             suggestions = emptyList()
             lastCommittedWord = ""
+            lastCommittedChar = ""
         }
     }
 
@@ -177,6 +179,7 @@ class KeyboardViewModel : ViewModel() {
                         }
                     }
                     feedbackManager?.playBackspaceFeedback()
+                    lastCommittedChar = ""
                     updateShiftForCursor()
                     updateSuggestions()
                 }
@@ -204,12 +207,13 @@ class KeyboardViewModel : ViewModel() {
                     }
                     feedbackManager?.playReturnFeedback()
                     lastCommittedWord = ""
+                    lastCommittedChar = "\n"
                     suggestions = emptyList()
                 }
                 "SPACE" -> {
                     val committedWord = getCurrentWord()
                     learnCurrentWord()
-                    val textBefore = ic.getTextBeforeCursor(1, 0)?.toString()
+                    val textBefore = lastCommittedChar
                     if ((preferences?.doubleSpacePeriodEnabled ?: true) && textBefore == " ") {
                         val contextBefore = ic.getTextBeforeCursor(30, 0)?.toString() ?: ""
 
@@ -234,6 +238,7 @@ class KeyboardViewModel : ViewModel() {
                         updateShiftForCursor()
                     }
                     feedbackManager?.playSpacebarFeedback()
+                    lastCommittedChar = " "
                     if (committedWord.isNotEmpty()) {
                         lastCommittedWord = committedWord
                         updateSuggestions()
@@ -283,13 +288,16 @@ class KeyboardViewModel : ViewModel() {
                         key.kaaLowercase()
                     }
                     if ((preferences?.autoRemoveSpaceBeforePunctuation ?: true) && textToCommit in PUNCTUATION_BEFORE_SPACE) {
-                        if (ic.getTextBeforeCursor(1, 0)?.toString() == " ") {
+                        if (lastCommittedChar == " ") {
                             ic.deleteSurroundingText(1, 0)
                         }
                     }
                     ic.commitText(textToCommit, 1)
                     if ((preferences?.autoSpaceAfterPunctuation ?: false) && textToCommit in PUNCTUATION_AUTO_SPACE) {
                         ic.commitText(" ", 1)
+                        lastCommittedChar = " "
+                    } else {
+                        lastCommittedChar = textToCommit
                     }
                     feedbackManager?.playKeyPressFeedback()
 
@@ -394,11 +402,11 @@ class KeyboardViewModel : ViewModel() {
     private fun updateSuggestions() {
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
-        val word = getCurrentWord()
-        currentWordForSuggestions = word
 
         suggestionJob?.cancel()
         suggestionJob = viewModelScope.launch {
+            val word = getCurrentWord()
+            currentWordForSuggestions = word
             val results = if (word.isEmpty()) {
                 // No prefix being typed — show bigram predictions for last committed word
                 val bigrams = withContext(Dispatchers.IO) {
@@ -492,11 +500,13 @@ class KeyboardViewModel : ViewModel() {
             keyboardState = keyboardState.resetShift()
             return
         }
-        val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
-        keyboardState = if (capsMode != 0) {
-            keyboardState.enableAutoCapitalization()
-        } else {
-            keyboardState.resetShift()
+        viewModelScope.launch {
+            val capsMode = inputConnection?.getCursorCapsMode(editorInfo?.inputType ?: 0) ?: 0
+            keyboardState = if (capsMode != 0) {
+                keyboardState.enableAutoCapitalization()
+            } else {
+                keyboardState.resetShift()
+            }
         }
     }
 
