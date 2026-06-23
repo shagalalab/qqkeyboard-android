@@ -3,7 +3,6 @@ package com.shagalalab.qqkeyboard.keyboard.theme
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 
 data class KeyboardColors(
@@ -183,6 +182,6 @@ val LocalKeyboardHeight = staticCompositionLocalOf { KeyboardHeight.DEFAULT }
 val LocalKeyboardBorderEnabled = staticCompositionLocalOf { true }
 
 fun KeyboardHeight.toDp(): Dp = when (this) {
-    KeyboardHeight.SHORT -> 40.dp
-    KeyboardHeight.DEFAULT -> 48.dp
+    KeyboardHeight.SHORT -> KeyboardDimensions.keyHeightShort
+    KeyboardHeight.DEFAULT -> KeyboardDimensions.keyHeightDefault
 }

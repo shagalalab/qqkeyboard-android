@@ -35,8 +35,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
@@ -52,8 +50,8 @@ import kotlinx.coroutines.delay
 
 private const val REPEAT_INTERVAL_DELAY_MS = 50L
 private const val BUBBLE_DISMISS_MS = 500L
-private val BUBBLE_SHAPE = RoundedCornerShape(8.dp)
-private val KEY_SHAPE = RoundedCornerShape(6.dp)
+private val BUBBLE_SHAPE = RoundedCornerShape(KeyboardDimensions.bubbleCornerRadius)
+private val KEY_SHAPE = RoundedCornerShape(KeyboardDimensions.keyCornerRadius)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -161,16 +159,16 @@ fun KeyButton(
                         painter = painterResource(effectiveIconResId),
                         contentDescription = keyData.code,
                         tint = contentColor,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(KeyboardDimensions.actionIconSize)
                     )
                 }
                 keyData.hintText != null -> {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(KeyboardDimensions.hintKeySpacing)) {
                         Spacer(Modifier.weight(1f))
                         Text(
                             text = keyData.displayText,
                             color = contentColor,
-                            fontSize = 20.sp,
+                            fontSize = KeyboardDimensions.hintKeyFontSize,
                             fontWeight = FontWeight.Normal,
                             maxLines = 1
                         )
@@ -178,8 +176,8 @@ fun KeyButton(
                             text = keyData.hintText,
                             modifier = Modifier.weight(1f),
                             color = contentColor.copy(alpha = 0.55f),
-                            fontSize = 10.sp,
-                            letterSpacing = 0.5.sp,
+                            fontSize = KeyboardDimensions.hintFontSize,
+                            letterSpacing = KeyboardDimensions.hintLetterSpacing,
                             maxLines = 1
                         )
                     }
@@ -193,9 +191,9 @@ fun KeyButton(
                         },
                         color = contentColor,
                         fontSize = when (keyData.keyType) {
-                            KeyType.CHARACTER -> 26.sp
-                            KeyType.MODIFIER -> 18.sp
-                            else -> 14.sp
+                            KeyType.CHARACTER -> KeyboardDimensions.characterKeyFontSize
+                            KeyType.MODIFIER -> KeyboardDimensions.modifierKeyFontSize
+                            else -> KeyboardDimensions.actionKeyFontSize
                         },
                         fontWeight = when (keyData.keyType) {
                             KeyType.MODIFIER, KeyType.ACTION -> FontWeight.SemiBold
@@ -211,9 +209,9 @@ fun KeyButton(
                     text = keyData.secondaryLabel,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(end = 5.dp, top = 3.dp),
+                        .padding(end = KeyboardDimensions.secondaryLabelEndPadding, top = KeyboardDimensions.secondaryLabelTopPadding),
                     color = contentColor.copy(alpha = 0.6f),
-                    fontSize = 9.sp,
+                    fontSize = KeyboardDimensions.secondaryLabelFontSize,
                     maxLines = 1,
                     style = TextStyle(
                         platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -233,19 +231,19 @@ fun KeyButton(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = -(keyHeight + 6.dp))
+                    .offset(y = -(keyHeight + KeyboardDimensions.bubbleVerticalOffset))
                     .zIndex(1f)
                     .defaultMinSize(minWidth = keyHeight)
                     .height(keyHeight)
-                    .shadow(6.dp, BUBBLE_SHAPE)
+                    .shadow(KeyboardDimensions.bubbleShadowElevation, BUBBLE_SHAPE)
                     .background(colors.bubbleBackground, BUBBLE_SHAPE)
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = KeyboardDimensions.bubbleHorizontalPadding),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = bubbleLabel,
                     color = colors.keyContent,
-                    fontSize = 26.sp,
+                    fontSize = KeyboardDimensions.bubbleFontSize,
                     fontWeight = FontWeight.Normal,
                     maxLines = 1
                 )

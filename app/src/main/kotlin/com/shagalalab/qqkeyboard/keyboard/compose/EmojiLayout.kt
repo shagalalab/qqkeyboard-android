@@ -33,18 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.data.EmojiData
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
 import kotlinx.coroutines.launch
 
-const val COLLECTION_GRID_COLS_SIZE = 9
-private const val EMOJI_KEY_HEIGHT = 48
-private const val EMOJI_FONT_SIZE = 28
-private const val CATEGORY_ICON_SIZE = 24
-private const val CATEGORY_VERTICAL_PADDING = 6
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -100,7 +94,7 @@ private fun CategoryNavigationRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = KeyboardDimensions.categoryNavHorizontalPadding)
             .horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -120,14 +114,14 @@ private fun CategoryNavigationRow(
             modifier = Modifier
                 .background(colors.modifierBackground, CircleShape)
                 .clickable { onClose() }
-                .padding(4.dp),
+                .padding(KeyboardDimensions.categoryClosePadding),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 painter = painterResource(R.drawable.close_24px),
                 contentDescription = null,
                 tint = colors.keyContent,
-                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp),
+                modifier = Modifier.size(KeyboardDimensions.categoryIconSize),
             )
         }
     }
@@ -144,18 +138,18 @@ private fun CategoryIcon(
     Box(
         modifier = Modifier
             .clickable(indication = null, interactionSource = null, onClick = onClick)
-            .padding(vertical = CATEGORY_VERTICAL_PADDING.dp),
+            .padding(vertical = KeyboardDimensions.categoryVerticalPadding),
         contentAlignment = Alignment.Center
     ) {
         Box(
-            modifier = Modifier.size((CATEGORY_ICON_SIZE + 4).dp),
+            modifier = Modifier.size(KeyboardDimensions.categoryIconTouchSize),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(iconResId),
                 contentDescription = null,
                 tint = iconColor.copy(alpha = if (isActive) 1f else 0.3f),
-                modifier = Modifier.size(CATEGORY_ICON_SIZE.dp)
+                modifier = Modifier.size(KeyboardDimensions.categoryIconSize)
             )
         }
     }
@@ -182,7 +176,7 @@ private fun EmojiCategoryPage(
         }
     } else {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(COLLECTION_GRID_COLS_SIZE),
+            columns = GridCells.Fixed(KeyboardDimensions.emojiGridColumns),
             modifier = Modifier.fillMaxSize()
         ) {
             items(
@@ -191,13 +185,13 @@ private fun EmojiCategoryPage(
             ) { emoji ->
                 Box(
                     modifier = Modifier
-                        .height(EMOJI_KEY_HEIGHT.dp)
+                        .height(KeyboardDimensions.emojiKeyHeight)
                         .clickable(interactionSource = null, indication = null) { onKeyClick(emoji) },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = emoji,
-                        fontSize = EMOJI_FONT_SIZE.sp,
+                        fontSize = KeyboardDimensions.emojiFontSize,
                         textAlign = TextAlign.Center,
                     )
                 }

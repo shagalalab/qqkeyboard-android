@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
@@ -44,7 +42,7 @@ fun SuggestionStrip(
         modifier = modifier
             .fillMaxWidth()
             .height(KeyboardDimensions.suggestionStripHeight)
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = KeyboardDimensions.suggestionStripHorizontalPadding)
             .background(colors.keyboardBackground),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -65,9 +63,9 @@ fun SuggestionStrip(
                         modifier = Modifier
                             .weight(1f)
                             .clickable { onSuggestionClick(displayText) }
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                            .padding(horizontal = KeyboardDimensions.suggestionPaddingHorizontal, vertical = KeyboardDimensions.suggestionPaddingVertical),
                         color = colors.keyContent,
-                        fontSize = 18.sp,
+                        fontSize = KeyboardDimensions.suggestionFontSize,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -80,14 +78,14 @@ fun SuggestionStrip(
             modifier = Modifier
                 .background(colors.modifierBackground, CircleShape)
                 .clickable { onEmojiToggle() }
-                .padding(4.dp),
+                .padding(KeyboardDimensions.emojiTogglePadding),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_smile),
                 contentDescription = null,
                 tint = colors.keyContent,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(KeyboardDimensions.emojiToggleIconSize),
             )
         }
     }

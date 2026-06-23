@@ -3,8 +3,8 @@ package com.shagalalab.qqkeyboard.keyboard.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.shagalalab.qqkeyboard.keyboard.compose.COLLECTION_GRID_COLS_SIZE
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
@@ -193,7 +193,7 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_KEY_BORDER = "key_border_enabled"
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
         private const val KEY_MIGRATION_V1_DONE = "migration_v1_done"
-        private const val MAX_RECENT_EMOJIS = COLLECTION_GRID_COLS_SIZE * 5
+        private const val MAX_RECENT_EMOJIS = KeyboardDimensions.emojiGridColumns * 5
 
         // Legacy keys from old app (PreferenceManager.getDefaultSharedPreferences)
         private const val LEGACY_SOUND_KEY = "pref_keypress_sound_key"
