@@ -81,7 +81,7 @@ fun QqKeyboard(
             val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
                 KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
             )
-            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridHorizontalPadding * 4
+            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridVerticalPadding * 2
             val totalHeight = keyAreaHeight + if (isSpecialLayout) 0.dp else KeyboardDimensions.suggestionStripHeight
 
             Box(
@@ -104,7 +104,7 @@ fun QqKeyboard(
                         Modifier
                             .fillMaxWidth()
                             .height(keyAreaHeight)
-                            .padding(KeyboardDimensions.gridHorizontalPadding)
+                            .padding(horizontal = KeyboardDimensions.gridHorizontalPadding)
                     ) {
                         KeyboardLayout(
                             rows = updatedLayout,
