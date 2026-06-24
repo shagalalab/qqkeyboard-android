@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.sp
 object KeyboardDimensions {
     // --- Grid & Layout ---
     val rowGap = 8.dp
+    val rowGapLandscape = 4.dp
     val gridHorizontalPadding = 2.dp
     val gridVerticalPadding = 4.dp
     val keyHorizontalPadding = 2.dp
@@ -13,6 +14,7 @@ object KeyboardDimensions {
     // --- Key Heights ---
     val keyHeightShort = 40.dp
     val keyHeightDefault = 48.dp
+    val keyHeightLandscape = 32.dp
 
     // --- Key Shapes ---
     val keyCornerRadius = 6.dp
@@ -20,13 +22,18 @@ object KeyboardDimensions {
 
     // --- Key Font Sizes ---
     val characterKeyFontSize = 26.sp
+    val characterKeyFontSizeLandscape = 22.sp
     val modifierKeyFontSize = 18.sp
+    val modifierKeyFontSizeLandscape = 15.sp
     val actionKeyFontSize = 14.sp
+    val actionKeyFontSizeLandscape = 12.sp
 
     // --- Key with Hint Text ---
     val hintKeyFontSize = 20.sp
+    val hintKeyFontSizeLandscape = 17.sp
     val hintKeySpacing = 6.dp
     val hintFontSize = 10.sp
+    val hintFontSizeLandscape = 9.sp
     val hintLetterSpacing = 0.5.sp
 
     // --- Secondary Label (top-right corner) ---
@@ -36,6 +43,7 @@ object KeyboardDimensions {
 
     // --- Bubble (long-press popup) ---
     val bubbleFontSize = 26.sp
+    val bubbleFontSizeLandscape = 22.sp
     val bubbleVerticalOffset = 6.dp
     val bubbleShadowElevation = 6.dp
     val bubbleHorizontalPadding = 10.dp

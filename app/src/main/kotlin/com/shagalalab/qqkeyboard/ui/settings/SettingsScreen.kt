@@ -154,6 +154,7 @@ fun SettingsScreen(
                             when (keyboardHeight) {
                                 KeyboardHeight.SHORT -> stringResource(R.string.settings_height_short)
                                 KeyboardHeight.DEFAULT -> stringResource(R.string.settings_height_default)
+                                KeyboardHeight.LANDSCAPE -> stringResource(R.string.settings_height_default)
                             }
                         )
                     },

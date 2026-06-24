@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
@@ -16,6 +17,7 @@ fun KeyboardLayout(
     rows: List<List<KeyData>>,
     maxKeysInRow: Int,
     modifier: Modifier = Modifier,
+    rowGap: Dp = KeyboardDimensions.rowGap,
     onKeyClick: (String) -> Unit,
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
@@ -25,7 +27,7 @@ fun KeyboardLayout(
         val standardKeyWidth = (maxWidth - KeyboardDimensions.gridHorizontalPadding * 2) / maxKeysInRow
         Column(
             modifier = Modifier.fillMaxWidth().padding(horizontal = KeyboardDimensions.gridHorizontalPadding, vertical = KeyboardDimensions.gridVerticalPadding),
-            verticalArrangement = Arrangement.spacedBy(KeyboardDimensions.rowGap)
+            verticalArrangement = Arrangement.spacedBy(rowGap)
         ) {
             rows.forEach { keyRow ->
                 KeyRow(

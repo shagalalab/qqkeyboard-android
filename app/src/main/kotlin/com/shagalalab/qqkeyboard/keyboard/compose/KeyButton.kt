@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
@@ -72,6 +73,7 @@ fun KeyButton(
 
     val colors = LocalKeyboardColors.current
     val keyHeight = LocalKeyboardHeight.current.toDp()
+    val isLandscape = LocalKeyboardHeight.current == KeyboardHeight.LANDSCAPE
     val keyBackgroundEnabled = LocalKeyboardBorderEnabled.current
 
     val (backgroundColor, contentColor) = when {
@@ -168,7 +170,7 @@ fun KeyButton(
                         Text(
                             text = keyData.displayText,
                             color = contentColor,
-                            fontSize = KeyboardDimensions.hintKeyFontSize,
+                            fontSize = if (isLandscape) KeyboardDimensions.hintKeyFontSizeLandscape else KeyboardDimensions.hintKeyFontSize,
                             fontWeight = FontWeight.Normal,
                             maxLines = 1
                         )
@@ -176,7 +178,7 @@ fun KeyButton(
                             text = keyData.hintText,
                             modifier = Modifier.weight(1f),
                             color = contentColor.copy(alpha = 0.55f),
-                            fontSize = KeyboardDimensions.hintFontSize,
+                            fontSize = if (isLandscape) KeyboardDimensions.hintFontSizeLandscape else KeyboardDimensions.hintFontSize,
                             letterSpacing = KeyboardDimensions.hintLetterSpacing,
                             maxLines = 1
                         )
@@ -191,9 +193,9 @@ fun KeyButton(
                         },
                         color = contentColor,
                         fontSize = when (keyData.keyType) {
-                            KeyType.CHARACTER -> KeyboardDimensions.characterKeyFontSize
-                            KeyType.MODIFIER -> KeyboardDimensions.modifierKeyFontSize
-                            else -> KeyboardDimensions.actionKeyFontSize
+                            KeyType.CHARACTER -> if (isLandscape) KeyboardDimensions.characterKeyFontSizeLandscape else KeyboardDimensions.characterKeyFontSize
+                            KeyType.MODIFIER -> if (isLandscape) KeyboardDimensions.modifierKeyFontSizeLandscape else KeyboardDimensions.modifierKeyFontSize
+                            else -> if (isLandscape) KeyboardDimensions.actionKeyFontSizeLandscape else KeyboardDimensions.actionKeyFontSize
                         },
                         fontWeight = when (keyData.keyType) {
                             KeyType.MODIFIER, KeyType.ACTION -> FontWeight.SemiBold
@@ -243,7 +245,7 @@ fun KeyButton(
                 Text(
                     text = bubbleLabel,
                     color = colors.keyContent,
-                    fontSize = KeyboardDimensions.bubbleFontSize,
+                    fontSize = if (isLandscape) KeyboardDimensions.bubbleFontSizeLandscape else KeyboardDimensions.bubbleFontSize,
                     fontWeight = FontWeight.Normal,
                     maxLines = 1
                 )

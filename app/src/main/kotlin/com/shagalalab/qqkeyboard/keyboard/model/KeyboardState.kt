@@ -15,7 +15,7 @@ enum class TopRowMode {
     NUMBERS
 }
 
-enum class KeyboardHeight { SHORT, DEFAULT }
+enum class KeyboardHeight { SHORT, DEFAULT, LANDSCAPE }
 
 enum class VibrationStrength(val amplitude: Int, val durationMs: Long) {
     LIGHT(80, 18L),

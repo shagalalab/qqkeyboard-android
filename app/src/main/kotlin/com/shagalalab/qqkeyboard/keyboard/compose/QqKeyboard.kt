@@ -1,5 +1,6 @@
 package com.shagalalab.qqkeyboard.keyboard.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -15,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
@@ -33,9 +36,13 @@ fun QqKeyboard(
     val keyboardState = viewModel.keyboardState
     val currentImeAction = viewModel.currentImeAction
 
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val effectiveKeyboardHeight = if (isLandscape) KeyboardHeight.LANDSCAPE else viewModel.keyboardHeight
+    val effectiveRowGap = if (isLandscape) KeyboardDimensions.rowGapLandscape else KeyboardDimensions.rowGap
+
     CompositionLocalProvider(
         LocalKeyboardColors provides viewModel.currentTheme.resolvedColors(isSystemInDarkTheme()),
-        LocalKeyboardHeight provides viewModel.keyboardHeight,
+        LocalKeyboardHeight provides effectiveKeyboardHeight,
         LocalKeyboardBorderEnabled provides viewModel.keyBorderEnabled,
     ) {
         val colors = LocalKeyboardColors.current
@@ -81,7 +88,7 @@ fun QqKeyboard(
             val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
                 KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
             )
-            val keyAreaHeight = keyHeight * numRows + KeyboardDimensions.rowGap * (numRows - 1) + KeyboardDimensions.gridVerticalPadding * 2
+            val keyAreaHeight = keyHeight * numRows + effectiveRowGap * (numRows - 1) + KeyboardDimensions.gridVerticalPadding * 2
             val totalHeight = keyAreaHeight + if (isSpecialLayout) 0.dp else KeyboardDimensions.suggestionStripHeight
 
             Box(
@@ -110,6 +117,7 @@ fun QqKeyboard(
                             rows = updatedLayout,
                             maxKeysInRow = maxKeysInRow,
                             modifier = Modifier.fillMaxWidth(),
+                            rowGap = effectiveRowGap,
                             onKeyClick = { key -> viewModel.onKeyPressed(key) },
                             onKeyRepeat = { viewModel.onBackspaceRepeat() },
                             onKeyLongPress = { key ->

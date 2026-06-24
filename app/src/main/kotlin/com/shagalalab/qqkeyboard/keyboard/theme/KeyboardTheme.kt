@@ -184,4 +184,5 @@ val LocalKeyboardBorderEnabled = staticCompositionLocalOf { true }
 fun KeyboardHeight.toDp(): Dp = when (this) {
     KeyboardHeight.SHORT -> KeyboardDimensions.keyHeightShort
     KeyboardHeight.DEFAULT -> KeyboardDimensions.keyHeightDefault
+    KeyboardHeight.LANDSCAPE -> KeyboardDimensions.keyHeightLandscape
 }
