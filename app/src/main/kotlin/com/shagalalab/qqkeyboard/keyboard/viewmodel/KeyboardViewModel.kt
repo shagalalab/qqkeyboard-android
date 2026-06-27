@@ -355,6 +355,11 @@ class KeyboardViewModel : ViewModel() {
                 val deleteLength = EmojiUtils.getGraphemeClusterLength(textBefore)
                 if (deleteLength > 0) {
                     ic.deleteSurroundingText(deleteLength, 0)
+                    // Only update shift state when we've deleted everything
+                    val textAfter = ic.getTextBeforeCursor(1, 0)?.toString()
+                    if (textAfter.isNullOrEmpty()) {
+                        updateShiftForCursor()
+                    }
                 }
             }
         }
