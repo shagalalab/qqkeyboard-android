@@ -33,18 +33,18 @@
     <string name="help_step2_description">Tekst kiriter waqıtta navigaciya panelindegi klaviatura (yaki globus) ikonkasın basıń yamasa tómendegi túymeden paydalanıń.</string>
     <string name="help_switch_default_keyboard">Tiykarǵı klaviaturanı almastırıw</string>
     <string name="help_using_keyboard_title">Klaviaturadan paydalanıw</string>
-    <string name="help_using_keyboard_description">Jazıw túrin ózgertiw — latındı kirilge yaki, kerisinshe, kirildi latınǵa almastırıw ushın, tómengi shep múyeshtegi ҚQ / QҚ klavishin basıń.\n\nShift — bas háripke ótiw ushın bir ret; Caps Lock’tı qosıw ushın izbe-iz eki ret basıladı yaki basıp uslap turıladı. Caps Lock’tı óshiriw ushın jáne bir ret basılıwı kerek.\n\nCifrlar hám belgiler — bul panelge ótiw ushın 123 klavishi basılıwı kerek; artqa, háriplerge qaytıw ushın bolsa ABC basıladı.\n\nEmodzi — bul panelge ótiw ushın joqarǵı oń múyeshtegi emodzi ikonkasına basıń.\n\nUsınıslar paneli — klaviaturanıń joqarǵı bóliminde, jazıw barısında programma tárepinen boljanılǵan sózler usınıs etilip barılatuǵın qatar. Usınıs etilgen sózdi kiritiw ushın onıń ústine basıń.\n\nQos probel — bul funkciya qosılǵan jaǵdayda, probel eki ret basılǵan waqıtta, gápti juwmaqlaw ushın noqat qoyıladı.</string>
+    <string name="help_using_keyboard_description">Jazıw túrin ózgertiw — latındı kirilge yaki, kerisinshe, kirildi latınǵa almastırıw ushın, tómengi shep múyeshtegi ҚQ / QҚ klavishasın basıń.\n\nShift — bas háripke ótiw ushın bir ret; Caps Lock’tı qosıw ushın izbe-iz eki ret basıladı yaki basıp uslap turıladı. Caps Lock’tı óshiriw ushın jáne bir ret basılıwı kerek.\n\nCifrlar hám belgiler — bul panelge ótiw ushın 123 klavishası basılıwı kerek; artqa, háriplerge qaytıw ushın bolsa ABC basıladı.\n\nEmodzi — bul panelge ótiw ushın joqarǵı oń múyeshtegi emodzi ikonkasına basıń.\n\nUsınıslar paneli — klaviaturanıń joqarǵı bóliminde, jazıw barısında programma tárepinen boljanılǵan sózler usınıs etilip barılatuǵın qatar. Usınıs etilgen sózdi kiritiw ushın onıń ústine basıń.\n\nQos probel — bul funkciya qosılǵan jaǵdayda, probel eki ret basılǵan waqıtta, gápti juwmaqlaw ushın noqat qoyıladı.</string>
     <string name="help_tips_title">Paydalı keńesler</string>
-    <string name="help_tips_description">• Klaviatura aqırǵı márte qaysı jazıw túrin (latın yaki kirill) paydalanǵanıńızdı eslep qaladı.\n\n• Avtomatikalıq bas hárip funkciyası qosılǵanda, taza gáptiń birinshi háribi bas háripke ózgeredi.\n\n• Kiritilgen belgilerdi úzliksiz óshiriw ushın Backspace klavishin basıp uslap turıw talap etiledi.\n\n• Sońǵı paydalanılǵan emodziler Emodzi paneliniń «Sońǵı paydalanılǵanlar» betinde kórinedi.\n\n• Usınıslar paneli siz tańlap atırǵan sózlerge qaray otırıp waqıttıń ótiwi menen óziniń boljawların jaqsılap baradı.</string>
+    <string name="help_tips_description">• Klaviatura aqırǵı márte qaysı jazıw túrin (latın yaki kirill) paydalanǵanıńızdı eslep qaladı.\n\n• Avtomatikalıq bas hárip funkciyası qosılǵanda, taza gáptiń birinshi háribi bas háripke ózgeredi.\n\n• Kiritilgen belgilerdi úzliksiz óshiriw ushın Backspace klavishasın basıp uslap turıw talap etiledi.\n\n• Sońǵı paydalanılǵan emodziler Emodzi paneliniń «Sońǵı paydalanılǵanlar» betinde kórinedi.\n\n• Usınıslar paneli siz tańlap atırǵan sózlerge qaray otırıp waqıttıń ótiwi menen óziniń boljawların jaqsılap baradı.</string>
 
     <!-- Help Screen — Settings section -->
     <string name="help_settings_title">Sazlawlar</string>
     <string name="help_settings_input_title">Kiritiw</string>
     <string name="help_settings_input_description">Avtomatikalıq bas hárip — gáp aqırındaǵı irkilis belgileri (., !, ?) qoyılǵannan keyin, avtomat túrde bas háripke ótedi.\n\nIrkilis belgilerinen keyin avtomatikalıq probel — belgili bir irkilis belgilerinen keyin avtomat túrde probel qaldıradı.\n\nIrkilis belgileri aldındaǵı probeldi avtomat túrde óshiriw — artıqsha boslıq payda bolmawı ushın, irkilis belgileri aldındaǵı probeldi avtomat túrde óshiredi.\n\nQos probel noqatqa aylanadı — probel izbe-iz eki ret basılǵanda, ol noqat hám probelge aylanadı. Bul gáplerdi tez hám qolay juwmaqlawǵa járdem beredi.</string>
     <string name="help_settings_appearance_title">Sırtqı kórinis</string>
-    <string name="help_settings_appearance_description">Tema — klaviaturanıń reń temasın tańlaw.\n\nKlaviatura biyikligi — klaviatura ólshemin standart yaki pás etip sazlań.\n\nKlavish fonı — klavishler fonın kórsetiw yaki jasırıp qoyıw ushın qollanıladı.\n\nJoqarǵı qatar — bul orında arnawlı háripler (á, ǵ, ú, ń, ı, ó) yaki cifrlar (1–9, 0) turıwın belgileń. Cifrlar qatarı tańlanǵanda, arnawlı háripler uzaq basıp turıw arqalı shaqırıladı.</string>
+    <string name="help_settings_appearance_description">Tema — klaviaturanıń reń temasın tańlaw.\n\nKlaviatura biyikligi — klaviatura ólshemin standart yaki pás etip sazlań.\n\nKlavisha fonı — klavishalar fonın kórsetiw yaki jasırıp qoyıw ushın qollanıladı.\n\nJoqarǵı qatar — bul orında arnawlı háripler (á, ǵ, ú, ń, ı, ó) yaki cifrlar (1–9, 0) turıwın belgileń. Cifrlar qatarı tańlanǵanda, arnawlı háripler uzaq basıp turıw arqalı shaqırıladı.</string>
     <string name="help_settings_feedback_title">Ses hám vibraciya</string>
-    <string name="help_settings_feedback_description">Klavish sesi — klavish basılǵanda, shertilgen ses shıǵaradı.\n\nVibraciya — klavish basılǵanda, vibraciya menen juwap qaytaradı.\n\nVibraciya kúshi — vibraciya kúshin tómen, ortasha yaki kúshli etip sazlaydı. Bul punkt tek vibraciya qosılıp turǵanda ǵana qollanıladı.</string>
+    <string name="help_settings_feedback_description">Klavisha sesi — klavisha basılǵanda, shertilgen ses shıǵaradı.\n\nVibraciya — klavisha basılǵanda, vibraciya menen juwap qaytaradı.\n\nVibraciya kúshi — vibraciya kúshin tómen, ortasha yaki kúshli etip sazlaydı. Bul punkt tek vibraciya qosılıp turǵanda ǵana qollanıladı.</string>
 
     <!-- Settings Screen -->
     <string name="title_keyboard_settings">Klaviatura sazlawları</string>
@@ -59,13 +59,13 @@
     <string name="settings_preview">Aldın ala kóriw</string>
     <string name="settings_height_short">Pás</string>
     <string name="settings_height_default">Standart</string>
-    <string name="settings_key_border">Klavish fonı</string>
+    <string name="settings_key_border">Klavisha fonı</string>
     <string name="settings_top_row_layout">Joqarǵı qatar</string>
     <string name="settings_top_row_extra_letters">Arnawlı háripler qatarı</string>
     <string name="settings_top_row_numbers">Cifrlar qatarı</string>
     <string name="settings_top_row_extra_letters_desc">á, ǵ, ú, ń, ı, ó</string>
     <string name="settings_top_row_numbers_desc">1, 2, 3…</string>
-    <string name="settings_key_press_sound">Klavish sesi</string>
+    <string name="settings_key_press_sound">Klavisha sesi</string>
     <string name="settings_vibration">Vibraciya</string>
     <string name="settings_vibration_intensity">Vibraciya kúshi</string>
     <string name="settings_vibration_light">Tómen</string>
