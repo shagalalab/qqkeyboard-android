@@ -1,5 +1,3 @@
-import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -13,7 +11,7 @@ android {
         applicationId = "com.shagalalab.qqkeyboard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 21
+        versionCode = 23
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

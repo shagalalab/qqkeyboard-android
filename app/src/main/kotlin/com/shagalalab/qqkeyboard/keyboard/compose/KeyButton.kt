@@ -35,6 +35,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
@@ -62,7 +64,9 @@ fun KeyButton(
     modifier: Modifier = Modifier,
     onKeyLongPress: (() -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
-    shiftState: ShiftState = ShiftState.OFF
+    shiftState: ShiftState = ShiftState.OFF,
+    topTouchPadding: Dp = 0.dp,
+    bottomTouchPadding: Dp = 0.dp
 ) {
     val isShiftActive = shiftState != ShiftState.OFF
     val interactionSource = remember { MutableInteractionSource() }
@@ -119,13 +123,15 @@ fun KeyButton(
         }
     }
 
-    // Outer box: full allocated width — this is the touch target.
-    // Inner box: inset by 1dp on each side — this is what the user sees.
-    // Adjacent keys' outer boxes are flush (0dp gap), so there is no dead zone between keys,
-    // while the visual 2dp gap is preserved via the 1dp insets on each side.
+    // Outer box: full allocated width and height (including the inter-row gap absorbed via
+    // top/bottomTouchPadding) — this is the touch target.
+    // Inner box: inset by keyHorizontalPadding on each side and by the touch paddings top/bottom
+    // — this is what the user sees.
+    // Adjacent keys' outer boxes are flush both horizontally and vertically (0dp gap), so there
+    // is no dead zone between keys, while the visual gaps are preserved via the inner insets.
     Box(
         modifier = modifier
-            .height(keyHeight)
+            .height(keyHeight + topTouchPadding + bottomTouchPadding)
             .let { m ->
                 if (keyData.code != "SPACER") {
                     m.combinedClickable(
@@ -150,7 +156,12 @@ fun KeyButton(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = KeyboardDimensions.keyHorizontalPadding)
+                .padding(
+                    start = KeyboardDimensions.keyHorizontalPadding,
+                    end = KeyboardDimensions.keyHorizontalPadding,
+                    top = topTouchPadding,
+                    bottom = bottomTouchPadding
+                )
                 .clip(KEY_SHAPE)
                 .background(backgroundColor),
             contentAlignment = Alignment.Center

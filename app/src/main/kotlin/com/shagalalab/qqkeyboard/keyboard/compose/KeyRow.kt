@@ -22,6 +22,8 @@ fun KeyRow(
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
     shiftState: ShiftState = ShiftState.OFF,
+    topTouchPadding: Dp = 0.dp,
+    bottomTouchPadding: Dp = 0.dp,
 ) {
     // Rows containing a space key fill the full width with weights (space expands to fill).
     // All other rows use fixed key widths and are centered, so shorter rows don't stretch keys.
@@ -50,6 +52,8 @@ fun KeyRow(
                     }
                 } else null,
                 shiftState = shiftState,
+                topTouchPadding = topTouchPadding,
+                bottomTouchPadding = bottomTouchPadding,
                 modifier = when {
                     hasSpaceKey -> Modifier.weight(keyData.widthRatio)
                     keyData.fillSpace -> Modifier.weight(1f)

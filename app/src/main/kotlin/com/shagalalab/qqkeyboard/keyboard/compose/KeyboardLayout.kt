@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
@@ -25,11 +26,16 @@ fun KeyboardLayout(
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val standardKeyWidth = (maxWidth - KeyboardDimensions.gridHorizontalPadding * 2) / maxKeysInRow
+        // The row gap is absorbed into each key's touch target rather than being dead space
+        // between rows: each key extends rowGap/2 into the gap on the sides facing a neighbouring
+        // row (none on the outer edges), so adjacent rows' touch targets are flush. The visual
+        // gap is preserved via matching padding on the inner box in KeyButton.
+        val halfGap = rowGap / 2
         Column(
             modifier = Modifier.fillMaxWidth().padding(horizontal = KeyboardDimensions.gridHorizontalPadding, vertical = KeyboardDimensions.gridVerticalPadding),
-            verticalArrangement = Arrangement.spacedBy(rowGap)
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            rows.forEach { keyRow ->
+            rows.forEachIndexed { index, keyRow ->
                 KeyRow(
                     keys = keyRow,
                     standardKeyWidth = standardKeyWidth,
@@ -37,6 +43,8 @@ fun KeyboardLayout(
                     onKeyLongPress = onKeyLongPress,
                     onKeyRepeat = onKeyRepeat,
                     shiftState = shiftState,
+                    topTouchPadding = if (index == 0) 0.dp else halfGap,
+                    bottomTouchPadding = if (index == rows.lastIndex) 0.dp else halfGap,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
