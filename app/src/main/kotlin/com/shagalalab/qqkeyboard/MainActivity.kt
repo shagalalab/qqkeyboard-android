@@ -27,10 +27,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,12 +37,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.shagalalab.qqkeyboard.ui.debug.KeyboardTestScreen
 import com.shagalalab.qqkeyboard.ui.settings.AboutScreen
 import com.shagalalab.qqkeyboard.ui.settings.HelpScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
-
-private enum class Screen { Main, About, Help, TestKeyboard }
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -54,29 +53,41 @@ class MainActivity : ComponentActivity() {
         setContent {
             QqKeyboardTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    var currentScreen by remember { mutableStateOf(Screen.Main) }
+                    val backStack = rememberNavBackStack(Home)
 
-                    when (currentScreen) {
-                        Screen.About -> AboutScreen(
-                            onBackClick = { currentScreen = Screen.Main },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                        Screen.Help -> HelpScreen(
-                            onBackClick = { currentScreen = Screen.Main },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                        Screen.TestKeyboard -> KeyboardTestScreen(
-                            onBackClick = { currentScreen = Screen.Main },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                        Screen.Main -> MainScreen(
-                            onSettingsClick = { startActivity(Intent(this@MainActivity, SettingsActivity::class.java)) },
-                            onAboutClick = { currentScreen = Screen.About },
-                            onHelpClick = { currentScreen = Screen.Help },
-                            onTestKeyboardClick = { currentScreen = Screen.TestKeyboard },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { backStack.removeLastOrNull() },
+                        entryProvider = entryProvider {
+                            entry<Home> {
+                                MainScreen(
+                                    onSettingsClick = { startActivity(Intent(this@MainActivity, SettingsActivity::class.java)) },
+                                    onAboutClick = { backStack.add(About) },
+                                    onHelpClick = { backStack.add(Help) },
+                                    onTestKeyboardClick = { backStack.add(TestKeyboard) },
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
+                            entry<About> {
+                                AboutScreen(
+                                    onBackClick = { backStack.removeLastOrNull() },
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
+                            entry<Help> {
+                                HelpScreen(
+                                    onBackClick = { backStack.removeLastOrNull() },
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
+                            entry<TestKeyboard> {
+                                KeyboardTestScreen(
+                                    onBackClick = { backStack.removeLastOrNull() },
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
+                        }
+                    )
                 }
             }
         }

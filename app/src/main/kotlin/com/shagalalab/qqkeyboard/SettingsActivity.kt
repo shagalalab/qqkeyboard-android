@@ -8,14 +8,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
+import com.shagalalab.qqkeyboard.ui.settings.HeightSelection
 import com.shagalalab.qqkeyboard.ui.settings.KeyboardHeightScreen
+import com.shagalalab.qqkeyboard.ui.settings.Settings
 import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
+import com.shagalalab.qqkeyboard.ui.settings.ThemeSelection
 import com.shagalalab.qqkeyboard.ui.settings.ThemeSelectionScreen
 import com.shagalalab.qqkeyboard.ui.settings.TopRowModeScreen
+import com.shagalalab.qqkeyboard.ui.settings.TopRowSelection
+import com.shagalalab.qqkeyboard.ui.settings.VibrationSelection
 import com.shagalalab.qqkeyboard.ui.settings.VibrationStrengthScreen
 import com.shagalalab.qqkeyboard.ui.theme.QqKeyboardTheme
 
@@ -25,59 +30,63 @@ class SettingsActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QqKeyboardTheme {
-                val navController = rememberNavController()
+                val backStack = rememberNavBackStack(Settings)
                 val preferences = remember { KeyboardPreferences(this@SettingsActivity) }
                 var keyboardHeight by remember { mutableStateOf(preferences.keyboardHeight) }
                 var vibrationStrength by remember { mutableStateOf(preferences.vibrationStrength) }
                 var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
 
-                NavHost(navController = navController, startDestination = "settings") {
-                    composable("settings") {
-                        SettingsScreen(
-                            onBackClick = { finish() },
-                            onThemeSelectionClick = { navController.navigate("theme_selection") },
-                            keyboardHeight = keyboardHeight,
-                            onKeyboardHeightClick = { navController.navigate("height_selection") },
-                            vibrationStrength = vibrationStrength,
-                            onVibrationStrengthClick = { navController.navigate("vibration_selection") },
-                            topRowMode = topRowMode,
-                            onTopRowModeClick = { navController.navigate("top_row_selection") },
-                        )
+                NavDisplay(
+                    backStack = backStack,
+                    onBack = { backStack.removeLastOrNull() },
+                    entryProvider = entryProvider {
+                        entry<Settings> {
+                            SettingsScreen(
+                                onBackClick = { finish() },
+                                onThemeSelectionClick = { backStack.add(ThemeSelection) },
+                                keyboardHeight = keyboardHeight,
+                                onKeyboardHeightClick = { backStack.add(HeightSelection) },
+                                vibrationStrength = vibrationStrength,
+                                onVibrationStrengthClick = { backStack.add(VibrationSelection) },
+                                topRowMode = topRowMode,
+                                onTopRowModeClick = { backStack.add(TopRowSelection) },
+                            )
+                        }
+                        entry<ThemeSelection> {
+                            ThemeSelectionScreen(onBackClick = { backStack.removeLastOrNull() })
+                        }
+                        entry<HeightSelection> {
+                            KeyboardHeightScreen(
+                                selectedValue = keyboardHeight,
+                                onSelect = { height ->
+                                    keyboardHeight = height
+                                    preferences.keyboardHeight = height
+                                },
+                                onBackClick = { backStack.removeLastOrNull() },
+                            )
+                        }
+                        entry<VibrationSelection> {
+                            VibrationStrengthScreen(
+                                selectedValue = vibrationStrength,
+                                onSelect = { strength ->
+                                    vibrationStrength = strength
+                                    preferences.vibrationStrength = strength
+                                },
+                                onBackClick = { backStack.removeLastOrNull() },
+                            )
+                        }
+                        entry<TopRowSelection> {
+                            TopRowModeScreen(
+                                selectedValue = topRowMode,
+                                onSelect = { mode ->
+                                    topRowMode = mode
+                                    preferences.topRowMode = mode
+                                },
+                                onBackClick = { backStack.removeLastOrNull() },
+                            )
+                        }
                     }
-                    composable("theme_selection") {
-                        ThemeSelectionScreen(onBackClick = { navController.popBackStack() })
-                    }
-                    composable("height_selection") {
-                        KeyboardHeightScreen(
-                            selectedValue = keyboardHeight,
-                            onSelect = { height ->
-                                keyboardHeight = height
-                                preferences.keyboardHeight = height
-                            },
-                            onBackClick = { navController.popBackStack() },
-                        )
-                    }
-                    composable("vibration_selection") {
-                        VibrationStrengthScreen(
-                            selectedValue = vibrationStrength,
-                            onSelect = { strength ->
-                                vibrationStrength = strength
-                                preferences.vibrationStrength = strength
-                            },
-                            onBackClick = { navController.popBackStack() },
-                        )
-                    }
-                    composable("top_row_selection") {
-                        TopRowModeScreen(
-                            selectedValue = topRowMode,
-                            onSelect = { mode ->
-                                topRowMode = mode
-                                preferences.topRowMode = mode
-                            },
-                            onBackClick = { navController.popBackStack() },
-                        )
-                    }
-                }
+                )
             }
         }
     }
