@@ -25,6 +25,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.shagalalab.qqkeyboard.BuildConfig
@@ -61,6 +67,26 @@ fun AboutScreen(
                     Text("${stringResource(R.string.app_name)} ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.titleLarge)
                     Text(
                         stringResource(R.string.about_description),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        buildAnnotatedString {
+                            append("Baylanıs ushın ")
+                            withLink(
+                                LinkAnnotation.Url(
+                                    "https://t.me/shagalalab_bot",
+                                    TextLinkStyles(
+                                        style = SpanStyle(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            textDecoration = TextDecoration.Underline
+                                        )
+                                    )
+                                )
+                            ) {
+                                append("@shagalalab_bot")
+                            }
+                            append(" telegram botına xabarlasıń.")
+                        },
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
