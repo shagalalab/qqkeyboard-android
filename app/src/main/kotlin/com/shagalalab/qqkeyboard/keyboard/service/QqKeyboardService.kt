@@ -1,7 +1,9 @@
 package com.shagalalab.qqkeyboard.keyboard.service
 
+import android.content.Context
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.lifecycle.Lifecycle
@@ -35,6 +37,10 @@ class QqKeyboardService : InputMethodService(), LifecycleOwner, SavedStateRegist
         savedStateRegistryController.performRestore(null)
         handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         keyboardViewModel = KeyboardViewModel()
+        keyboardViewModel.onShowInputMethodPicker = {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showInputMethodPicker()
+        }
     }
 
     override fun onCreateInputView(): View {

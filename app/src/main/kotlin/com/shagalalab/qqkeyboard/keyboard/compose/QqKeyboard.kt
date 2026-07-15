@@ -124,6 +124,7 @@ fun QqKeyboard(
                                 when (key) {
                                     "SHIFT" -> viewModel.onShiftLongPress()
                                     "BACKSPACE" -> viewModel.onBackspaceLongPress()
+                                    "SPACE" -> viewModel.onSpaceLongPress()
                                     else -> viewModel.onKeyPressed(key)
                                 }
                             },

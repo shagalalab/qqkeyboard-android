@@ -72,6 +72,9 @@ class KeyboardViewModel : ViewModel() {
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
+    /** Set by the service; invoked to open the system input-method (keyboard) picker. */
+    var onShowInputMethodPicker: (() -> Unit)? = null
+
     private var lastShiftTapTime: Long = 0L
     private var suggestionJob: Job? = null
     private var lastCommittedWord: String = ""
@@ -370,6 +373,10 @@ class KeyboardViewModel : ViewModel() {
     }
 
     fun onBackspaceLongPress() {
+    }
+
+    fun onSpaceLongPress() {
+        onShowInputMethodPicker?.invoke()
     }
 
     fun toggleEmoji() {
