@@ -44,7 +44,7 @@ fun KeyRow(
                 onKeyRepeat = onKeyRepeat,
                 onKeyLongPress = if (onKeyLongPress != null) {
                     when {
-                        keyData.code == "SHIFT" || keyData.code == "BACKSPACE" ->
+                        keyData.code == "SHIFT" || keyData.code == "BACKSPACE" || keyData.code == "SPACE" ->
                             { { onKeyLongPress(keyData.code) } }
                         keyData.longPressCode != null ->
                             { { onKeyLongPress(keyData.longPressCode) } }
