@@ -71,17 +71,23 @@ object KeyboardMappings {
         )
     }
 
-    private fun latinSecondary(base: String, extra: String, mode: TopRowMode): KeyData {
+    private fun latinSecondary(base: String, extra: String, mode: TopRowMode): KeyData =
+        latinSecondary(base, listOf(extra), mode)
+
+    private fun latinSecondary(base: String, extras: List<String>, mode: TopRowMode): KeyData {
         return if (mode == TopRowMode.NUMBERS) {
-            KeyData.character(base).copy(longPressCode = extra, secondaryLabel = extra)
+            KeyData.character(base).copy(alternativeChars = extras)
         } else {
             KeyData.character(base)
         }
     }
 
-    private fun cyrillicSecondary(base: String, extra: String, mode: TopRowMode): KeyData {
+    private fun cyrillicSecondary(base: String, extra: String, mode: TopRowMode): KeyData =
+        cyrillicSecondary(base, listOf(extra), mode)
+
+    private fun cyrillicSecondary(base: String, extras: List<String>, mode: TopRowMode): KeyData {
         return if (mode == TopRowMode.NUMBERS) {
-            KeyData.character(base).copy(longPressCode = extra, secondaryLabel = extra)
+            KeyData.character(base).copy(alternativeChars = extras)
         } else {
             KeyData.character(base)
         }
@@ -107,9 +113,11 @@ object KeyboardMappings {
         return listOf(
             topRow,
             listOf(
-                cyrillicSecondary("й", "ў", topRowMode),
+                KeyData.character("й"),
                 KeyData.character("ц"),
-                cyrillicSecondary("у", "ү", topRowMode),
+                // ў and ү are both у-variants, so they share the у key rather than ў being
+                // parked on й for want of a phonetic base of its own.
+                cyrillicSecondary("у", listOf("ў", "ү"), topRowMode),
                 cyrillicSecondary("к", "қ", topRowMode),
                 cyrillicSecondary("е", "ё", topRowMode),
                 cyrillicSecondary("н", "ң", topRowMode),

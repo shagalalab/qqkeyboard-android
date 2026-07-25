@@ -21,6 +21,7 @@ fun KeyRow(
     modifier: Modifier = Modifier,
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
+    onAlternateHighlight: (() -> Unit)? = null,
     shiftState: ShiftState = ShiftState.OFF,
     topTouchPadding: Dp = 0.dp,
     bottomTouchPadding: Dp = 0.dp,
@@ -42,15 +43,15 @@ fun KeyRow(
                 keyData = keyData,
                 onKeyClick = onKeyClick,
                 onKeyRepeat = onKeyRepeat,
-                onKeyLongPress = if (onKeyLongPress != null) {
-                    when {
-                        keyData.code == "SHIFT" || keyData.code == "BACKSPACE" || keyData.code == "SPACE" ->
-                            { { onKeyLongPress(keyData.code) } }
-                        keyData.longPressCode != null ->
-                            { { onKeyLongPress(keyData.longPressCode) } }
-                        else -> null
-                    }
-                } else null,
+                // KeyButton decides what a long press resolves to (the key's own code for
+                // modifiers, or the chosen alternate) and passes it back through this callback.
+                onKeyLongPress = when {
+                    onKeyLongPress == null -> null
+                    keyData.code == "SHIFT" || keyData.code == "BACKSPACE" || keyData.code == "SPACE" -> onKeyLongPress
+                    keyData.alternativeChars.isNotEmpty() -> onKeyLongPress
+                    else -> null
+                },
+                onAlternateHighlight = onAlternateHighlight,
                 shiftState = shiftState,
                 topTouchPadding = topTouchPadding,
                 bottomTouchPadding = bottomTouchPadding,

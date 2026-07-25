@@ -128,6 +128,7 @@ fun QqKeyboard(
                                     else -> viewModel.onKeyPressed(key)
                                 }
                             },
+                            onAlternateHighlight = viewModel::onAlternateHighlight,
                             shiftState = keyboardState.shiftState,
                         )
                     }
