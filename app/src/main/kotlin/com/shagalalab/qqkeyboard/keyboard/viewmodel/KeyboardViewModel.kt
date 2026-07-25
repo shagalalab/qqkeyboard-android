@@ -379,6 +379,12 @@ class KeyboardViewModel : ViewModel() {
         onShowInputMethodPicker?.invoke()
     }
 
+    /** The highlight moved to another alternate in the long-press picker — vibrate only, since
+     * a key press sound on every crossing would be noisy. */
+    fun onAlternateHighlight() {
+        feedbackManager?.playKeyPressVibration()
+    }
+
     fun toggleEmoji() {
         val opening = !keyboardState.isEmojiShown
         keyboardState = keyboardState.toggleEmojiPopup()

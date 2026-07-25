@@ -22,6 +22,7 @@ fun KeyboardLayout(
     onKeyClick: (String) -> Unit,
     onKeyLongPress: ((String) -> Unit)? = null,
     onKeyRepeat: ((String) -> Unit)? = null,
+    onAlternateHighlight: (() -> Unit)? = null,
     shiftState: ShiftState = ShiftState.OFF,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
@@ -42,6 +43,7 @@ fun KeyboardLayout(
                     onKeyClick = onKeyClick,
                     onKeyLongPress = onKeyLongPress,
                     onKeyRepeat = onKeyRepeat,
+                    onAlternateHighlight = onAlternateHighlight,
                     shiftState = shiftState,
                     topTouchPadding = if (index == 0) 0.dp else halfGap,
                     bottomTouchPadding = if (index == rows.lastIndex) 0.dp else halfGap,

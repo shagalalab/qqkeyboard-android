@@ -48,6 +48,15 @@ object KeyboardDimensions {
     val bubbleShadowElevation = 6.dp
     val bubbleHorizontalPadding = 10.dp
 
+    // --- Alternate picker (long-press popup with more than one alternate) ---
+    // Cells are laid out at exactly bubbleCellWidth so the finger's x position maps directly
+    // onto a cell index; the inset is applied inside each cell to keep that mapping exact.
+    val bubbleCellWidth = 48.dp
+    val bubbleCellInset = 3.dp
+    val bubbleCellCornerRadius = 6.dp
+    // How far below the key the finger must travel to dismiss the picker without choosing.
+    val bubbleCancelSlop = 24.dp
+
     // --- Icons ---
     val actionIconSize = 24.dp
 

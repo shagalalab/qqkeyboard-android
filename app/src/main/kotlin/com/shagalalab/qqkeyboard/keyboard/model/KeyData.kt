@@ -20,10 +20,10 @@ data class KeyData(
     val iconResId: Int? = null,
     val widthRatio: Float = 1f,
     val fillSpace: Boolean = false,
-    val longPressCode: String? = null,
+    // Characters reachable by long-pressing this key. A single entry commits straight away on
+    // long press; two or more open a picker bubble the user slides across to choose from.
     val alternativeChars: List<String> = emptyList(),
     val hintText: String? = null,
-    val secondaryLabel: String? = null,
 ) {
     companion object {
         // Character keys
