@@ -6,8 +6,23 @@ import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 
 object KeyboardMappings {
 
+    // The emoji key only exists when the suggestion strip is hidden — otherwise the strip's own
+    // emoji button is the entry point. It sits to the right of the space bar and borrows its
+    // width from it, so the bottom row keeps the same total and the other keys don't shift.
+    // Only the letter layouts get it; from the numeric and symbolic layouts the way to emoji is
+    // ABC first.
+    private fun spaceAndEmoji(showEmojiKey: Boolean): List<KeyData> = if (showEmojiKey) {
+        listOf(KeyData.space(widthRatio = 3f), KeyData.emoji())
+    } else {
+        listOf(KeyData.space())
+    }
+
     // Latin keyboard layout (QWERTY-based with Karakalpak modifications)
-    fun getLatinLayout(topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS, imeAction: Int? = null): List<List<KeyData>> {
+    fun getLatinLayout(
+        topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS,
+        imeAction: Int? = null,
+        showEmojiKey: Boolean = false,
+    ): List<List<KeyData>> {
         val topRow = if (topRowMode == TopRowMode.NUMBERS) {
             listOf(
                 KeyData.character("1"), KeyData.character("2"), KeyData.character("3"),
@@ -64,7 +79,7 @@ object KeyboardMappings {
                 KeyData.modeSwitch("123"),
                 KeyData.character(",", ","),
                 KeyData.layoutSwitch(R.drawable.layout_switch_to_cyr),
-                KeyData.space(),
+            ) + spaceAndEmoji(showEmojiKey) + listOf(
                 KeyData.character(".", "."),
                 KeyData.enterDynamic(imeAction)
             )
@@ -94,7 +109,11 @@ object KeyboardMappings {
     }
 
     // Cyrillic keyboard layout
-    fun getCyrillicLayout(topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS, imeAction: Int? = null): List<List<KeyData>> {
+    fun getCyrillicLayout(
+        topRowMode: TopRowMode = TopRowMode.EXTRA_LETTERS,
+        imeAction: Int? = null,
+        showEmojiKey: Boolean = false,
+    ): List<List<KeyData>> {
         val topRow = if (topRowMode == TopRowMode.NUMBERS) {
             listOf(
                 KeyData.character("1"), KeyData.character("2"), KeyData.character("3"),
@@ -157,7 +176,7 @@ object KeyboardMappings {
                 KeyData.modeSwitch("123"),
                 KeyData.character(",", ","),
                 KeyData.layoutSwitch(R.drawable.layout_switch_to_lat),
-                KeyData.space(),
+            ) + spaceAndEmoji(showEmojiKey) + listOf(
                 KeyData.character(".", "."),
                 KeyData.enterDynamic(imeAction),
             )

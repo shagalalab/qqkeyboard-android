@@ -53,6 +53,8 @@
     <string name="settings_auto_remove_space">Irkilis belgileri aldındaǵı probeldi avtomat túrde óshiriw</string>
     <string name="settings_double_space_period">Qos probel noqatqa aylanadı</string>
     <string name="settings_suggestion_strip">Sózlerdi usınıs etiw</string>
+    <string name="settings_suggestion_strip_on">Qosılǵan</string>
+    <string name="settings_suggestion_strip_off">Óshirilgen</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_select_theme">Temanı tańlaw</string>
     <string name="settings_keyboard_height">Klaviatura biyikligi</string>

@@ -100,6 +100,10 @@ class KeyboardPreferences(context: Context) {
         get() = prefs.getBoolean(KEY_KEY_BORDER, true)
         set(value) { prefs.edit { putBoolean(KEY_KEY_BORDER, value) } }
 
+    var suggestionStripEnabled: Boolean
+        get() = prefs.getBoolean(KEY_SUGGESTION_STRIP, true)
+        set(value) { prefs.edit { putBoolean(KEY_SUGGESTION_STRIP, value) } }
+
     var vibrationStrength: VibrationStrength
         get() {
             val name = prefs.getString(KEY_VIBRATION_STRENGTH, VibrationStrength.MEDIUM.name)
@@ -191,6 +195,7 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_DOUBLE_SPACE_PERIOD = "double_space_period"
         private const val KEY_KEYBOARD_HEIGHT = "keyboard_height"
         private const val KEY_KEY_BORDER = "key_border_enabled"
+        private const val KEY_SUGGESTION_STRIP = "suggestion_strip_enabled"
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
         private const val KEY_MIGRATION_V1_DONE = "migration_v1_done"
         private const val MAX_RECENT_EMOJIS = KeyboardDimensions.emojiGridColumns * 5

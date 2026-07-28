@@ -42,6 +42,8 @@ fun SettingsScreen(
     onKeyboardHeightClick: () -> Unit,
     vibrationStrength: VibrationStrength,
     onVibrationStrengthClick: () -> Unit,
+    suggestionStripEnabled: Boolean,
+    onSuggestionStripClick: () -> Unit,
     topRowMode: TopRowMode,
     onTopRowModeClick: () -> Unit,
 ) {
@@ -148,7 +150,7 @@ fun SettingsScreen(
                 }
                 SegmentedListItem(
                     onClick = onKeyboardHeightClick,
-                    shapes = ListItemDefaults.segmentedShapes(2, 5),
+                    shapes = ListItemDefaults.segmentedShapes(1, 5),
                     supportingContent = {
                         Text(
                             when (keyboardHeight) {
@@ -170,13 +172,29 @@ fun SettingsScreen(
                         keyBorderEnabled = !keyBorderEnabled
                         preferences.keyBorderEnabled = keyBorderEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(3, 5),
+                    shapes = ListItemDefaults.segmentedShapes(2, 5),
                     trailingContent = {
                         Switch(checked = keyBorderEnabled, onCheckedChange = null)
                     },
                     colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Text(stringResource(R.string.settings_key_border))
+                }
+                SegmentedListItem(
+                    onClick = onSuggestionStripClick,
+                    shapes = ListItemDefaults.segmentedShapes(3, 5),
+                    supportingContent = {
+                        Text(
+                            if (suggestionStripEnabled) stringResource(R.string.settings_suggestion_strip_on)
+                            else stringResource(R.string.settings_suggestion_strip_off)
+                        )
+                    },
+                    trailingContent = {
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text(stringResource(R.string.settings_suggestion_strip))
                 }
                 SegmentedListItem(
                     onClick = onTopRowModeClick,
