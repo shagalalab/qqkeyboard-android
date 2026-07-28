@@ -55,6 +55,9 @@ class KeyboardViewModel : ViewModel() {
     var keyBorderEnabled by mutableStateOf(true)
         private set
 
+    var suggestionStripEnabled by mutableStateOf(true)
+        private set
+
     var isPasswordField by mutableStateOf(false)
         private set
 
@@ -111,6 +114,7 @@ class KeyboardViewModel : ViewModel() {
         topRowMode = prefs.topRowMode
         keyboardHeight = prefs.keyboardHeight
         keyBorderEnabled = prefs.keyBorderEnabled
+        suggestionStripEnabled = prefs.suggestionStripEnabled
     }
 
     fun setInputConnection(connection: InputConnection?) {
@@ -425,6 +429,14 @@ class KeyboardViewModel : ViewModel() {
     }
 
     private fun updateSuggestions() {
+        // With the strip hidden there is nowhere to show suggestions, so skip the lookups
+        // entirely. Word learning stays on (see learnCurrentWord) so the dictionary is still
+        // useful if the user turns the strip back on.
+        if (!suggestionStripEnabled) {
+            suggestionJob?.cancel()
+            suggestions = emptyList()
+            return
+        }
         if (!isSuggestionsAllowed()) { suggestions = emptyList(); return }
         val script = currentScript() ?: run { suggestions = emptyList(); return }
 

@@ -68,11 +68,18 @@ data class KeyData(
             }
         }
 
-        fun space() = KeyData(
+        fun space(widthRatio: Float = 4f) = KeyData(
             code = "SPACE",
             keyType = KeyType.SPACE,
             iconResId = R.drawable.ic_space,
-            widthRatio = 4f
+            widthRatio = widthRatio
+        )
+
+        fun emoji() = KeyData(
+            code = "EMOJI",
+            keyType = KeyType.CHARACTER,
+            iconResId = R.drawable.ic_smile,
+            widthRatio = 1f
         )
 
         fun layoutSwitch(iconResId: Int) = KeyData(

@@ -56,10 +56,19 @@ fun QqKeyboard(
             val topRowMode = viewModel.topRowMode
             val switchButtonText = viewModel.getLayoutSwitchButtonText()
             val bottomRowCommaKey = viewModel.bottomRowCommaKey
-            val updatedLayout = remember(keyboardState.layout, topRowMode, currentImeAction, switchButtonText, bottomRowCommaKey) {
+
+            val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
+                KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
+            )
+            val showSuggestionStrip = !isSpecialLayout && viewModel.suggestionStripEnabled
+            // Whenever the strip isn't drawn its emoji button goes with it, so the letter
+            // layouts' bottom row takes over as the way into the emoji picker.
+            val showEmojiKey = !showSuggestionStrip
+
+            val updatedLayout = remember(keyboardState.layout, topRowMode, currentImeAction, switchButtonText, bottomRowCommaKey, showEmojiKey) {
                 val baseLayout = when (keyboardState.layout) {
-                    KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction)
-                    KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction)
+                    KeyboardLayout.LATIN -> KeyboardMappings.getLatinLayout(topRowMode, currentImeAction, showEmojiKey)
+                    KeyboardLayout.CYRILLIC -> KeyboardMappings.getCyrillicLayout(topRowMode, currentImeAction, showEmojiKey)
                     KeyboardLayout.NUMERIC -> KeyboardMappings.getNumericLayout(currentImeAction)
                     KeyboardLayout.SYMBOLIC -> KeyboardMappings.getSymbolicLayout(currentImeAction)
                     KeyboardLayout.NUMBER_PAD -> KeyboardMappings.getNumberPadLayout(currentImeAction)
@@ -85,11 +94,8 @@ fun QqKeyboard(
                 else -> 10
             }
 
-            val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
-                KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
-            )
             val keyAreaHeight = keyHeight * numRows + effectiveRowGap * (numRows - 1) + KeyboardDimensions.gridVerticalPadding * 2
-            val totalHeight = keyAreaHeight + if (isSpecialLayout) 0.dp else KeyboardDimensions.suggestionStripHeight
+            val totalHeight = keyAreaHeight + if (showSuggestionStrip) KeyboardDimensions.suggestionStripHeight else 0.dp
 
             Box(
                 Modifier
@@ -97,7 +103,7 @@ fun QqKeyboard(
                     .height(totalHeight)
             ) {
                 Column(Modifier.fillMaxWidth()) {
-                    if (!isSpecialLayout) {
+                    if (showSuggestionStrip) {
                         SuggestionStrip(
                             suggestions = viewModel.suggestions,
                             isEmojiShown = keyboardState.isEmojiShown,
