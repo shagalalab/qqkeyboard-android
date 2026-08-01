@@ -108,8 +108,7 @@ class KeyboardViewModel : ViewModel() {
         }
         val prefs = preferences!!
         feedbackManager?.refreshSettings(prefs)
-        val lastLayout = prefs.lastUsedLayout
-        keyboardState = keyboardState.copy(layout = lastLayout, isEmojiShown = false)
+        keyboardState = keyboardState.copy(layout = prefs.startupLayout, isEmojiShown = false)
         currentTheme = KeyboardThemes.getByName(prefs.selectedTheme)
         topRowMode = prefs.topRowMode
         keyboardHeight = prefs.keyboardHeight
