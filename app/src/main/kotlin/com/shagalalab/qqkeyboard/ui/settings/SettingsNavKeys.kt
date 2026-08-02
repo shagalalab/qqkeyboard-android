@@ -12,3 +12,4 @@ sealed interface SettingsNavKey : NavKey
 @Serializable data object VibrationSelection : SettingsNavKey
 @Serializable data object SuggestionStripSelection : SettingsNavKey
 @Serializable data object TopRowSelection : SettingsNavKey
+@Serializable data object DefaultLayoutSelection : SettingsNavKey

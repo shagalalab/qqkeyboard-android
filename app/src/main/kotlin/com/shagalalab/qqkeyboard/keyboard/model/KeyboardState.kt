@@ -15,6 +15,13 @@ enum class TopRowMode {
     NUMBERS
 }
 
+/** Which language layout the keyboard starts in each time it opens. */
+enum class DefaultLayoutMode {
+    LAST_USED,  // Whatever language the user switched to most recently
+    LATIN,
+    CYRILLIC
+}
+
 enum class KeyboardHeight { SHORT, DEFAULT, LANDSCAPE }
 
 enum class VibrationStrength(val amplitude: Int, val durationMs: Long) {

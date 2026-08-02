@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
+import com.shagalalab.qqkeyboard.keyboard.model.DefaultLayoutMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
@@ -46,6 +47,8 @@ fun SettingsScreen(
     onSuggestionStripClick: () -> Unit,
     topRowMode: TopRowMode,
     onTopRowModeClick: () -> Unit,
+    defaultLayoutMode: DefaultLayoutMode,
+    onDefaultLayoutClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val preferences = remember { KeyboardPreferences(context) }
@@ -82,11 +85,30 @@ fun SettingsScreen(
             // Input Settings
             Column(modifier = Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap)) {
                 SegmentedListItem(
+                    onClick = onDefaultLayoutClick,
+                    shapes = ListItemDefaults.segmentedShapes(0, 5),
+                    supportingContent = {
+                        Text(
+                            when (defaultLayoutMode) {
+                                DefaultLayoutMode.LAST_USED -> stringResource(R.string.settings_default_layout_last_used)
+                                DefaultLayoutMode.LATIN -> stringResource(R.string.settings_default_layout_latin)
+                                DefaultLayoutMode.CYRILLIC -> stringResource(R.string.settings_default_layout_cyrillic)
+                            }
+                        )
+                    },
+                    trailingContent = {
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                ) {
+                    Text(stringResource(R.string.settings_default_layout))
+                }
+                SegmentedListItem(
                     onClick = {
                         autoCapEnabled = !autoCapEnabled
                         preferences.autoCapEnabled = autoCapEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(0, 4),
+                    shapes = ListItemDefaults.segmentedShapes(1, 5),
                     trailingContent = {
                         Switch(checked = autoCapEnabled, onCheckedChange = null)
                     },
@@ -99,7 +121,7 @@ fun SettingsScreen(
                         autoSpaceAfterPunctuation = !autoSpaceAfterPunctuation
                         preferences.autoSpaceAfterPunctuation = autoSpaceAfterPunctuation
                     },
-                    shapes = ListItemDefaults.segmentedShapes(1, 4),
+                    shapes = ListItemDefaults.segmentedShapes(2, 5),
                     trailingContent = {
                         Switch(checked = autoSpaceAfterPunctuation, onCheckedChange = null)
                     },
@@ -112,7 +134,7 @@ fun SettingsScreen(
                         autoRemoveSpaceBeforePunctuation = !autoRemoveSpaceBeforePunctuation
                         preferences.autoRemoveSpaceBeforePunctuation = autoRemoveSpaceBeforePunctuation
                     },
-                    shapes = ListItemDefaults.segmentedShapes(2, 4),
+                    shapes = ListItemDefaults.segmentedShapes(3, 5),
                     trailingContent = {
                         Switch(checked = autoRemoveSpaceBeforePunctuation, onCheckedChange = null)
                     },
@@ -125,7 +147,7 @@ fun SettingsScreen(
                         doubleSpacePeriodEnabled = !doubleSpacePeriodEnabled
                         preferences.doubleSpacePeriodEnabled = doubleSpacePeriodEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(3, 4),
+                    shapes = ListItemDefaults.segmentedShapes(4, 5),
                     trailingContent = {
                         Switch(checked = doubleSpacePeriodEnabled, onCheckedChange = null)
                     },

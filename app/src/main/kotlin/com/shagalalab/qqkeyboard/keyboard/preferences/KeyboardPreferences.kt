@@ -3,11 +3,12 @@ package com.shagalalab.qqkeyboard.keyboard.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.shagalalab.qqkeyboard.keyboard.model.DefaultLayoutMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
-import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import org.json.JSONArray
 
@@ -39,6 +40,27 @@ class KeyboardPreferences(context: Context) {
             if (value == KeyboardLayout.LATIN || value == KeyboardLayout.CYRILLIC) {
                 prefs.edit { putString(KEY_LAST_LAYOUT, value.name) }
             }
+        }
+
+    var defaultLayoutMode: DefaultLayoutMode
+        get() {
+            val name = prefs.getString(KEY_DEFAULT_LAYOUT_MODE, DefaultLayoutMode.LAST_USED.name)
+            return try {
+                DefaultLayoutMode.valueOf(name ?: DefaultLayoutMode.LAST_USED.name)
+            } catch (_: IllegalArgumentException) {
+                DefaultLayoutMode.LAST_USED
+            }
+        }
+        set(value) {
+            prefs.edit { putString(KEY_DEFAULT_LAYOUT_MODE, value.name) }
+        }
+
+    /** The language layout the keyboard should open in, honouring [defaultLayoutMode]. */
+    val startupLayout: KeyboardLayout
+        get() = when (defaultLayoutMode) {
+            DefaultLayoutMode.LATIN -> KeyboardLayout.LATIN
+            DefaultLayoutMode.CYRILLIC -> KeyboardLayout.CYRILLIC
+            DefaultLayoutMode.LAST_USED -> lastUsedLayout
         }
 
     var soundEnabled: Boolean
@@ -184,6 +206,7 @@ class KeyboardPreferences(context: Context) {
     companion object {
         private const val PREFS_NAME = "qq_keyboard_prefs"
         private const val KEY_LAST_LAYOUT = "last_used_layout"
+        private const val KEY_DEFAULT_LAYOUT_MODE = "default_layout_mode"
         private const val KEY_SOUND_ENABLED = "sound_enabled"
         private const val KEY_VIBRATION_ENABLED = "vibration_enabled"
         private const val KEY_SELECTED_THEME = "selected_theme"

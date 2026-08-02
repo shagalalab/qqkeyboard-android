@@ -12,6 +12,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
+import com.shagalalab.qqkeyboard.ui.settings.DefaultLayoutScreen
+import com.shagalalab.qqkeyboard.ui.settings.DefaultLayoutSelection
 import com.shagalalab.qqkeyboard.ui.settings.HeightSelection
 import com.shagalalab.qqkeyboard.ui.settings.KeyboardHeightScreen
 import com.shagalalab.qqkeyboard.ui.settings.Settings
@@ -38,6 +40,7 @@ class SettingsActivity : ComponentActivity() {
                 var vibrationStrength by remember { mutableStateOf(preferences.vibrationStrength) }
                 var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
                 var suggestionStripEnabled by remember { mutableStateOf(preferences.suggestionStripEnabled) }
+                var defaultLayoutMode by remember { mutableStateOf(preferences.defaultLayoutMode) }
 
                 NavDisplay(
                     backStack = backStack,
@@ -55,6 +58,18 @@ class SettingsActivity : ComponentActivity() {
                                 onSuggestionStripClick = { backStack.add(SuggestionStripSelection) },
                                 topRowMode = topRowMode,
                                 onTopRowModeClick = { backStack.add(TopRowSelection) },
+                                defaultLayoutMode = defaultLayoutMode,
+                                onDefaultLayoutClick = { backStack.add(DefaultLayoutSelection) },
+                            )
+                        }
+                        entry<DefaultLayoutSelection> {
+                            DefaultLayoutScreen(
+                                selectedValue = defaultLayoutMode,
+                                onSelect = { mode ->
+                                    defaultLayoutMode = mode
+                                    preferences.defaultLayoutMode = mode
+                                },
+                                onBackClick = { backStack.removeLastOrNull() },
                             )
                         }
                         entry<ThemeSelection> {
