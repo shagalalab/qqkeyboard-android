@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.shagalalab.qqkeyboard.keyboard.model.DefaultLayoutMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
-import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
+import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import org.json.JSONArray
 
@@ -47,7 +47,7 @@ class KeyboardPreferences(context: Context) {
             val name = prefs.getString(KEY_DEFAULT_LAYOUT_MODE, DefaultLayoutMode.LAST_USED.name)
             return try {
                 DefaultLayoutMode.valueOf(name ?: DefaultLayoutMode.LAST_USED.name)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 DefaultLayoutMode.LAST_USED
             }
         }

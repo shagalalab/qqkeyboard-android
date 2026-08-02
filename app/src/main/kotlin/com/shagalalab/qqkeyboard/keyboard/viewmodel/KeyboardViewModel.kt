@@ -106,14 +106,15 @@ class KeyboardViewModel : ViewModel() {
                 repository = SuggestionRepository(context.applicationContext)
             }
         }
-        val prefs = preferences!!
-        feedbackManager?.refreshSettings(prefs)
-        keyboardState = keyboardState.copy(layout = prefs.startupLayout, isEmojiShown = false)
-        currentTheme = KeyboardThemes.getByName(prefs.selectedTheme)
-        topRowMode = prefs.topRowMode
-        keyboardHeight = prefs.keyboardHeight
-        keyBorderEnabled = prefs.keyBorderEnabled
-        suggestionStripEnabled = prefs.suggestionStripEnabled
+        preferences?.let { prefs ->
+            feedbackManager?.refreshSettings(prefs)
+            keyboardState = keyboardState.copy(layout = prefs.startupLayout, isEmojiShown = false)
+            currentTheme = KeyboardThemes.getByName(prefs.selectedTheme)
+            topRowMode = prefs.topRowMode
+            keyboardHeight = prefs.keyboardHeight
+            keyBorderEnabled = prefs.keyBorderEnabled
+            suggestionStripEnabled = prefs.suggestionStripEnabled
+        }
     }
 
     fun setInputConnection(connection: InputConnection?) {
