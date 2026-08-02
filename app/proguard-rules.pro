@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# The project is open source, so there is nothing to hide by renaming. Keeping the original
+# names also keeps stack traces readable and — more importantly — keeps enum constant names
+# intact, which KeyboardPreferences and KeyboardThemes.getByName persist and read back.
+-dontobfuscate
