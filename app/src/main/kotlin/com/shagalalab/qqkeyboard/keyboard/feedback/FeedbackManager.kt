@@ -8,7 +8,7 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 
-class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) {
+class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -32,7 +32,7 @@ class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) 
 
     fun playKeyPressSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, SYSTEM_DEFAULT_VOLUME)
         }
     }
 
@@ -52,7 +52,7 @@ class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) 
 
     fun playBackspaceSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE, SYSTEM_DEFAULT_VOLUME)
         }
     }
 
@@ -72,7 +72,7 @@ class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) 
 
     fun playSpacebarSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR, SYSTEM_DEFAULT_VOLUME)
         }
     }
 
@@ -83,12 +83,25 @@ class FeedbackManager(private val context: Context, prefs: KeyboardPreferences) 
 
     fun playReturnSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN, SYSTEM_DEFAULT_VOLUME)
         }
     }
 
     fun playReturnFeedback() {
         playReturnSound()
         playKeyPressVibration()
+    }
+
+    private companion object {
+        /**
+         * Sentinel accepted by [AudioManager.playSoundEffect] meaning "use the device's default
+         * effect volume" (derived from the framework's `config_soundEffectVolumeDb` resource), so
+         * loudness is unchanged from the single-argument overload. We pass it explicitly because
+         * the single-argument overload returns early when the system-wide touch sounds setting
+         * (`Settings.System.SOUND_EFFECTS_ENABLED`) is off, which silently suppresses key sounds
+         * even though the user enabled them in our own settings. The two-argument overload skips
+         * that check.
+         */
+        const val SYSTEM_DEFAULT_VOLUME = -1f
     }
 }
