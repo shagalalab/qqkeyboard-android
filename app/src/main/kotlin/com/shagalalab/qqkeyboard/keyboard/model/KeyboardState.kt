@@ -34,20 +34,23 @@ enum class VibrationStrength(val amplitude: Int, val durationMs: Long) {
  * Gain applied to key press sounds, as the linear 0f..1f scalar
  * `AudioManager.playSoundEffect` expects.
  *
- * Levels are spaced in decibels rather than linearly, because loudness is perceived
- * logarithmically; a linear ladder would feel lopsided. [MEDIUM] is the AOSP default effect gain
- * (`config_soundEffectVolumeDb` = -16 dB), so it matches how the keyboard sounded before this
- * setting existed. The system stream volume still applies on top of this value.
+ * Levels are spaced evenly in decibels (12 dB apart) rather than linearly, because loudness is
+ * perceived logarithmically; a linear ladder would feel lopsided. The system stream volume still
+ * applies on top of this value.
  *
- * [LOUD] is the full-scale maximum the API accepts rather than an evenly spaced ~8 dB step above
- * [MEDIUM]: on at least one device that step was barely audible, which suggests the effect stream
- * is compressed near the top of its range. If [LOUD] still sounds close to [MEDIUM] on some
+ * [LOUD] is the full-scale maximum the API accepts. It and [MEDIUM] were both raised after device
+ * testing found the original values too close together to tell apart, which suggests the effect
+ * stream is compressed near the top of its range. If [LOUD] still sounds close to [MEDIUM] on some
  * device, no further tuning here can help — that would call for bundling our own samples and
  * playing them through a SoundPool instead.
+ *
+ * Note that [MEDIUM], the default, is deliberately louder than the AOSP default effect gain
+ * (`config_soundEffectVolumeDb` = -16 dB, i.e. 0.16f) that key sounds used before this setting
+ * existed, because the original complaint that prompted it was that key sounds were too faint.
  */
 enum class SoundVolume(val volume: Float) {
     QUIET(0.06f),   // ~-24 dB
-    MEDIUM(0.16f),  // ~-16 dB
+    MEDIUM(0.25f),  // ~-12 dB
     LOUD(1.0f)      // 0 dB — full scale
 }
 
