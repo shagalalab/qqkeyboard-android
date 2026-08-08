@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.R
 import com.shagalalab.qqkeyboard.keyboard.model.DefaultLayoutMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
+import com.shagalalab.qqkeyboard.keyboard.model.SoundVolume
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
@@ -43,6 +44,8 @@ fun SettingsScreen(
     onKeyboardHeightClick: () -> Unit,
     vibrationStrength: VibrationStrength,
     onVibrationStrengthClick: () -> Unit,
+    soundVolume: SoundVolume,
+    onSoundVolumeClick: () -> Unit,
     suggestionStripEnabled: Boolean,
     onSuggestionStripClick: () -> Unit,
     topRowMode: TopRowMode,
@@ -245,7 +248,7 @@ fun SettingsScreen(
                         soundEnabled = !soundEnabled
                         preferences.soundEnabled = soundEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(0, 3),
+                    shapes = ListItemDefaults.segmentedShapes(0, 4),
                     trailingContent = {
                         Switch(checked = soundEnabled, onCheckedChange = null)
                     },
@@ -254,11 +257,37 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_key_press_sound))
                 }
                 SegmentedListItem(
+                    onClick = onSoundVolumeClick,
+                    shapes = ListItemDefaults.segmentedShapes(1, 4),
+                    enabled = soundEnabled,
+                    supportingContent = {
+                        Text(
+                            text = when (soundVolume) {
+                                SoundVolume.QUIET -> stringResource(R.string.settings_sound_volume_quiet)
+                                SoundVolume.MEDIUM -> stringResource(R.string.settings_sound_volume_medium)
+                                SoundVolume.LOUD -> stringResource(R.string.settings_sound_volume_loud)
+                            },
+                            color = if (soundEnabled) MaterialTheme.colorScheme.onSurfaceVariant
+                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        )
+                    },
+                    trailingContent = {
+                        Icon(painter = painterResource(R.drawable.chevron_right_24px), contentDescription = null)
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer, disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer)
+                ) {
+                    Text(
+                        text = stringResource(R.string.settings_sound_volume),
+                        color = if (soundEnabled) MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                }
+                SegmentedListItem(
                     onClick = {
                         vibrationEnabled = !vibrationEnabled
                         preferences.vibrationEnabled = vibrationEnabled
                     },
-                    shapes = ListItemDefaults.segmentedShapes(1, 3),
+                    shapes = ListItemDefaults.segmentedShapes(2, 4),
                     trailingContent = {
                         Switch(checked = vibrationEnabled, onCheckedChange = null)
                     },
@@ -268,7 +297,7 @@ fun SettingsScreen(
                 }
                 SegmentedListItem(
                     onClick = onVibrationStrengthClick,
-                    shapes = ListItemDefaults.segmentedShapes(2, 3),
+                    shapes = ListItemDefaults.segmentedShapes(3, 4),
                     enabled = vibrationEnabled,
                     supportingContent = {
                         Text(

@@ -75,6 +75,10 @@
     <string name="settings_top_row_extra_letters_desc">á, ǵ, ú, ń, ı, ó</string>
     <string name="settings_top_row_numbers_desc">1, 2, 3…</string>
     <string name="settings_key_press_sound">Klavisha sesi</string>
+    <string name="settings_sound_volume">Ses kúshi</string>
+    <string name="settings_sound_volume_quiet">Tómen</string>
+    <string name="settings_sound_volume_medium">Ortasha</string>
+    <string name="settings_sound_volume_loud">Joqarı</string>
     <string name="settings_vibration">Vibraciya</string>
     <string name="settings_vibration_intensity">Vibraciya kúshi</string>
     <string name="settings_vibration_light">Tómen</string>

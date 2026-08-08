@@ -30,6 +30,21 @@ enum class VibrationStrength(val amplitude: Int, val durationMs: Long) {
     STRONG(250, 48L)
 }
 
+/**
+ * Gain applied to key press sounds, as the linear 0f..1f scalar
+ * `AudioManager.playSoundEffect` expects.
+ *
+ * Levels are spaced evenly in decibels (~8 dB apart) rather than linearly, because loudness is
+ * perceived logarithmically; a linear ladder would feel lopsided. [MEDIUM] is the AOSP default
+ * effect gain (`config_soundEffectVolumeDb` = -16 dB), so it matches how the keyboard sounded
+ * before this setting existed. The system stream volume still applies on top of this value.
+ */
+enum class SoundVolume(val volume: Float) {
+    QUIET(0.06f),   // ~-24 dB
+    MEDIUM(0.16f),  // ~-16 dB
+    LOUD(0.40f)     // ~-8 dB
+}
+
 enum class ShiftState {
     OFF,
     ON,
