@@ -1,23 +1,31 @@
 package com.shagalalab.qqkeyboard.keyboard.compose
 
 import android.content.res.Configuration
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
@@ -145,7 +153,48 @@ fun QqKeyboard(
                 }
             }
 
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            Spacer(Modifier.height(bottomSystemBarsInset()))
         }
     }
 }
+
+/**
+ * Height of the bottom system bars — in practice the navigation bar — read straight from the
+ * window instead of through `WindowInsets.systemBars`.
+ *
+ * Compose's inset state only updates when the platform dispatches `onApplyWindowInsets` to the
+ * ComposeView, and an IME window does not reliably receive that dispatch after a rotation: the
+ * value measured in the previous orientation sticks. Landscape reports a much smaller bottom inset
+ * than portrait (with gesture navigation the bar moves to the side and the bottom inset can be 0),
+ * so rotating landscape → portrait left this spacer too short and the bottom key row ended up
+ * behind the navigation bar, where it could not be tapped.
+ *
+ * Re-reading the root insets on every layout pass sidesteps the dispatch entirely. A rotation
+ * always produces a layout pass, so the value always catches up.
+ */
+@Composable
+private fun bottomSystemBarsInset(): Dp {
+    val view = LocalView.current
+    // Seeded during composition rather than from the effect below, so the first frame is already
+    // spaced correctly instead of briefly rendering flush against the navigation bar.
+    var insetPx by remember(view) { mutableIntStateOf(readBottomSystemBarsInset(view)) }
+
+    DisposableEffect(view) {
+        val observer = view.viewTreeObserver
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            insetPx = readBottomSystemBarsInset(view)
+        }
+        observer.addOnGlobalLayoutListener(listener)
+        onDispose {
+            if (observer.isAlive) observer.removeOnGlobalLayoutListener(listener)
+            else view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
+
+    return with(LocalDensity.current) { insetPx.toDp() }
+}
+
+private fun readBottomSystemBarsInset(view: View): Int =
+    ViewCompat.getRootWindowInsets(view)
+        ?.getInsets(WindowInsetsCompat.Type.systemBars())
+        ?.bottom ?: 0
