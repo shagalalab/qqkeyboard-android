@@ -18,6 +18,8 @@ import com.shagalalab.qqkeyboard.ui.settings.HeightSelection
 import com.shagalalab.qqkeyboard.ui.settings.KeyboardHeightScreen
 import com.shagalalab.qqkeyboard.ui.settings.Settings
 import com.shagalalab.qqkeyboard.ui.settings.SettingsScreen
+import com.shagalalab.qqkeyboard.ui.settings.SoundVolumeScreen
+import com.shagalalab.qqkeyboard.ui.settings.SoundVolumeSelection
 import com.shagalalab.qqkeyboard.ui.settings.SuggestionStripScreen
 import com.shagalalab.qqkeyboard.ui.settings.SuggestionStripSelection
 import com.shagalalab.qqkeyboard.ui.settings.ThemeSelection
@@ -38,6 +40,7 @@ class SettingsActivity : ComponentActivity() {
                 val preferences = remember { KeyboardPreferences(this@SettingsActivity) }
                 var keyboardHeight by remember { mutableStateOf(preferences.keyboardHeight) }
                 var vibrationStrength by remember { mutableStateOf(preferences.vibrationStrength) }
+                var soundVolume by remember { mutableStateOf(preferences.soundVolume) }
                 var topRowMode by remember { mutableStateOf(preferences.topRowMode) }
                 var suggestionStripEnabled by remember { mutableStateOf(preferences.suggestionStripEnabled) }
                 var defaultLayoutMode by remember { mutableStateOf(preferences.defaultLayoutMode) }
@@ -54,6 +57,8 @@ class SettingsActivity : ComponentActivity() {
                                 onKeyboardHeightClick = { backStack.add(HeightSelection) },
                                 vibrationStrength = vibrationStrength,
                                 onVibrationStrengthClick = { backStack.add(VibrationSelection) },
+                                soundVolume = soundVolume,
+                                onSoundVolumeClick = { backStack.add(SoundVolumeSelection) },
                                 suggestionStripEnabled = suggestionStripEnabled,
                                 onSuggestionStripClick = { backStack.add(SuggestionStripSelection) },
                                 topRowMode = topRowMode,
@@ -91,6 +96,16 @@ class SettingsActivity : ComponentActivity() {
                                 onSelect = { strength ->
                                     vibrationStrength = strength
                                     preferences.vibrationStrength = strength
+                                },
+                                onBackClick = { backStack.removeLastOrNull() },
+                            )
+                        }
+                        entry<SoundVolumeSelection> {
+                            SoundVolumeScreen(
+                                selectedValue = soundVolume,
+                                onSelect = { volume ->
+                                    soundVolume = volume
+                                    preferences.soundVolume = volume
                                 },
                                 onBackClick = { backStack.removeLastOrNull() },
                             )

@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import com.shagalalab.qqkeyboard.keyboard.model.DefaultLayoutMode
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.model.SoundVolume
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.model.VibrationStrength
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
@@ -134,6 +135,14 @@ class KeyboardPreferences(context: Context) {
         }
         set(value) { prefs.edit { putString(KEY_VIBRATION_STRENGTH, value.name) } }
 
+    var soundVolume: SoundVolume
+        get() {
+            val name = prefs.getString(KEY_SOUND_VOLUME, SoundVolume.MEDIUM.name)
+            return try { SoundVolume.valueOf(name ?: SoundVolume.MEDIUM.name) }
+            catch (e: IllegalArgumentException) { SoundVolume.MEDIUM }
+        }
+        set(value) { prefs.edit { putString(KEY_SOUND_VOLUME, value.name) } }
+
     var recentEmojis: List<String>
         get() {
             val jsonString = prefs.getString(KEY_RECENT_EMOJIS, "[]") ?: "[]"
@@ -220,6 +229,7 @@ class KeyboardPreferences(context: Context) {
         private const val KEY_KEY_BORDER = "key_border_enabled"
         private const val KEY_SUGGESTION_STRIP = "suggestion_strip_enabled"
         private const val KEY_VIBRATION_STRENGTH = "vibration_strength"
+        private const val KEY_SOUND_VOLUME = "sound_volume"
         private const val KEY_MIGRATION_V1_DONE = "migration_v1_done"
         private const val MAX_RECENT_EMOJIS = KeyboardDimensions.emojiGridColumns * 5
 

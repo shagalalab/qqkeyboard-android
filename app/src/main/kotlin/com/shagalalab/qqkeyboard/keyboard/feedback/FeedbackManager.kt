@@ -6,8 +6,19 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.shagalalab.qqkeyboard.keyboard.model.SoundVolume
 import com.shagalalab.qqkeyboard.keyboard.preferences.KeyboardPreferences
 
+/**
+ * Plays the audio and haptic feedback that accompanies key presses.
+ *
+ * Sounds always go through the two-argument [AudioManager.playSoundEffect] overload. Besides
+ * letting us apply the user's chosen [SoundVolume], it is the reason key sounds work at all on
+ * devices where the system-wide touch sounds setting (`Settings.System.SOUND_EFFECTS_ENABLED`) is
+ * off: the single-argument overload returns early in that case and silently suppresses every
+ * effect, even though the user enabled sound in our own settings. The two-argument overload skips
+ * that check.
+ */
 class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -21,18 +32,20 @@ class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
     private val hasVibrator = vibrator.hasVibrator()
 
     private var soundEnabled = prefs.soundEnabled
+    private var soundVolume = prefs.soundVolume
     private var vibrationEnabled = prefs.vibrationEnabled
     private var vibrationStrength = prefs.vibrationStrength
 
     fun refreshSettings(prefs: KeyboardPreferences) {
         soundEnabled = prefs.soundEnabled
+        soundVolume = prefs.soundVolume
         vibrationEnabled = prefs.vibrationEnabled
         vibrationStrength = prefs.vibrationStrength
     }
 
     fun playKeyPressSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, SYSTEM_DEFAULT_VOLUME)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, soundVolume.volume)
         }
     }
 
@@ -52,7 +65,7 @@ class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
 
     fun playBackspaceSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE, SYSTEM_DEFAULT_VOLUME)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE, soundVolume.volume)
         }
     }
 
@@ -72,7 +85,7 @@ class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
 
     fun playSpacebarSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR, SYSTEM_DEFAULT_VOLUME)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR, soundVolume.volume)
         }
     }
 
@@ -83,25 +96,12 @@ class FeedbackManager(context: Context, prefs: KeyboardPreferences) {
 
     fun playReturnSound() {
         if (soundEnabled) {
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN, SYSTEM_DEFAULT_VOLUME)
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN, soundVolume.volume)
         }
     }
 
     fun playReturnFeedback() {
         playReturnSound()
         playKeyPressVibration()
-    }
-
-    private companion object {
-        /**
-         * Sentinel accepted by [AudioManager.playSoundEffect] meaning "use the device's default
-         * effect volume" (derived from the framework's `config_soundEffectVolumeDb` resource), so
-         * loudness is unchanged from the single-argument overload. We pass it explicitly because
-         * the single-argument overload returns early when the system-wide touch sounds setting
-         * (`Settings.System.SOUND_EFFECTS_ENABLED`) is off, which silently suppresses key sounds
-         * even though the user enabled them in our own settings. The two-argument overload skips
-         * that check.
-         */
-        const val SYSTEM_DEFAULT_VOLUME = -1f
     }
 }
