@@ -12,8 +12,8 @@ android {
         applicationId = "com.shagalalab.qqkeyboard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 30
-        versionName = "1.4"
+        versionCode = 31
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
