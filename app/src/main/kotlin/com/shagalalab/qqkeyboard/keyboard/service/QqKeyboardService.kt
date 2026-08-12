@@ -1,6 +1,7 @@
 package com.shagalalab.qqkeyboard.keyboard.service
 
 import android.content.Context
+import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -32,6 +33,8 @@ class QqKeyboardService : InputMethodService(), LifecycleOwner, SavedStateRegist
 
     private lateinit var keyboardViewModel: KeyboardViewModel
 
+    private var inputView: View? = null
+
     override fun onCreate() {
         super.onCreate()
         savedStateRegistryController.performRestore(null)
@@ -55,7 +58,30 @@ class QqKeyboardService : InputMethodService(), LifecycleOwner, SavedStateRegist
                     QqKeyboard(keyboardViewModel)
                 }
             }
-        }
+        }.also { inputView = it }
+    }
+
+    /**
+     * The keyboard reserves room for the navigation bar with a spacer sized by
+     * `WindowInsets.systemBars`. Compose only refreshes that state when the platform dispatches
+     * `onApplyWindowInsets` to the ComposeView, and an IME window does not reliably receive such a
+     * dispatch after a rotation — the inset measured in the previous orientation sticks. Landscape
+     * reports a much smaller bottom inset than portrait, so rotating back left the bottom key row
+     * behind the navigation bar, where it could not be tapped.
+     *
+     * Asking for a fresh dispatch here gives Compose the new values. It runs twice because the
+     * window has not necessarily been resized yet when this callback fires; the posted pass
+     * catches the values that only settle after the new layout.
+     */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        requestApplyInsets()
+        inputView?.post { requestApplyInsets() }
+    }
+
+    private fun requestApplyInsets() {
+        window?.window?.decorView?.requestApplyInsets()
+        inputView?.requestApplyInsets()
     }
 
     override fun onStartInputView(info: android.view.inputmethod.EditorInfo?, restarting: Boolean) {
