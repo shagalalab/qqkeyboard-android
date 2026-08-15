@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shagalalab.qqkeyboard.keyboard.data.ClipboardRepository
 import com.shagalalab.qqkeyboard.keyboard.data.SuggestionRepository
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
@@ -33,6 +34,7 @@ class KeyboardViewModel : ViewModel() {
     private var preferences: KeyboardPreferences? = null
     private var feedbackManager: FeedbackManager? = null
     private var repository: SuggestionRepository? = null
+    private var clipboardRepository: ClipboardRepository? = null
 
     var keyboardState by mutableStateOf(KeyboardState())
         private set
@@ -72,6 +74,20 @@ class KeyboardViewModel : ViewModel() {
     val suggestionShiftState: ShiftState
         get() = shiftStateForWord(currentWordForSuggestions)
 
+    /**
+     * True while the focused field forces a special-purpose layout — a password field, or one of
+     * the numeric/phone pads. These layouts replace the suggestion strip entirely.
+     */
+    val isSpecialLayout: Boolean
+        get() = isPasswordField || keyboardState.layout in SPECIAL_LAYOUTS
+
+    /**
+     * The clipboard is reached from the suggestion strip, so it goes away with the strip: no
+     * button to open it, and nothing recorded while it is unreachable.
+     */
+    val clipboardEnabled: Boolean
+        get() = suggestionStripEnabled && !isSpecialLayout
+
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
@@ -89,6 +105,11 @@ class KeyboardViewModel : ViewModel() {
         private val PUNCTUATION_BEFORE_SPACE = setOf(",", ".", "?", "!", "…", ";", ":", "»", "”", ")")
         private val PUNCTUATION_AUTO_SPACE = PUNCTUATION_BEFORE_SPACE + setOf("—")
         private val WORD_SPLIT_REGEX = Regex("""[\s.,!?;:()\[\]{}"'«»—–…]""")
+        private val SPECIAL_LAYOUTS = setOf(
+            KeyboardLayout.NUMBER_PAD,
+            KeyboardLayout.NUMBER_PASSWORD,
+            KeyboardLayout.PHONE
+        )
         private val DEFAULT_SUGGESTIONS_LATIN = listOf("men", "sálem", "sen")
         private val DEFAULT_SUGGESTIONS_CYRILLIC = listOf("мен", "сәлем", "сен")
         private val PERIOD_SPACE_PATTERN = Regex("""\.\s+$""")
@@ -104,6 +125,9 @@ class KeyboardViewModel : ViewModel() {
             recentEmojis = prefs.recentEmojis
             viewModelScope.launch(Dispatchers.IO) {
                 repository = SuggestionRepository(context.applicationContext)
+                // Purging here clears whatever expired while the keyboard was closed, so every
+                // later read is already free of stale clips.
+                clipboardRepository = ClipboardRepository(context.applicationContext).also { it.purge() }
             }
         }
         preferences?.let { prefs ->
@@ -163,12 +187,7 @@ class KeyboardViewModel : ViewModel() {
             }
             if (specialLayout != null) {
                 keyboardState = keyboardState.switchToLayout(specialLayout)
-            } else if (keyboardState.layout in setOf(
-                    KeyboardLayout.NUMBER_PAD,
-                    KeyboardLayout.NUMBER_PASSWORD,
-                    KeyboardLayout.PHONE
-                )
-            ) {
+            } else if (keyboardState.layout in SPECIAL_LAYOUTS) {
                 val lastLayout = preferences?.lastUsedLayout ?: KeyboardLayout.LATIN
                 keyboardState = keyboardState.switchToLayout(lastLayout)
             }
@@ -387,6 +406,19 @@ class KeyboardViewModel : ViewModel() {
      * a key press sound on every crossing would be noisy. */
     fun onAlternateHighlight() {
         feedbackManager?.playKeyPressVibration()
+    }
+
+    /**
+     * Records text that has just appeared on the system clipboard.
+     *
+     * The service has already filtered on what it can see of the clip itself (text type, not marked
+     * sensitive); what is checked here is the context we are pasting into — a field that opts out
+     * of personalised learning, or one that hides the strip, must not leave a trail behind.
+     */
+    fun onClipboardChanged(text: String, copiedAt: Long) {
+        if (!clipboardEnabled || !isSuggestionsAllowed()) return
+        val repo = clipboardRepository ?: return
+        viewModelScope.launch(Dispatchers.IO) { repo.capture(text, copiedAt) }
     }
 
     fun toggleEmoji() {

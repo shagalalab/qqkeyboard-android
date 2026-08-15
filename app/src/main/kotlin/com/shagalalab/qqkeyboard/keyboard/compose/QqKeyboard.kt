@@ -57,10 +57,7 @@ fun QqKeyboard(
             val switchButtonText = viewModel.getLayoutSwitchButtonText()
             val bottomRowCommaKey = viewModel.bottomRowCommaKey
 
-            val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
-                KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
-            )
-            val showSuggestionStrip = !isSpecialLayout && viewModel.suggestionStripEnabled
+            val showSuggestionStrip = !viewModel.isSpecialLayout && viewModel.suggestionStripEnabled
             // Whenever the strip isn't drawn its emoji button goes with it, so the letter
             // layouts' bottom row takes over as the way into the emoji picker.
             val showEmojiKey = !showSuggestionStrip
