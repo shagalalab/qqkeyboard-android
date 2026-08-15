@@ -60,12 +60,27 @@ enum class ShiftState {
     CAPS_LOCK
 }
 
+/**
+ * The full-height panel currently covering the keys, if any.
+ *
+ * Only one can be open at a time, which is why this is an enum rather than a flag per panel — a
+ * pair of booleans can describe a state ("both open") that the layout has no way to render.
+ */
+enum class KeyboardPanel {
+    NONE,
+    EMOJI,
+    CLIPBOARD
+}
+
 data class KeyboardState(
     val layout: KeyboardLayout = KeyboardLayout.LATIN,
     val shiftState: ShiftState = ShiftState.OFF,
-    val isEmojiShown: Boolean = false,
+    val panel: KeyboardPanel = KeyboardPanel.NONE,
     val isShiftLocked: Boolean = false,
 ) {
+    val isEmojiShown: Boolean
+        get() = panel == KeyboardPanel.EMOJI
+
     val shouldShowUpperCase: Boolean
         get() = shiftState == ShiftState.ON || shiftState == ShiftState.CAPS_LOCK
 
@@ -113,7 +128,12 @@ data class KeyboardState(
         }
     }
 
-    fun toggleEmojiPopup(): KeyboardState {
-        return copy(isEmojiShown = !isEmojiShown)
+    /** Opens [target], or closes it if it is already the open panel. */
+    fun togglePanel(target: KeyboardPanel): KeyboardState {
+        return copy(panel = if (panel == target) KeyboardPanel.NONE else target)
+    }
+
+    fun closePanel(): KeyboardState {
+        return copy(panel = KeyboardPanel.NONE)
     }
 }

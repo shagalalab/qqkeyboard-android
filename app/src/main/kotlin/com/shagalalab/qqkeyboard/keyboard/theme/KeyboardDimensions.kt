@@ -66,8 +66,27 @@ object KeyboardDimensions {
     val suggestionPaddingHorizontal = 8.dp
     val suggestionPaddingVertical = 8.dp
     val suggestionFontSize = 18.sp
-    val emojiTogglePadding = 4.dp
-    val emojiToggleIconSize = 24.dp
+    val stripIconPadding = 4.dp
+    val stripIconSize = 24.dp
+
+    // --- Clipboard Panel ---
+    const val clipboardGridColumns = 2
+    val clipboardHeaderHeight = 40.dp
+    val clipboardHeaderPadding = 8.dp
+    val clipboardGridPadding = 8.dp
+    val clipCardSpacing = 8.dp
+    val clipCardCornerRadius = 8.dp
+    val clipCardPadding = 10.dp
+    val clipCardMinHeight = 44.dp
+    val clipCardSelectedBorder = 2.dp
+    val clipPinBadgeSize = 14.dp
+    val clipFontSize = 14.sp
+    const val clipMaxLines = 4
+    val clipActionSpacing = 6.dp
+    val clipActionIconSpacing = 6.dp
+    val clipActionIconSize = 16.dp
+    val clipActionHorizontalPadding = 10.dp
+    val clipActionVerticalPadding = 6.dp
 
     // --- Emoji Layout ---
     const val emojiGridColumns = 9

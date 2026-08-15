@@ -25,6 +25,7 @@ import com.shagalalab.qqkeyboard.keyboard.compose.KeyboardLayout
 import com.shagalalab.qqkeyboard.keyboard.compose.SuggestionStrip
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardPanel
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardThemes
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
@@ -116,9 +117,10 @@ private fun SuggestionStripPreview(
                     if (showStrip) {
                         SuggestionStrip(
                             suggestions = PREVIEW_SUGGESTIONS,
-                            isEmojiShown = false,
+                            activePanel = KeyboardPanel.NONE,
                             onSuggestionClick = {},
                             onEmojiToggle = {},
+                            onClipboardToggle = {},
                         )
                     }
                     KeyboardLayout(

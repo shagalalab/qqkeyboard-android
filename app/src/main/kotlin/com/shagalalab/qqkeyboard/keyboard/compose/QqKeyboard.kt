@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.shagalalab.qqkeyboard.keyboard.data.KeyboardMappings
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardPanel
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardBorderEnabled
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
@@ -57,10 +58,7 @@ fun QqKeyboard(
             val switchButtonText = viewModel.getLayoutSwitchButtonText()
             val bottomRowCommaKey = viewModel.bottomRowCommaKey
 
-            val isSpecialLayout = viewModel.isPasswordField || keyboardState.layout in setOf(
-                KeyboardLayout.NUMBER_PAD, KeyboardLayout.NUMBER_PASSWORD, KeyboardLayout.PHONE
-            )
-            val showSuggestionStrip = !isSpecialLayout && viewModel.suggestionStripEnabled
+            val showSuggestionStrip = !viewModel.isSpecialLayout && viewModel.suggestionStripEnabled
             // Whenever the strip isn't drawn its emoji button goes with it, so the letter
             // layouts' bottom row takes over as the way into the emoji picker.
             val showEmojiKey = !showSuggestionStrip
@@ -106,9 +104,10 @@ fun QqKeyboard(
                     if (showSuggestionStrip) {
                         SuggestionStrip(
                             suggestions = viewModel.suggestions,
-                            isEmojiShown = keyboardState.isEmojiShown,
+                            activePanel = keyboardState.panel,
                             onSuggestionClick = viewModel::onSuggestionSelected,
                             onEmojiToggle = viewModel::toggleEmoji,
+                            onClipboardToggle = viewModel::toggleClipboard,
                             shiftState = viewModel.suggestionShiftState,
                         )
                     }
@@ -140,8 +139,18 @@ fun QqKeyboard(
                     }
                 }
 
-                if (keyboardState.isEmojiShown) {
-                    EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
+                when (keyboardState.panel) {
+                    KeyboardPanel.EMOJI ->
+                        EmojiLayout(viewModel::onKeyPressed, viewModel::toggleEmoji, viewModel.recentEmojis)
+                    KeyboardPanel.CLIPBOARD ->
+                        ClipboardLayout(
+                            clips = viewModel.clips,
+                            onClipClick = viewModel::onClipSelected,
+                            onClipPinToggle = viewModel::onClipPinToggle,
+                            onClipDelete = viewModel::onClipDelete,
+                            onClose = viewModel::toggleClipboard,
+                        )
+                    KeyboardPanel.NONE -> {}
                 }
             }
 
