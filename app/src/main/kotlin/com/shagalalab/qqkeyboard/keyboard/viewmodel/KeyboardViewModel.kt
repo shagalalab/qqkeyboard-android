@@ -12,8 +12,10 @@ import androidx.lifecycle.viewModelScope
 import com.shagalalab.qqkeyboard.keyboard.data.ClipboardRepository
 import com.shagalalab.qqkeyboard.keyboard.data.SuggestionRepository
 import com.shagalalab.qqkeyboard.keyboard.feedback.FeedbackManager
+import com.shagalalab.qqkeyboard.keyboard.model.ClipItem
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardHeight
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardLayout
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardPanel
 import com.shagalalab.qqkeyboard.keyboard.model.KeyboardState
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.model.TopRowMode
@@ -40,6 +42,9 @@ class KeyboardViewModel : ViewModel() {
         private set
 
     var recentEmojis by mutableStateOf<List<String>>(emptyList())
+        private set
+
+    var clips by mutableStateOf<List<ClipItem>>(emptyList())
         private set
 
     var currentImeAction by mutableStateOf<Int?>(null)
@@ -132,7 +137,7 @@ class KeyboardViewModel : ViewModel() {
         }
         preferences?.let { prefs ->
             feedbackManager?.refreshSettings(prefs)
-            keyboardState = keyboardState.copy(layout = prefs.startupLayout, isEmojiShown = false)
+            keyboardState = keyboardState.copy(layout = prefs.startupLayout, panel = KeyboardPanel.NONE)
             currentTheme = KeyboardThemes.getByName(prefs.selectedTheme)
             topRowMode = prefs.topRowMode
             keyboardHeight = prefs.keyboardHeight
@@ -423,9 +428,37 @@ class KeyboardViewModel : ViewModel() {
 
     fun toggleEmoji() {
         val opening = !keyboardState.isEmojiShown
-        keyboardState = keyboardState.toggleEmojiPopup()
+        keyboardState = keyboardState.togglePanel(KeyboardPanel.EMOJI)
         if (opening) {
             recentEmojis = preferences?.recentEmojis ?: emptyList()
+        }
+    }
+
+    fun toggleClipboard() {
+        val opening = keyboardState.panel != KeyboardPanel.CLIPBOARD
+        keyboardState = keyboardState.togglePanel(KeyboardPanel.CLIPBOARD)
+        if (opening) refreshClips()
+    }
+
+    /** Pastes a stored clip at the cursor and closes the panel. */
+    fun onClipSelected(clip: ClipItem) {
+        val ic = inputConnection ?: return
+        // commitText replaces the selection when there is one, matching a normal paste.
+        ic.commitText(clip.text, 1)
+        feedbackManager?.playKeyPressFeedback()
+        // Pasted text is deliberately not fed to the dictionary: the user did not type it, and
+        // clips tend to be exactly the addresses and identifiers that would pollute suggestions.
+        lastCommittedWord = ""
+        lastCommittedChar = clip.text.takeLast(1)
+        keyboardState = keyboardState.closePanel()
+        updateShiftForCursor()
+        updateSuggestions()
+    }
+
+    private fun refreshClips() {
+        val repo = clipboardRepository ?: return
+        viewModelScope.launch {
+            clips = withContext(Dispatchers.IO) { repo.clips() }
         }
     }
 

@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.shagalalab.qqkeyboard.R
+import com.shagalalab.qqkeyboard.keyboard.model.KeyboardPanel
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 import com.shagalalab.qqkeyboard.keyboard.theme.KeyboardDimensions
 import com.shagalalab.qqkeyboard.keyboard.theme.LocalKeyboardColors
@@ -30,9 +32,10 @@ private const val MAX_SUGGESTIONS_TO_SHOW = 3
 @Composable
 fun SuggestionStrip(
     suggestions: List<String>,
-    isEmojiShown: Boolean,
+    activePanel: KeyboardPanel,
     onSuggestionClick: (String) -> Unit,
     onEmojiToggle: () -> Unit,
+    onClipboardToggle: () -> Unit,
     modifier: Modifier = Modifier,
     shiftState: ShiftState = ShiftState.OFF,
 ) {
@@ -46,12 +49,20 @@ fun SuggestionStrip(
             .background(colors.keyboardBackground),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        StripIconButton(
+            iconResId = R.drawable.ic_clipboard,
+            contentDescription = stringResource(R.string.cd_clipboard),
+            onClick = onClipboardToggle,
+        )
+
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (!isEmojiShown) {
+            // An open panel is drawn over the strip, so this is not about what is visible: it keeps
+            // covered suggestions from lingering in the semantics tree for screen readers.
+            if (activePanel == KeyboardPanel.NONE) {
                 suggestions.take(MAX_SUGGESTIONS_TO_SHOW).forEach { suggestion ->
                     val displayText = when (shiftState) {
                         ShiftState.CAPS_LOCK -> suggestion.kaaUppercase()
@@ -74,19 +85,39 @@ fun SuggestionStrip(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .background(colors.modifierBackground, CircleShape)
-                .clickable { onEmojiToggle() }
-                .padding(KeyboardDimensions.emojiTogglePadding),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_smile),
-                contentDescription = null,
-                tint = colors.keyContent,
-                modifier = Modifier.size(KeyboardDimensions.emojiToggleIconSize),
-            )
-        }
+        StripIconButton(
+            iconResId = R.drawable.ic_smile,
+            contentDescription = null,
+            onClick = onEmojiToggle,
+        )
+    }
+}
+
+/**
+ * One of the two round buttons bookending the strip — clipboard at the start, emoji at the end.
+ *
+ * Neither shows an open/closed state: a panel covers the strip completely, so there would be
+ * nothing to see it on.
+ */
+@Composable
+private fun StripIconButton(
+    iconResId: Int,
+    contentDescription: String?,
+    onClick: () -> Unit,
+) {
+    val colors = LocalKeyboardColors.current
+    Box(
+        modifier = Modifier
+            .background(colors.modifierBackground, CircleShape)
+            .clickable(onClick = onClick)
+            .padding(KeyboardDimensions.stripIconPadding),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            painter = painterResource(iconResId),
+            contentDescription = contentDescription,
+            tint = colors.keyContent,
+            modifier = Modifier.size(KeyboardDimensions.stripIconSize),
+        )
     }
 }

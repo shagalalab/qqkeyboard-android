@@ -10,6 +10,12 @@
     <string name="subtype_cyrillic">Kirill</string>
     <string name="no_recent_emojis">Aqırǵı emodziler joq</string>
 
+    <!-- Clipboard -->
+    <string name="clipboard_title">Almasıw buferi</string>
+    <string name="clipboard_empty">Kóshirilgen tekstler joq</string>
+    <string name="clipboard_hint">Kóshirilgen tekst usı jerde bir saat saqlanadı</string>
+    <string name="cd_clipboard">Almasıw buferi</string>
+
     <!-- Common -->
     <string name="cd_back">Artqa</string>
 
