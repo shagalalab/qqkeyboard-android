@@ -146,6 +146,8 @@ fun QqKeyboard(
                         ClipboardLayout(
                             clips = viewModel.clips,
                             onClipClick = viewModel::onClipSelected,
+                            onClipPinToggle = viewModel::onClipPinToggle,
+                            onClipDelete = viewModel::onClipDelete,
                             onClose = viewModel::toggleClipboard,
                         )
                     KeyboardPanel.NONE -> {}

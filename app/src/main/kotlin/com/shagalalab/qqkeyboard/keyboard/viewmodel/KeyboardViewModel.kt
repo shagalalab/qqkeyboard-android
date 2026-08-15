@@ -437,7 +437,7 @@ class KeyboardViewModel : ViewModel() {
     fun toggleClipboard() {
         val opening = keyboardState.panel != KeyboardPanel.CLIPBOARD
         keyboardState = keyboardState.togglePanel(KeyboardPanel.CLIPBOARD)
-        if (opening) refreshClips()
+        if (opening) viewModelScope.launch { refreshClips() }
     }
 
     /** Pastes a stored clip at the cursor and closes the panel. */
@@ -455,11 +455,27 @@ class KeyboardViewModel : ViewModel() {
         updateSuggestions()
     }
 
-    private fun refreshClips() {
+    fun onClipPinToggle(clip: ClipItem) {
         val repo = clipboardRepository ?: return
+        feedbackManager?.playKeyPressFeedback()
         viewModelScope.launch {
-            clips = withContext(Dispatchers.IO) { repo.clips() }
+            withContext(Dispatchers.IO) { repo.setPinned(clip.id, !clip.pinned) }
+            refreshClips()
         }
+    }
+
+    fun onClipDelete(clip: ClipItem) {
+        val repo = clipboardRepository ?: return
+        feedbackManager?.playKeyPressFeedback()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { repo.delete(clip.id) }
+            refreshClips()
+        }
+    }
+
+    private suspend fun refreshClips() {
+        val repo = clipboardRepository ?: return
+        clips = withContext(Dispatchers.IO) { repo.clips() }
     }
 
     private fun isSuggestionsAllowed(): Boolean {
