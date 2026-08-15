@@ -423,7 +423,13 @@ class KeyboardViewModel : ViewModel() {
     fun onClipboardChanged(text: String, copiedAt: Long) {
         if (!clipboardEnabled || !isSuggestionsAllowed()) return
         val repo = clipboardRepository ?: return
-        viewModelScope.launch(Dispatchers.IO) { repo.capture(text, copiedAt) }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { repo.capture(text, copiedAt) }
+            // Copying with the panel already open is ordinary — the text being copied is in the
+            // field right above it. The panel loads its list when it opens, so without this the new
+            // clip only turns up after closing and reopening it.
+            if (keyboardState.panel == KeyboardPanel.CLIPBOARD) refreshClips()
+        }
     }
 
     fun toggleEmoji() {
