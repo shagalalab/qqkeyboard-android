@@ -81,12 +81,13 @@ private const val PICKER_HIGHLIGHT_ALPHA = 0.15f
 private fun resolveAlternateIndex(
     position: Offset,
     keySize: IntSize,
+    keyCenterOffsetPx: Float,
     cellWidthPx: Float,
     cancelSlopPx: Float,
     count: Int
 ): Int {
     if (position.y > keySize.height + cancelSlopPx) return PICKER_CANCELLED
-    val firstCellLeft = keySize.width / 2f - cellWidthPx / 2f
+    val firstCellLeft = keySize.width / 2f + keyCenterOffsetPx - cellWidthPx / 2f
     return floor((position.x - firstCellLeft) / cellWidthPx).toInt().coerceIn(0, count - 1)
 }
 
@@ -101,7 +102,9 @@ fun KeyButton(
     onAlternateHighlight: (() -> Unit)? = null,
     shiftState: ShiftState = ShiftState.OFF,
     topTouchPadding: Dp = 0.dp,
-    bottomTouchPadding: Dp = 0.dp
+    bottomTouchPadding: Dp = 0.dp,
+    startTouchPadding: Dp = 0.dp,
+    endTouchPadding: Dp = 0.dp
 ) {
     val isShiftActive = shiftState != ShiftState.OFF
     val interactionSource = remember { MutableInteractionSource() }
@@ -117,6 +120,10 @@ fun KeyButton(
     var highlightedIndex by remember { mutableIntStateOf(0) }
     val currentLongPress by rememberUpdatedState(onKeyLongPress)
     val currentHighlightFeedback by rememberUpdatedState(onAlternateHighlight)
+
+    // The touch area can reach past the drawn key on one side, so the bubble and the alternate
+    // picker line up on the drawn key rather than on the middle of the touch area.
+    val keyCenterOffset = (startTouchPadding - endTouchPadding) / 2
 
     val colors = LocalKeyboardColors.current
     val keyHeight = LocalKeyboardHeight.current.toDp()
@@ -170,8 +177,9 @@ fun KeyButton(
     // combinedClickable cannot do. This observer runs alongside it: it never consumes anything,
     // so the click/long-click detection above is left exactly as it is for every other key.
     val pickerModifier = if (hasPicker) {
-        Modifier.pointerInput(alternates) {
+        Modifier.pointerInput(alternates, keyCenterOffset) {
             val cellWidthPx = KeyboardDimensions.bubbleCellWidth.toPx()
+            val keyCenterOffsetPx = keyCenterOffset.toPx()
             val cancelSlopPx = KeyboardDimensions.bubbleCancelSlop.toPx()
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false)
@@ -181,7 +189,7 @@ fun KeyButton(
                     val event = awaitPointerEvent()
                     val change = event.changes.firstOrNull { it.id == down.id } ?: break
                     val resolved = resolveAlternateIndex(
-                        change.position, size, cellWidthPx, cancelSlopPx, alternates.size
+                        change.position, size, keyCenterOffsetPx, cellWidthPx, cancelSlopPx, alternates.size
                     )
                     if (resolved != index) {
                         index = resolved
@@ -240,8 +248,8 @@ fun KeyButton(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    start = KeyboardDimensions.keyHorizontalPadding,
-                    end = KeyboardDimensions.keyHorizontalPadding,
+                    start = KeyboardDimensions.keyHorizontalPadding + startTouchPadding,
+                    end = KeyboardDimensions.keyHorizontalPadding + endTouchPadding,
                     top = topTouchPadding,
                     bottom = bottomTouchPadding
                 )
@@ -327,7 +335,7 @@ fun KeyButton(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = -(keyHeight + KeyboardDimensions.bubbleVerticalOffset))
+                    .offset(x = keyCenterOffset, y = -(keyHeight + KeyboardDimensions.bubbleVerticalOffset))
                     .zIndex(1f)
                     .defaultMinSize(minWidth = keyHeight)
                     .height(keyHeight)
@@ -357,7 +365,7 @@ fun KeyButton(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .offset(
-                        x = KeyboardDimensions.bubbleCellWidth * (alternates.size - 1) / 2,
+                        x = keyCenterOffset + KeyboardDimensions.bubbleCellWidth * (alternates.size - 1) / 2,
                         y = -(keyHeight + KeyboardDimensions.bubbleVerticalOffset)
                     )
                     .zIndex(1f)

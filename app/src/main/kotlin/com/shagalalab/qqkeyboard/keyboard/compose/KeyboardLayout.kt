@@ -40,6 +40,7 @@ fun KeyboardLayout(
                 KeyRow(
                     keys = keyRow,
                     standardKeyWidth = standardKeyWidth,
+                    maxKeysInRow = maxKeysInRow,
                     onKeyClick = onKeyClick,
                     onKeyLongPress = onKeyLongPress,
                     onKeyRepeat = onKeyRepeat,

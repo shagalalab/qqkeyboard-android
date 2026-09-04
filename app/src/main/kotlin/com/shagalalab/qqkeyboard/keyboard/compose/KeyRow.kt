@@ -13,10 +13,17 @@ import com.shagalalab.qqkeyboard.keyboard.model.KeyData
 import com.shagalalab.qqkeyboard.keyboard.model.KeyType
 import com.shagalalab.qqkeyboard.keyboard.model.ShiftState
 
+// A row with fewer keys than the grid holds is centred, leaving a gap at both ends. That gap
+// belongs to the edge keys' touch area — a tap left of "a" or right of "l" still types them —
+// while the keys keep their drawn size. Rows with a much wider gap (the six-letter top row) only
+// hand over half a key on each side, so taps far from any key stay dead.
+private const val MAX_EDGE_TOUCH_EXPANSION = 0.5f
+
 @Composable
 fun KeyRow(
     keys: List<KeyData>,
     standardKeyWidth: Dp,
+    maxKeysInRow: Int,
     onKeyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     onKeyLongPress: ((String) -> Unit)? = null,
@@ -26,9 +33,15 @@ fun KeyRow(
     topTouchPadding: Dp = 0.dp,
     bottomTouchPadding: Dp = 0.dp,
 ) {
-    // Rows containing a space key fill the full width with weights (space expands to fill).
-    // All other rows use fixed key widths and are centered, so shorter rows don't stretch keys.
     val hasSpaceKey = keys.any { it.keyType == KeyType.SPACE }
+
+    // Rows with a space bar or a filling key already stretch to both edges, so they have no gap.
+    val edgeTouchPadding = if (hasSpaceKey || keys.any { it.fillSpace }) {
+        0.dp
+    } else {
+        val slack = maxKeysInRow - keys.fold(0f) { total, key -> total + key.widthRatio }
+        standardKeyWidth * (slack / 2f).coerceIn(0f, MAX_EDGE_TOUCH_EXPANSION)
+    }
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -38,13 +51,13 @@ fun KeyRow(
             Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally)
         }
     ) {
-        keys.forEach { keyData ->
+        keys.forEachIndexed { index, keyData ->
+            val startTouchPadding = if (index == 0) edgeTouchPadding else 0.dp
+            val endTouchPadding = if (index == keys.lastIndex) edgeTouchPadding else 0.dp
             KeyButton(
                 keyData = keyData,
                 onKeyClick = onKeyClick,
                 onKeyRepeat = onKeyRepeat,
-                // KeyButton decides what a long press resolves to (the key's own code for
-                // modifiers, or the chosen alternate) and passes it back through this callback.
                 onKeyLongPress = when {
                     onKeyLongPress == null -> null
                     keyData.code == "SHIFT" || keyData.code == "BACKSPACE" || keyData.code == "SPACE" -> onKeyLongPress
@@ -55,10 +68,12 @@ fun KeyRow(
                 shiftState = shiftState,
                 topTouchPadding = topTouchPadding,
                 bottomTouchPadding = bottomTouchPadding,
+                startTouchPadding = startTouchPadding,
+                endTouchPadding = endTouchPadding,
                 modifier = when {
                     hasSpaceKey -> Modifier.weight(keyData.widthRatio)
                     keyData.fillSpace -> Modifier.weight(1f)
-                    else -> Modifier.width(standardKeyWidth * keyData.widthRatio)
+                    else -> Modifier.width(standardKeyWidth * keyData.widthRatio + startTouchPadding + endTouchPadding)
                 }
             )
         }
